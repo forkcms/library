@@ -103,10 +103,10 @@ function exceptionHandler($exception)
 	$trace = $exception->getTrace();
 
 	// specific name
-	$name = (is_callable(array($exception, 'getName'))) ? $exception->getName() : get_class($exception);
+	$name = (method_exists($exception, 'getName')) ? $exception->getName() : get_class($exception);
 
 	// spoon type exception
-	if(is_callable(array($exception, 'getName')) && strtolower(substr($exception->getName(), 0, 5)) == 'spoon' && $exception->getCode() != 0)
+	if(method_exists($exception, 'getName') && strtolower(substr($exception->getName(), 0, 5)) == 'spoon' && $exception->getCode() != 0)
 	{
 		$documentation = '&raquo; <a href="http://www.spoon-library.com/exceptions/detail/' . $exception->getCode() . '">view documentation</a>';
 	}
@@ -331,7 +331,7 @@ function exceptionHandler($exception)
 	';
 
 	// obfuscate
-	if(is_callable(array($exception, 'getObfuscate')) && count($exception->getObfuscate()) != 0)
+	if(method_exists($exception, 'getObfuscate') && count($exception->getObfuscate()) != 0)
 	{
 		$output = str_replace($exception->getObfuscate(), '***', $output);
 	}
