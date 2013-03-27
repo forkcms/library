@@ -145,12 +145,18 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(SpoonFilter::isAlphabetical('GeeN'));
 		$this->assertFalse(SpoonFilter::isAlphabetical('géén'));
 		$this->assertFalse(SpoonFilter::isAlphabetical('gééN'));
+
+		// Simulating PHP < 5.4 behaviour
+		$this->assertTrue(SpoonFilter::isAlphabetical(array('a', 'b')));
 	}
 
 	public function testIsAlphaNumeric()
 	{
 		$this->assertTrue(SpoonFilter::isAlphaNumeric('John09'));
 		$this->assertFalse(SpoonFilter::isAlphaNumeric('Johan Mayer 007'));
+
+		// Simulating PHP < 5.4 behaviour
+		$this->assertTrue(SpoonFilter::isAlphaNumeric(array('a', 'b')));
 	}
 
 	public function testIsBetween()
@@ -174,6 +180,7 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse(SpoonFilter::isBool(100));
 		$this->assertFalse(SpoonFilter::isBool(900));
 		$this->assertTrue(SpoonFilter::isBool(090));
+		$this->assertFalse(SpoonFilter::isBool(array()));
 	}
 
 	public function testIsDigital()
@@ -181,6 +188,7 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(SpoonFilter::isDigital('010192029'));
 		$this->assertTrue(SpoonFilter::isDigital(1337));
 		$this->assertFalse(SpoonFilter::isDigital('I can has cheezeburger'));
+		$this->assertFalse(SpoonFilter::isDigital(array()));
 	}
 
 	public function testIsEmail()
@@ -191,6 +199,8 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(SpoonFilter::isEmail('erik.bauffman@spoon-library.be'));
 		$this->assertTrue(SpoonFilter::isEmail('a.osterhaus@erasmusnc.nl'));
 		$this->assertTrue(SpoonFilter::isEmail('asmonto@umich.edu'));
+		$this->assertFalse(SpoonFilter::isEmail(array()));
+		$this->assertFalse(SpoonFilter::isEmail(array('foo@example.com')));
 	}
 
 	public function testIsEven()
@@ -199,6 +209,11 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse(SpoonFilter::isEven(1));
 		$this->assertTrue(SpoonFilter::isEven(10901920));
 		$this->assertFalse(SpoonFilter::isEven(-1337));
+
+		// I don't know man, semantically speaking, this bull shit, but it does
+		// adhere to PHP's idiosyncratic casting rules.
+		$this->assertTrue(SpoonFilter::isEven(array()));
+		$this->assertFalse(SpoonFilter::isEven(array(2)));
 	}
 
 	public function testIsFilename()
@@ -206,6 +221,9 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(SpoonFilter::isFilename('test.tpl'));
 		$this->assertTrue(SpoonFilter::isFilename('spoon_template.php'));
 		$this->assertFalse(SpoonFilter::isFilename('/Users/bauffman/Desktop/test.txt'));
+
+		// Simulating PHP < 5.4 behaviour
+		$this->assertTrue(SpoonFilter::isFilename(array()));
 	}
 
 	public function testIsFloat()
@@ -227,6 +245,7 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(SpoonFilter::isFloat('65.00'));
 		$this->assertTrue(SpoonFilter::isFloat(65.010, true));
 		$this->assertTrue(SpoonFilter::isFloat('65.010', true));
+		$this->assertFalse(SpoonFilter::isFloat(array()));
 	}
 
 	public function testIsGreaterThan()
@@ -236,6 +255,7 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(SpoonFilter::isGreaterThan(-1, 10));
 		$this->assertFalse(SpoonFilter::isGreaterThan(1, -10));
 		$this->assertFalse(SpoonFilter::isGreaterThan(0, 0));
+		$this->assertTrue(SpoonFilter::isGreaterThan(array(), array(1)));
 	}
 
 	public function testIsInteger()
@@ -246,6 +266,8 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(SpoonFilter::isInteger(-1234567890));
 		$this->assertFalse(SpoonFilter::isInteger(1.337));
 		$this->assertFalse(SpoonFilter::isInteger(-1.337));
+		$this->assertFalse(SpoonFilter::isInteger(array()));
+
 	}
 
 	public function testIsInternalReferrer()
@@ -271,6 +293,8 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertTrue(SpoonFilter::isIp('127.0.0.1'));
 		$this->assertTrue(SpoonFilter::isIp('192.168.1.101'));
+		$this->assertFalse(SpoonFilter::isIp('kfsl'));
+		$this->assertFalse(SpoonFilter::isIp(array()));
 	}
 
 	public function testIsMaximum()
@@ -280,6 +304,17 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(SpoonFilter::isMaximum(-10, -10));
 		$this->assertFalse(SpoonFilter::isMaximum(100, 101));
 		$this->assertFalse(SpoonFilter::isMaximum(-100, -99));
+
+		// Again, showing the downright dangerous implications of casting as a
+		// defensive programming technique.
+		$this->assertTrue(SpoonFilter::isMaximum(array(), array()));
+		$this->assertTrue(SpoonFilter::isMaximum(array(1), array()));
+		$this->assertFalse(SpoonFilter::isMaximum(array(), array(1)));
+		$this->assertFalse(SpoonFilter::isMaximum(array(), 10));
+		$this->assertTrue(SpoonFilter::isMaximum(array(), 0));
+		$this->assertTrue(SpoonFilter::isMaximum(array(1), 0));
+		$this->assertTrue(SpoonFilter::isMaximum(array(1), 1));
+		$this->assertFalse(SpoonFilter::isMaximum(array(1), 2));
 	}
 
 	public function testIsMaximumCharacters()
@@ -334,6 +369,9 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 	public function testIsString()
 	{
 		$this->assertTrue(SpoonFilter::isString('This should qualify as a string.'));
+
+		// Simulating (string) casting behaviour in PHP < 5.4
+		$this->assertTrue(SpoonFilter::isString(array()));
 	}
 
 	public function testIsValidAgainstRegexp()

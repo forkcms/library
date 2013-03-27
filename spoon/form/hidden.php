@@ -74,7 +74,9 @@ class SpoonFormHidden extends SpoonFormAttributes
 			if(isset($data[$this->attributes['name']]))
 			{
 				// value
-				$value = (string) $data[$this->attributes['name']];
+				$value = $data[$this->getName()];
+				$value = is_scalar($value) ? (string) $value : 'Array';
+
 				if(!$allowHTML) $value = (SPOON_CHARSET == 'utf-8') ? SpoonFilter::htmlspecialchars($value) : SpoonFilter::htmlentities($value);
 			}
 		}
@@ -92,10 +94,9 @@ class SpoonFormHidden extends SpoonFormAttributes
 	{
 		// post/get data
 		$data = $this->getMethod(true);
-
-		// validate
-		if(!(isset($data[$this->attributes['name']]) && trim((string) $data[$this->attributes['name']]) != '')) return false;
-		return true;
+		$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+		$value = is_array($value) ? 'Array' : trim((string) $value);
+		return $value != '';
 	}
 
 

@@ -150,11 +150,16 @@ class SpoonFormRadiobutton extends SpoonFormElement
 		// form submitted
 		if($this->isSubmitted())
 		{
+			$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+			if(is_array($value))
+			{
+				$value = 'Array';
+			}
 			// currently field checked
-			if(isset($data[$this->getName()]) && isset($this->values[(string) $data[$this->getName()]]))
+			if(isset($data[$this->getName()]) && isset($this->values[$value]))
 			{
 				// set this field as checked
-				$this->setChecked($data[$this->getName()]);
+				$this->setChecked($value);
 			}
 		}
 
@@ -217,8 +222,13 @@ class SpoonFormRadiobutton extends SpoonFormElement
 			// external data NOT allowed
 			else
 			{
+				$submittedValue = isset($data[$this->name]) ? $data[$this->name] : '';
+				if(is_array($submittedValue))
+				{
+					$submittedValue = 'Array';
+				}
 				// item is set
-				if(isset($data[$this->name]) && isset($this->values[(string) $data[$this->name]])) $value = $data[$this->name];
+				if($submittedValue != '' && isset($this->values[$submittedValue])) $value = $submittedValue;
 			}
 		}
 
@@ -239,9 +249,11 @@ class SpoonFormRadiobutton extends SpoonFormElement
 		{
 			// post/get data
 			$data = $this->getMethod(true);
+			$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+			$value = is_array($value) ? 'Array' : trim((string) $value);
 
 			// correct
-			if(isset($data[$this->name]) && isset($this->values[(string) $data[$this->name]])) return true;
+			if($value != '' && isset($this->values[$value])) return true;
 		}
 
 		// oh-oh

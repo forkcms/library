@@ -115,8 +115,9 @@ class SpoonFormTime extends SpoonFormInput
 			// submitted by post (may be empty)
 			if(isset($data[$this->attributes['name']]))
 			{
-				// value
-				$value = (string) $data[$this->attributes['name']];
+				$value = is_array($data[$this->getName()])
+					? 'Array'
+					: (string) $data[$this->getName()];
 			}
 		}
 

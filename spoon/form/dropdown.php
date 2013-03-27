@@ -347,14 +347,16 @@ class SpoonFormDropdown extends SpoonFormAttributes
 			{
 				// rest
 				$values = null;
+				$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+				$value = is_scalar($value) ? (string) $value : 'Array';
 
 				// external data is allowed
-				if($this->allowExternalData) $values = (string) $data[$this->attributes['name']];
+				if($this->allowExternalData) $values = (string) $value;
 
 				// external data is NOT allowed
 				else
 				{
-					if(isset($allowedValues[(string) $data[$this->attributes['name']]]) || (isset($this->defaultElement[1]) && $this->defaultElement[1] == $data[$this->attributes['name']] && $this->defaultElement[1] != '')) $values = (string) $data[$this->attributes['name']];
+					if(isset($allowedValues[(string) $value]) || (isset($this->defaultElement[1]) && $this->defaultElement[1] == $value && $this->defaultElement[1] != '')) $values = (string) $value;
 				}
 			}
 		}

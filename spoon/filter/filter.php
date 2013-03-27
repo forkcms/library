@@ -375,6 +375,11 @@ class SpoonFilter
 	 */
 	public static function isAlphabetical($value)
 	{
+		// Simulating (string) casting in PHP < 5.4
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
 		return ctype_alpha((string) $value);
 	}
 
@@ -387,6 +392,11 @@ class SpoonFilter
 	 */
 	public static function isAlphaNumeric($value)
 	{
+		// Simulating (string) casting in PHP < 5.4
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
 		return ctype_alnum((string) $value);
 	}
 
@@ -413,6 +423,11 @@ class SpoonFilter
 	 */
 	public static function isBool($value)
 	{
+		// Simulating (string) casting in PHP < 5.4
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
 		return (filter_var((string) $value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== null);
 	}
 
@@ -425,6 +440,11 @@ class SpoonFilter
 	 */
 	public static function isDigital($value)
 	{
+		// Simulating (string) casting in PHP < 5.4
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
 		return ctype_digit((string) $value);
 	}
 
@@ -437,7 +457,12 @@ class SpoonFilter
 	 */
 	public static function isEmail($value)
 	{
-		return (filter_var((string) $value, FILTER_VALIDATE_EMAIL) === false) ? false : true;
+		// Simulating (string) casting in PHP < 5.4
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
+		return ((filter_var((string) $value, FILTER_VALIDATE_EMAIL) === false) ? false : true);
 	}
 
 
@@ -461,6 +486,11 @@ class SpoonFilter
 	 */
 	public static function isFilename($value)
 	{
+		// Simulating (string) casting in PHP < 5.4
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
 		return (bool) preg_match('/^[^\\/\*\?\:\,]+$/', (string) $value);
 	}
 
@@ -474,6 +504,12 @@ class SpoonFilter
 	 */
 	public static function isFloat($value, $allowCommas = false)
 	{
+		// Simulating (string) casting in PHP < 5.4
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
+
 		// replace commas if needed
 		if($allowCommas) $value = str_replace(',', '.', (string) $value);
 
@@ -550,7 +586,9 @@ class SpoonFilter
 	 */
 	public static function isIp($value)
 	{
-		return (filter_var((string) $value, FILTER_VALIDATE_IP) !== false) ? true : false;
+		return is_scalar($value)
+			? (filter_var((string) $value, FILTER_VALIDATE_IP) !== false) ? true : false
+			: false;
 	}
 
 
@@ -577,6 +615,12 @@ class SpoonFilter
 	 */
 	public static function isMaximumCharacters($maximum, $value, $charset = null)
 	{
+		// Simulating (string) casting behaviour in PHP < 5.4
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
+
 		// define charset
 		$charset = ($charset !== null) ? self::getValue($charset, Spoon::getCharsets(), SPOON_CHARSET) : SPOON_CHARSET;
 
@@ -608,6 +652,12 @@ class SpoonFilter
 	 */
 	public static function isMinimumCharacters($minimum, $value, $charset = null)
 	{
+		// Simulating (string) casting behaviour in PHP < 5.4
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
+
 		// define charset
 		$charset = ($charset !== null) ? self::getValue($charset, Spoon::getCharsets(), SPOON_CHARSET) : SPOON_CHARSET;
 
@@ -624,6 +674,11 @@ class SpoonFilter
 	 */
 	public static function isNumeric($value)
 	{
+		// Simulating (string) casting in PHP < 5.4
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
 		return self::isDigital((string) $value);
 	}
 
@@ -652,6 +707,12 @@ class SpoonFilter
 	 */
 	public static function isPrice($value, $precision = 2, $allowNegative = false, $allowCommas = true)
 	{
+		// Simulating (string) casting in PHP < 5.4
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
+
 		// replace commas if needed
 		if($allowCommas) $value = str_replace(',', '.', (string) $value);
 
@@ -691,6 +752,10 @@ class SpoonFilter
 	 */
 	public static function isString($value)
 	{
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
 		return (bool) preg_match('/^[^\x-\x1F]+$/', (string) $value);
 	}
 
@@ -703,6 +768,10 @@ class SpoonFilter
 	 */
 	public static function isURL($value)
 	{
+		if(is_array($value))
+		{
+			$value = 'Array';
+		}
 		return (bool) preg_match('_^(?:(?:https?|ftp)://)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)(?:\.(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)*(?:\.(?:[a-z\x{00a1}-\x{ffff}]{2,})))(?::\d{2,5})?(?:/[^\s]*)?$_iuS', (string) $value);
 	}
 

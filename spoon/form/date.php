@@ -181,12 +181,17 @@ class SpoonFormDate extends SpoonFormInput
 		{
 			// post/get data
 			$data = $this->getMethod(true);
+			$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
 
 			// submitted by post (may be empty)
-			if(isset($data[$this->attributes['name']]))
+			if(is_scalar($value))
 			{
 				// value
 				$value = (string) $data[$this->attributes['name']];
+			}
+			else
+			{
+				$value = 'Array';
 			}
 		}
 
@@ -207,9 +212,11 @@ class SpoonFormDate extends SpoonFormInput
 		{
 			// post/get data
 			$data = $this->getMethod(true);
+			$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+			$value = is_array($value) ? 'Array' : trim((string) $value);
 
 			// check filled status
-			if(!(isset($data[$this->getName()]) && trim((string) $data[$this->getName()]) != ''))
+			if($value == '')
 			{
 				if($error !== null) $this->setError($error);
 				return false;
@@ -233,6 +240,11 @@ class SpoonFormDate extends SpoonFormInput
 		{
 			// post/get data
 			$data = $this->getMethod(true);
+			if(!is_scalar($data[$this->getName()]))
+			{
+				if($error !== null) $this->setError($error);
+				return false;
+			}
 
 			// maxlength checks out (needs to be equal)
 			if(strlen((string) $data[$this->attributes['name']]) == $this->attributes['maxlength'])

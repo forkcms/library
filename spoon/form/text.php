@@ -98,7 +98,8 @@ class SpoonFormText extends SpoonFormInput
 			if(isset($data[$this->getName()]))
 			{
 				// value
-				$value = $data[$this->attributes['name']];
+				$value = $data[$this->getName()];
+				$value = is_scalar($value) ? (string) $value : 'Array';
 
 				// maximum length?
 				if(isset($this->attributes['maxlength']) && $this->attributes['maxlength'] > 0) $value = mb_substr($value, 0, (int) $this->attributes['maxlength'], SPOON_CHARSET);
@@ -334,9 +335,13 @@ class SpoonFormText extends SpoonFormInput
 	{
 		// post/get data
 		$data = $this->getMethod(true);
+		$value = isset($data[$this->getName()])
+			? $data[$this->getName()]
+			: '';
+		$value = is_array($value) ? 'Array' : trim((string) $value);
 
 		// validate
-		if(!(isset($data[$this->attributes['name']]) && trim((string) $data[$this->attributes['name']]) != ''))
+		if($value == '')
 		{
 			if($error !== null) $this->setError($error);
 			return false;

@@ -12,7 +12,7 @@ class SpoonLocaleTest extends PHPUnit_Framework_TestCase
 {
 	public function testGetAvailableLanguages()
 	{
-		$this->assertEquals(array('de', 'en', 'es', 'fr', 'nl'), SpoonLocale::getAvailableLanguages());
+		$this->assertEquals(array('de', 'en', 'es', 'fr', 'nl', 'it'), SpoonLocale::getAvailableLanguages());
 	}
 
 	public function testGetConjunction()
