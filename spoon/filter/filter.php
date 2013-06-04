@@ -1030,6 +1030,9 @@ class SpoonFilter
 		// convert "--" to "-"
 		$value = preg_replace('/\-+/', '-', $value);
 
+		// trim point
+		$value = trim($value, '.');
+
 		// trim - signs
 		return trim($value, '-');
 	}
