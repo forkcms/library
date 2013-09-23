@@ -75,6 +75,7 @@ class SpoonFile
 		$options[CURLOPT_URL] = $sourceURL;
 		$options[CURLOPT_FILE] = $fileHandle;
 		$options[CURLOPT_HEADER] = false;
+		$options[CURLOPT_FOLLOWLOCATION] = true;
 		if(ini_get('open_basedir') == '' && ini_get('safe_mode' == 'Off')) $options[CURLOPT_FOLLOWLOCATION] = true;
 
 		// init curl
@@ -340,7 +341,7 @@ class SpoonFile
 		fclose($handler);
 
 		// chmod file
-		chmod($filename, $chmod);
+		if(is_file($filename)) chmod($filename, $chmod);
 
 		// restore error reporting level
 		error_reporting($level);
