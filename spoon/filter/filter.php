@@ -232,10 +232,16 @@ class SpoonFilter
 	 */
 	protected static function fixGPCBoolLike($value)
 	{
-		if(is_string($value) && in_array(strtolower($value), array('n', 'no', 'false', 'f', 'off', '0', 'null'))) {
-			return false;
+		if(is_string($value)) {
+			$value = strtolower($value);
+			if(in_array($value, array('y', 'yes', 'true', 't', 'on', '1'))) {
+				return true;
+			}
+			if(in_array($value, array('n', 'no', 'false', 'f', 'off', '0', 'null'))) {
+				return false;
+			}
 		}
-		return (bool) $value;
+		return '';
 	}
 
 
