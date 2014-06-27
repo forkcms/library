@@ -4,7 +4,7 @@ $includePath = dirname(dirname(dirname(dirname(__FILE__))));
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
-require_once 'PHPUnit/Framework/TestCase.php';
+//require_once 'PHPUnit/Framework/TestCase.php';
 
 class SpoonFilterTest extends PHPUnit_Framework_TestCase
 {
@@ -61,8 +61,17 @@ class SpoonFilterTest extends PHPUnit_Framework_TestCase
 		$_GET['id'] = '1337';
 		$_GET['type'] = 'web';
 		$_GET['animal'] = 'donkey';
+		$_GET['true'] = 'true';
+		$_GET['false'] = 'false';
+		$_GET['invalidBool'] = 'ik heb radijsjes';
 
 		// perform tests
+		$this->assertTrue(SpoonFilter::getGetValue('i_do_not_exist', null, true, 'bool'));
+		$this->assertFalse(SpoonFilter::getGetValue('i_do_not_exist', null, false, 'bool'));
+		$this->assertFalse(SpoonFilter::getGetValue('i_do_not_exist', null, null, 'bool'));
+		$this->assertTrue(SpoonFilter::getGetValue('true', null, null, 'bool'));
+		$this->assertFalse(SpoonFilter::getGetValue('false', null, null, 'bool'));
+		$this->assertFalse(SpoonFilter::getGetValue('invalidBool', null, null, 'bool'));
 		$this->assertEquals(0, SpoonFilter::getGetValue('category_id', null, 0, 'int'));
 		$this->assertEquals(1337, SpoonFilter::getGetValue('id', null, 0, 'int'));
 		$this->assertEquals('web', SpoonFilter::getGetValue('type', array('web', 'print'), 'print'));

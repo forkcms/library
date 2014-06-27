@@ -187,6 +187,11 @@ class SpoonFilter
 		// define var
 		$var = (isset($_GET[$field])) ? $_GET[$field] : '';
 
+		// Fix bool coming from GPC
+		if($returnType === 'bool') {
+			$var = static::fixGPCBoolLike($var);
+		}
+
 		// parent method
 		return self::getValue($var, $values, $defaultValue, $returnType);
 	}
@@ -209,8 +214,34 @@ class SpoonFilter
 		// define var
 		$var = (isset($_POST[$field])) ? $_POST[$field] : '';
 
+		// Fix bool coming from GPC
+		if($returnType === 'bool') {
+			$var = static::fixGPCBoolLike($var);
+		}
+
 		// parent method
 		return self::getValue($var, $values, $defaultValue, $returnType);
+	}
+
+	/**
+	 * Booleans coming from GET, POST or COOKIE will be a string representing a boolean
+	 * This check will convert the value to a real boolean
+	 *
+	 * @param mixed $value
+	 * @return bool
+	 */
+	protected static function fixGPCBoolLike($value)
+	{
+		if(is_string($value)) {
+			$value = strtolower($value);
+			if(in_array($value, array('y', 'yes', 'true', 't', 'on', '1'))) {
+				return true;
+			}
+			if(in_array($value, array('n', 'no', 'false', 'f', 'off', '0', 'null'))) {
+				return false;
+			}
+		}
+		return '';
 	}
 
 
