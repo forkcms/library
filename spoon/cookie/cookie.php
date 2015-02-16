@@ -116,10 +116,8 @@ class SpoonCookie
 		// unserialize
 		$actualValue = @unserialize($value);
 
-		// unserialize failed
-		if($actualValue === false && serialize(false) != $value) throw new SpoonCookieException('The value of the cookie "' . $key . '" could not be retrieved. This might indicate that it has been tampered with OR the cookie was initially not set using SpoonCookie.');
+		// when unserialize fails it will return false. No problem.
 
-		// everything is fine
 		return $actualValue;
 	}
 

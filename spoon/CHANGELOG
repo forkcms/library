@@ -4,6 +4,9 @@ Bugfixes:
 
 * Locale: some countries where in wrong continent.
 
+Improvements:
+
+* Removed "value of the cookie xx could not be retrieved" exception.
 
 1.3.4 (2013-02-07)
 ----
