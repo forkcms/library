@@ -1783,7 +1783,7 @@ class SpoonDataGrid
 		else
 		{
 			// does not impmlement the interface
-			if(!in_array('iSpoonDatagridPaging', class_implements($class))) throw new SpoonDatagridException('The paging class you provided does not implement the "iSpoonDatagridPaging" interface');
+			if(!in_array('iSpoonDataGridPaging', class_implements($class))) throw new SpoonDatagridException('The paging class you provided does not implement the "iSpoonDataGridPaging" interface');
 
 			// all is fine
 			else $this->pagingClass = $class;
