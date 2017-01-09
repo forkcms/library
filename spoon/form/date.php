@@ -181,16 +181,10 @@ class SpoonFormDate extends SpoonFormInput
 		{
 			// post/get data
 			$data = $this->getMethod(true);
-			$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+			$value = (string) isset($data[$this->getName()]) ? $data[$this->getName()] : '';
 
 			// submitted by post (may be empty)
-			if(is_scalar($value))
-			{
-				// value
-				$value = (string) $data[$this->attributes['name']];
-			}
-			else
-			{
+			if(!is_scalar($value)) {
 				$value = 'Array';
 			}
 		}
