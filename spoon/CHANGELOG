@@ -3,6 +3,7 @@
 Bugfixes:
 
 * Locale: some countries where in wrong continent.
+* Core: CamelCasing fixed for DataGrid
 
 
 1.3.4 (2013-02-07)
@@ -51,7 +52,7 @@ Bugfixes:
 - Bugfix: form tokens are now working when you have more than one form on your page.
 - Feature: SpoonFilter::arrayMapRecursive() now has an optional third parameter $allowedKeys, which
   allows you to map callback to specified array keys only.
-- Bugfix: Custom keys didn't work correctly for SpoonDatagridSourceArray, they do now.
+- Bugfix: Custom keys didn't work correctly for SpoonDataGridSourceArray, they do now.
 - htmlspecialchars now uses ENT_NOQUOTES by default instead of ENT_QUOTES
 - Bugfix: SpoonDatagrid::getColumn no longer triggers an exception when the datagrid contains no
   results.

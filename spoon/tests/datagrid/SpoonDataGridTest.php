@@ -15,7 +15,7 @@ class SpoonDataGridTest extends PHPUnit_Framework_TestCase
 		$array[] = array('name' => 'Dave Lens', 'email' => 'dave@spoon-library.be');
 
 		// create source
-		$source = new SpoonDatagridSourceArray($array);
+		$source = new SpoonDataGridSourceArray($array);
 
 		// create datagrid
 		$dg = new SpoonDatagrid($source);
@@ -29,7 +29,7 @@ class SpoonDataGridTest extends PHPUnit_Framework_TestCase
 		$array[] = array('name' => 'Dave Lens', 'email' => 'dave@spoon-library.be');
 
 		// create source
-		$source = new SpoonDatagridSourceArray($array);
+		$source = new SpoonDataGridSourceArray($array);
 
 		// create datagrid
 		$dg = new SpoonDatagrid($source);
