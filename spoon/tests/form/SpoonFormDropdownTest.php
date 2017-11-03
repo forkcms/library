@@ -35,13 +35,13 @@ class SpoonFormDropdownTest extends PHPUnit_Framework_TestCase
 		$this->ddmSingle->setAttribute('rel', 'bauffman.jpg');
 		$this->assertEquals('bauffman.jpg', $this->ddmSingle->getAttribute('rel'));
 		$this->ddmSingle->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'single', 'class' => 'inputDropdown', 'size' => 1, 'rel' => 'bauffman.jpg'), $this->ddmSingle->getAttributes());
+		$this->assertEquals(array('id' => 'specialID', 'name' => 'single', 'class' => 'inputDropdown', 'rel' => 'bauffman.jpg'), $this->ddmSingle->getAttributes());
 
 		// single dropdown (optgroups)
 		$this->ddmOptGroupSingle->setAttribute('rel', 'bauffman.jpg');
 		$this->assertEquals('bauffman.jpg', $this->ddmOptGroupSingle->getAttribute('rel'));
 		$this->ddmOptGroupSingle->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'optgroup_single', 'class' => 'inputDropdown', 'size' => 1, 'rel' => 'bauffman.jpg'), $this->ddmOptGroupSingle->getAttributes());
+		$this->assertEquals(array('id' => 'specialID', 'name' => 'optgroup_single', 'class' => 'inputDropdown', 'rel' => 'bauffman.jpg'), $this->ddmOptGroupSingle->getAttributes());
 
 		// multiple dropdown
 		$this->ddmMultiple->setAttribute('rel', 'bauffman.jpg');
