@@ -768,7 +768,7 @@ class SpoonTemplateCompiler
 						$replace[] = '<?php
 						if(
 							(is_object(' . $baseVariable . ') && ' . $objectVariable . ' && ' . $objectVariable . ' != \'\' && ' . $objectVariable . ' !== false)
-							|| (is_array(' . $baseVariable . ') && isset(' . $variable . ') && count(' . $variable . ') != 0 && ' . $variable . ' != \'\' && ' . $variable . ' !== false))
+							|| (is_array(' . $baseVariable . ') && isset(' . $variable . ') && empty(' . $variable . ') === false && ' . $variable . ' != \'\' && ' . $variable . ' !== false))
 						{
 							?>';
 						$replace[] = '<?php } ?>';
@@ -776,7 +776,7 @@ class SpoonTemplateCompiler
 						// inverse option
 						$replace[] = '<?php if(
 							(is_object(' . $baseVariable . ') && (!' . $objectVariable . ' || ' . $objectVariable . ' == \'\' || ' . $objectVariable . ' === false))
-							|| (is_array(' . $baseVariable . ') && (!isset(' . $variable . ') || count(' . $variable . ') == 0 || ' . $variable . ' == \'\' || ' . $variable . ' === false))): ?>';
+							|| (is_array(' . $baseVariable . ') && (!isset(' . $variable . ') || empty(' . $variable . ') === true || ' . $variable . ' == \'\' || ' . $variable . ' === false))): ?>';
 						$replace[] = '<?php endif; ?>';
 					}
 					else
@@ -784,13 +784,13 @@ class SpoonTemplateCompiler
 						$replace = array();
 						// replace with
 						$replace[] = '<?php
-						if(isset(' . $variable . ') && count(' . $variable . ') != 0 && ' . $variable . ' != \'\' && ' . $variable . ' !== false)
+						if(isset(' . $variable . ') && empty(' . $variable . ') === false && ' . $variable . ' != \'\' && ' . $variable . ' !== false)
 						{
 							?>';
 						$replace[] = '<?php } ?>';
 
 						// inverse option
-						$replace[] = '<?php if(!isset(' . $variable . ') || count(' . $variable . ') == 0 || ' . $variable . ' == \'\' || ' . $variable . ' === false): ?>';
+						$replace[] = '<?php if(!isset(' . $variable . ') || empty(' . $variable . ') === true || ' . $variable . ' == \'\' || ' . $variable . ' === false): ?>';
 						$replace[] = '<?php endif; ?>';
 					}
 
