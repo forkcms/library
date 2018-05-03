@@ -11,7 +11,7 @@ class SpoonFileTest extends PHPUnit_Framework_TestCase
 	{
 		if(!defined('TMPPATH')) define('TMPPATH', dirname(realpath(dirname(__FILE__))) . '/tmp');
 
-		$this->existingUrl = 'http://www.spoon-library.com/downloads/1.0.3/spoon-1.0.3.zip';
+		$this->existingUrl = 'http://www.spoon-library.be/downloads/1.0.3/spoon-1.0.3.zip';
 		$this->nonExistingUrl = 'http://ksdgg.com/' . time() . '.txt';
 		$this->destinationFile = TMPPATH . '/spoon.zip';
 	}
