@@ -3,7 +3,7 @@
 	"type": "library",
 	"description": "A PHP5 library that is fast, easy to learn and fun!",
 	"homepage": "http://www.spoon-library.com",
-	"license": "BSD",
+	"license": "BSD-1-Clause",
 	"authors": [
 		{
 			"name": "Davy Hellemans",
