@@ -162,7 +162,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 			if($key == 'class') $html .= $this->getClassHTML();
 
 			// name
-			elseif($key == 'name' && !$this->single) $html .= ' name="' . $value . '"';
+			elseif($key == 'name' && !$this->single) $html .= ' name="' . $variables['[name]'] . '"';
 
 			// other elements
 			else $html .= ' ' . $key . '="' . str_replace(array_keys($variables), array_values($variables), $value) . '"';
@@ -456,17 +456,19 @@ class SpoonFormDropdown extends SpoonFormAttributes
 		// name is required
 		if($this->attributes['name'] == '') throw new SpoonFormException('A name is required for a dropdown menu. Please provide a name.');
 
-		// name?
-		if(!$this->single) $this->attributes['name'] .= '[]';
-
 		// init var
 		$selected = $this->getSelected();
 
 		// start html generation
 		$output = "\r\n" . '<select';
 
+		$name = $this->attributes['name'];
+		if (!$this->single) {
+			$name .= '[]';
+		}
+
 		// add attributes
-		$output .= $this->getAttributesHTML(array('[id]' => $this->attributes['id'], '[name]' => $this->attributes['name']));
+		$output .= $this->getAttributesHTML(array('[id]' => $this->attributes['id'], '[name]' => $name));
 
 		// end select tag
 		$output .= ">\r\n";
