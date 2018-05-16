@@ -274,7 +274,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 			if(!$this->single)
 			{
 				// get the name
-				$name = substr($this->attributes['name'], 0, -2);
+				$name = $this->attributes['name'];
 
 				// field has been submitted
 				if(isset($data[$name]) && is_array($data[$name]) && count($data[$name]) != 0)
