@@ -25,7 +25,7 @@
  * @author			Davy Hellemans <davy@spoon-library.com>
  * @since			1.0.0
  */
-class SpoonDataGrid
+class SpoonDatagrid
 {
 	/**
 	 * List of columns that may be sorted in, based on the query results
@@ -130,9 +130,9 @@ class SpoonDataGrid
 	/**
 	 * Class used to define paging
 	 *
-	 * @var	SpoonDataGridPaging
+	 * @var	SpoonDatagridPaging
 	 */
-	private $pagingClass = 'SpoonDataGridPaging';
+	private $pagingClass = 'SpoonDatagridPaging';
 
 
 	/**

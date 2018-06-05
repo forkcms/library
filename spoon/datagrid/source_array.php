@@ -101,7 +101,7 @@ class SpoonDatagridSourceArray extends SpoonDatagridSource
 			self::$order = $order;
 
 			// apply sorting
-			uasort($this->data, array('SpoonDataGridSourceArray', 'applySorting'));
+			uasort($this->data, array('SpoonDatagridSourceArray', 'applySorting'));
 
 			// reverse if needed?
 			if($sort !== null && $sort == 'desc') $this->data = array_reverse($this->data, true);
