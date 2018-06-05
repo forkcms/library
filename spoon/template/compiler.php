@@ -749,6 +749,7 @@ class SpoonTemplateCompiler
 					$replace = '';
 					if($isObject)
 					{
+						$replace = array();
 						// replace with
 						$replace[] = '<?php
 						if(' . $variable . ' && ' . $variable . ' != \'\' && ' . $variable . ' !== false)
@@ -762,6 +763,7 @@ class SpoonTemplateCompiler
 					}
 					elseif($inIteration)
 					{
+						$replace = array();
 						// replace with
 						$replace[] = '<?php
 						if(
@@ -779,6 +781,7 @@ class SpoonTemplateCompiler
 					}
 					else
 					{
+						$replace = array();
 						// replace with
 						$replace[] = '<?php
 						if(isset(' . $variable . ') && count(' . $variable . ') != 0 && ' . $variable . ' != \'\' && ' . $variable . ' !== false)
