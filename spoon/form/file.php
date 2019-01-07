@@ -247,13 +247,13 @@ class SpoonFormFile extends SpoonFormAttributes
 		if($this->isFilled())
 		{
 			// get image properties
-			$properties = @getimagesize($_FILES[$this->attributes['name']]['tmp_name']);
+			$mimeType = mime_content_type($_FILES[$this->attributes['name']]['tmp_name']);
 
 			// invalid properties
-			if($properties === false) $return = false;
+			if($mimeType === false) $return = false;
 
 			// search for mime-type
-			else $return = in_array($properties['mime'], $allowedTypes);
+			else $return = in_array($mimeType, $allowedTypes);
 
 			// add error if needed
 			if(!$return && $error !== null) $this->setError($error);

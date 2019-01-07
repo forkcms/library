@@ -48,11 +48,17 @@ class SpoonFormImage extends SpoonFormFile
 		// call the parent
 		parent::__construct($name, $class, $classError);
 
-		// is the form submitted and the file is uploaded?
-		if($this->isSubmitted() && is_uploaded_file($this->getTempFileName())) $this->properties = @getimagesize($this->getTempFileName());
+		$this->properties = false;
 
-		// fallback
-		else $this->properties = false;
+		// is the form submitted and the file is uploaded?
+		if($this->isSubmitted() && is_uploaded_file($this->getTempFileName())) {
+			$this->properties = @getimagesize($this->getTempFileName());
+
+			// Handle the svg case
+			if ($this->properties === false && mime_content_type($this->getTempFileName()) === 'image/svg+xml') {
+				$this->properties = $this->getSvgProperties($this->getTempFileName());
+			}
+		}
 	}
 
 
@@ -91,6 +97,10 @@ class SpoonFormImage extends SpoonFormFile
 			{
 				// get extension
 				$extension = image_type_to_extension($this->properties[2], false);
+
+				if ($extension === false && $this->properties['mime'] === 'image/svg+xml') {
+					$extension = 'svg';
+				}
 
 				// cleanup
 				if($extension == 'jpeg') $extension = 'jpg';
@@ -194,5 +204,23 @@ class SpoonFormImage extends SpoonFormFile
 
 		// return
 		return $isSquare;
+	}
+
+	/**
+	 * @param string $file
+	 */
+	private function getSvgProperties($file)
+	{
+		$xmlget = simplexml_load_file($file);
+		$xmlattributes = $xmlget->attributes();
+		$width = preg_replace('/[a-zA-Z]+/', '', (string)$xmlattributes->width);
+		$height = preg_replace('/[a-zA-Z]+/', '', (string) $xmlattributes->height);
+
+		return [
+			0 => $width,
+			1 => $height,
+			2 => false,
+			'mime' => 'image/svg+xml',
+		];
 	}
 }
