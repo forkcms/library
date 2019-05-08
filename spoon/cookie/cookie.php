@@ -136,7 +136,7 @@ class SpoonCookie
 		}
 
 		// unserialize failed
-		if($actualValue === null && json_encode(false) != $value) throw new SpoonCookieException('The value of the cookie "' . $key . '" could not be retrieved. This might indicate that it has been tampered with OR the cookie was initially not set using SpoonCookie.');
+		if($actualValue === null && json_encode(null) !== $value) throw new SpoonCookieException('The value of the cookie "' . $key . '" could not be retrieved. This might indicate that it has been tampered with OR the cookie was initially not set using SpoonCookie.');
 
 		// everything is fine
 		return $actualValue;
