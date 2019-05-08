@@ -126,7 +126,7 @@ class SpoonCookie
 				$unserializedValue = unserialize($value);
 
 				// unserialize was successful
-				if ($unserializedValue !== false) {
+				if ($unserializedValue !== false || serialize(false) === $value) {
 					// set the cookie again, but this time json encode it
 					self::set($key, $unserializedValue);
 
