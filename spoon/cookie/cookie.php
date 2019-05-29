@@ -114,10 +114,25 @@ class SpoonCookie
 		$value = (get_magic_quotes_gpc()) ? stripslashes($_COOKIE[$key]) : $_COOKIE[$key];
 
 		// unserialize
-		$actualValue = @unserialize($value);
+        $actualValue = json_decode($value);
+        // if the decode failed
+        if ($actualValue === null) {
+            // maybe it's serialized, check if there are any serialized objects in the string.
+            preg_match('/O:\d+:"/', $value, $matches);
+            // no objects were found
+            if (empty($matches)) {
+                $unserializedValue = unserialize($value);
+                // unserialize was successful
+                if ($unserializedValue !== false || serialize(false) === $value) {
+                    // set the cookie again, but this time json encode it
+                    self::set($key, $unserializedValue);
+                    return $unserializedValue;
+                }
+            }
+        }
 
 		// unserialize failed
-		if($actualValue === false && serialize(false) != $value) throw new SpoonCookieException('The value of the cookie "' . $key . '" could not be retrieved. This might indicate that it has been tampered with OR the cookie was initially not set using SpoonCookie.');
+        if($actualValue === null && json_encode(null) !== $value) throw new SpoonCookieException('The value of the cookie "' . $key . '" could not be retrieved. This might indicate that it has been tampered with OR the cookie was initially not set using SpoonCookie.');
 
 		// everything is fine
 		return $actualValue;
@@ -140,7 +155,7 @@ class SpoonCookie
 	{
 		// redefine
 		$key = (string) $key;
-		$value = serialize($value);
+		$value = json_encode($value);
 		$time = time() + (int) $time;
 		$path = (string) $path;
 		$domain = ($domain !== null) ? (string) $domain : null;
