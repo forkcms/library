@@ -216,11 +216,11 @@ class SpoonFormImage extends SpoonFormFile
 		$width = preg_replace('/[a-zA-Z]+/', '', (string)$xmlattributes->width);
 		$height = preg_replace('/[a-zA-Z]+/', '', (string) $xmlattributes->height);
 
-		return [
+		return array(
 			0 => $width,
 			1 => $height,
 			2 => false,
 			'mime' => 'image/svg+xml',
-		];
+		);
 	}
 }
