@@ -121,7 +121,7 @@ class SpoonCookie
             preg_match('/O:\d+:"/', $value, $matches);
             // no objects were found
             if (empty($matches)) {
-                $unserializedValue = unserialize($value);
+                $unserializedValue = @unserialize($value);
                 // unserialize was successful
                 if ($unserializedValue !== false || serialize(false) === $value) {
                     // set the cookie again, but this time json encode it
