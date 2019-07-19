@@ -281,6 +281,12 @@ class SpoonFormRadiobutton extends SpoonFormElement
 			$element = array();
 			$element[$name] = '<input type="radio" name="' . $this->name . '" value="' . $value . '"';
 
+			// if the form uses numeric values, PHP will automatically cast them to integers because we set them as array keys
+			// if we don't cast it back to a string we will compare an integer to a string and it will always fail
+			if (is_numeric($value) && is_string($this->getChecked())) {
+				$value = (string) $value;
+			}
+
 			// checked status
 			if($value === $this->getChecked()) $element[$name] .= ' checked="checked"';
 
