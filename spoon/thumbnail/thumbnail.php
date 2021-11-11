@@ -262,7 +262,7 @@ class SpoonThumbnail
 		// file is the same?
 		if(($currentType == IMAGETYPE_GIF && $extension == 'gif') || ($currentType == IMAGETYPE_JPEG && in_array($extension, array('jpg', 'jpeg'))) || ($currentType == IMAGETYPE_PNG && $extension == 'png'))
 		{
-			if($currentWidth == $this->width && $currentHeight == $this->height)
+			if($currentWidth == $this->width && $currentHeight == $this->height && $this->filename != $filename)
 			{
 				return SpoonDirectory::copy($this->filename, $filename, true, true, $chmod);
 			}
