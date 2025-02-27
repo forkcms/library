@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 date_default_timezone_set('Europe/Brussels');
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -48,8 +48,8 @@ class SpoonFormDateTest extends TestCase
 	{
 		$this->txtDate->setAttribute('rel', 'bauffman.jpg');
 		$this->assertEquals('bauffman.jpg', $this->txtDate->getAttribute('rel'));
-		$this->txtDate->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'date','maxlength' => 10, 'class' => 'inputDatefield', 'rel' => 'bauffman.jpg', 'data-mask' => 'dd/mm/yy'), $this->txtDate->getAttributes());
+		$this->txtDate->setAttributes(['id' => 'specialID']);
+		$this->assertEquals(['id' => 'specialID', 'name' => 'date','maxlength' => 10, 'class' => 'inputDatefield', 'rel' => 'bauffman.jpg', 'data-mask' => 'dd/mm/yy'], $this->txtDate->getAttributes());
 	}
 
 	public function testIsFilled()
@@ -57,7 +57,7 @@ class SpoonFormDateTest extends TestCase
 		$this->assertFalse($this->txtDate->isFilled());
 		$_POST['date'] = '12/10/2009';
 		$this->assertTrue($this->txtDate->isFilled());
-		$_POST['date'] = array('foo', 'bar');
+		$_POST['date'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtDate->isFilled());
 	}
 
@@ -70,7 +70,7 @@ class SpoonFormDateTest extends TestCase
 		$this->assertTrue($this->txtDate->isValid());
 		$_POST['date'] = '31/04/2009';
 		$this->assertFalse($this->txtDate->isValid());
-		$_POST['date'] = array('foo', 'bar');
+		$_POST['date'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtDate->isValid());
 	}
 
@@ -82,7 +82,7 @@ class SpoonFormDateTest extends TestCase
 		$this->assertEquals('12/11/2009 12:13:14', date('d/m/Y H:i:s', $this->txtDate->getTimestamp(null, 11, null, 12, 13, 14)));
 		$this->assertEquals('25/10/2009 12:13:14', date('d/m/Y H:i:s', $this->txtDate->getTimestamp(null, null, 25, 12, 13, 14)));
 
-		$_POST['date'] = array('foo', 'bar');
+		$_POST['date'] = ['foo', 'bar'];
 		$this->assertEquals(date('Y-m-d H:i:s'), date('Y-m-d H:i:s', $this->txtDate->getTimestamp()));
 	}
 
@@ -92,13 +92,13 @@ class SpoonFormDateTest extends TestCase
 		$_POST['date'] = '12/10/2009';
 		$this->assertEquals('12/10/2009', $this->txtDate->getValue());
 
-		$_POST['date'] = array('foo', 'bar');
+		$_POST['date'] = ['foo', 'bar'];
 		$this->assertEquals('Array', $this->txtDate->getValue());
 	}
 
 	public function testDateFormatsLong()
 	{
-		$formats = Array(
+		$formats = [
 			'j F Y',
 			'D j F Y',
 			'l j F Y',
@@ -113,7 +113,7 @@ class SpoonFormDateTest extends TestCase
 			'F d, Y',
 			'D F d, Y',
 			'l F d, Y',
-		);
+		];
 		$this->loopOverFormats($formats);
 	}
 
@@ -140,7 +140,7 @@ class SpoonFormDateTest extends TestCase
 
 	public function testDateFormatsShort()
 	{
-		$formats = Array(
+		$formats = [
 			'j/n/Y',
 			'j-n-Y',
 			'j.n.Y',
@@ -165,7 +165,7 @@ class SpoonFormDateTest extends TestCase
 			'm/d/y',
 			'm-d-y',
 			'm.d.y',
-		);
+		];
 		$this->loopOverFormats($formats);
 	}
 

@@ -37,7 +37,7 @@ class SpoonTemplate
 	 *
 	 * @var	array
 	 */
-	protected $cache = array();
+	protected $cache = [];
 
 
 	/**
@@ -69,7 +69,7 @@ class SpoonTemplate
 	 *
 	 * @var	array
 	 */
-	protected $forms = array();
+	protected $forms = [];
 
 
 	/**
@@ -77,7 +77,7 @@ class SpoonTemplate
 	 *
 	 * @var	array
 	 */
-	protected $iterations = array();
+	protected $iterations = [];
 
 
 	/**
@@ -85,7 +85,7 @@ class SpoonTemplate
 	 *
 	 * @var	array
 	 */
-	protected $variables = array();
+	protected $variables = [];
 
 
 	/**
@@ -344,8 +344,7 @@ class SpoonTemplate
 	 */
 	public function getAssignedValue($variable)
 	{
-		if(isset($this->variables[(string) $variable])) return $this->variables[(string) $variable];
-		return null;
+		return $this->variables[(string) $variable] ?? null;
 	}
 
 

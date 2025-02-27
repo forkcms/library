@@ -33,7 +33,7 @@ class SpoonDatagridColumn
 	 *
 	 * @var	array
 	 */
-	private $attributes = array('general' => array(), 'header' => array());
+	private $attributes = ['general' => [], 'header' => []];
 
 
 	/**
@@ -189,7 +189,7 @@ class SpoonDatagridColumn
 	 */
 	public function clearAttributes()
 	{
-		$this->attributes['general'] = array();
+		$this->attributes['general'] = [];
 	}
 
 
@@ -489,7 +489,7 @@ class SpoonDatagridColumn
 	 */
 	public function setSortingMethod($sort = 'asc')
 	{
-		$this->sortingMethod = SpoonFilter::getValue($sort, array('asc', 'desc'), 'asc');
+		$this->sortingMethod = SpoonFilter::getValue($sort, ['asc', 'desc'], 'asc');
 	}
 
 

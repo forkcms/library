@@ -103,13 +103,14 @@ class SpoonFormButton extends SpoonFormAttributes
 	 * @return	string
 	 * @param	SpoonTemplate[optional] $template	The template to parse the element in.
 	 */
+	#[\Override]
 	public function parse($template = null)
 	{
 		// start element
 		$output = '<input type="' . $this->type . '" value="' . SpoonFilter::htmlspecialchars($this->value) . '"';
 
 		// add attributes
-		$output .= $this->getAttributesHTML(array('[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'], '[value]' => $this->getValue())) . ' />';
+		$output .= $this->getAttributesHTML(['[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'], '[value]' => $this->getValue()]) . ' />';
 
 		// parse
 		if($template !== null) $template->assign('btn' . SpoonFilter::toCamelCase($this->attributes['name']), $output);
@@ -126,7 +127,7 @@ class SpoonFormButton extends SpoonFormAttributes
 	 */
 	public function setType($type = 'submit')
 	{
-		$this->type = SpoonFilter::getValue($type, array('button', 'reset', 'submit'), 'submit');
+		$this->type = SpoonFilter::getValue($type, ['button', 'reset', 'submit'], 'submit');
 		return $this;
 	}
 }

@@ -150,7 +150,7 @@ class SpoonFormRadiobutton extends SpoonFormElement
 		// form submitted
 		if($this->isSubmitted())
 		{
-			$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+			$value = $data[$this->getName()] ?? '';
 			if(is_array($value))
 			{
 				$value = 'Array';
@@ -183,6 +183,7 @@ class SpoonFormRadiobutton extends SpoonFormElement
 	 *
 	 * @return	string
 	 */
+	#[\Override]
 	public function getName()
 	{
 		return $this->name;
@@ -222,7 +223,7 @@ class SpoonFormRadiobutton extends SpoonFormElement
 			// external data NOT allowed
 			else
 			{
-				$submittedValue = isset($data[$this->name]) ? $data[$this->name] : '';
+				$submittedValue = $data[$this->name] ?? '';
 				if(is_array($submittedValue))
 				{
 					$submittedValue = 'Array';
@@ -249,7 +250,7 @@ class SpoonFormRadiobutton extends SpoonFormElement
 		{
 			// post/get data
 			$data = $this->getMethod(true);
-			$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+			$value = $data[$this->getName()] ?? '';
 			$value = is_array($value) ? 'Array' : trim((string) $value);
 
 			// correct
@@ -269,6 +270,7 @@ class SpoonFormRadiobutton extends SpoonFormElement
 	 * @param 	SpoonTemplate $template    The template to parse the element in.
 	 * @throws	SpoonFormException
 	 */
+	#[\Override]
 	public function parse($template = null)
 	{
 		// name required
@@ -281,14 +283,14 @@ class SpoonFormRadiobutton extends SpoonFormElement
 		{
 			// init vars
 			$name = 'rbt' . SpoonFilter::toCamelCase($this->name);
-			$element = array();
+			$element = [];
 			$element[$name] = '<input type="radio" name="' . $this->name . '" value="' . $value . '"';
 
 			// checked status
 			if($value === $this->getChecked()) $element[$name] .= ' checked="checked"';
 
 			// add attributes
-			$element[$name] .= $this->getAttributesHTML($value, array('[id]' => $this->variables[$value]['id'], '[value]' => $value));
+			$element[$name] .= $this->getAttributesHTML($value, ['[id]' => $this->variables[$value]['id'], '[value]' => $value]);
 
 			// add variables to this element
 			foreach($this->variables[$value] as $variableKey => $variableValue) $element[$variableKey] = $variableValue;

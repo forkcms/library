@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -45,8 +45,8 @@ class SpoonFormPasswordTest extends TestCase
 	{
 		$this->txtPassword->setAttribute('rel', 'bauffman.jpg');
 		$this->assertEquals('bauffman.jpg', $this->txtPassword->getAttribute('rel'));
-		$this->txtPassword->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'name', 'class' => 'inputPassword', 'rel' => 'bauffman.jpg'), $this->txtPassword->getAttributes());
+		$this->txtPassword->setAttributes(['id' => 'specialID']);
+		$this->assertEquals(['id' => 'specialID', 'name' => 'name', 'class' => 'inputPassword', 'rel' => 'bauffman.jpg'], $this->txtPassword->getAttributes());
 	}
 
 	public function testIsFilled()
@@ -54,7 +54,7 @@ class SpoonFormPasswordTest extends TestCase
 		$this->assertFalse($this->txtPassword->isFilled());
 		$_POST['name'] = 'I am not empty';
 		$this->assertTrue($this->txtPassword->isFilled());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtPassword->isFilled());
 	}
 
@@ -64,7 +64,7 @@ class SpoonFormPasswordTest extends TestCase
 		$this->assertFalse($this->txtPassword->isAlphabetical());
 		$_POST['name'] = 'Bauffman';
 		$this->assertTrue($this->txtPassword->isAlphabetical());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtPassword->isAlphabetical());
 	}
 
@@ -74,7 +74,7 @@ class SpoonFormPasswordTest extends TestCase
 		$this->assertFalse($this->txtPassword->isAlphaNumeric());
 		$_POST['name'] = 'L33t';
 		$this->assertTrue($this->txtPassword->isAlphaNumeric());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtPassword->isAlphaNumeric());
 	}
 
@@ -83,7 +83,7 @@ class SpoonFormPasswordTest extends TestCase
 		$_POST['name'] = 'Writing tests can be pretty frakkin boring';
 		$this->assertTrue($this->txtPassword->isMaximumCharacters(100));
 		$this->assertFalse($this->txtPassword->isMaximumCharacters(10));
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtPassword->isMaximumCharacters(4));
 	}
 
@@ -93,7 +93,7 @@ class SpoonFormPasswordTest extends TestCase
 		$this->assertTrue($this->txtPassword->isMinimumCharacters(10));
 		$this->assertTrue($this->txtPassword->isMinimumCharacters(2));
 		$this->assertFalse($this->txtPassword->isMinimumCharacters(23));
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtPassword->isMinimumCharacters(23));
 	}
 
@@ -102,7 +102,7 @@ class SpoonFormPasswordTest extends TestCase
 		$_POST['name'] = 'Spoon';
 		$this->assertTrue($this->txtPassword->isValidAgainstRegexp('/([a-z]+)/'));
 		$this->assertFalse($this->txtPassword->isValidAgainstRegexp('/([0-9]+)/'));
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtPassword->isValidAgainstRegexp('/Array/'));
 	}
 
@@ -111,7 +111,7 @@ class SpoonFormPasswordTest extends TestCase
 		$_POST['form'] = 'passwordfield';
 		$_POST['name'] = '<a href="http://www.spoon-library.be">Bobby Tables, my friends call mééé</a>';
 		$this->assertEquals($_POST['name'], $this->txtPassword->getValue());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertEquals('Array', $this->txtPassword->getValue());
 	}
 

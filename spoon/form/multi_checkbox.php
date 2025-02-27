@@ -40,7 +40,7 @@ class SpoonFormMultiCheckbox extends SpoonFormElement
 	 *
 	 * @var	array
 	 */
-	private $checked = array();
+	private $checked = [];
 
 
 	/**
@@ -91,7 +91,6 @@ class SpoonFormMultiCheckbox extends SpoonFormElement
 
 		// custom optional fields
 		if($checked !== null) $this->setChecked($checked);
-		$this->classError = (string) $class;
 	}
 
 
@@ -159,6 +158,7 @@ class SpoonFormMultiCheckbox extends SpoonFormElement
 	 *
 	 * @return	string
 	 */
+	#[\Override]
 	public function getName()
 	{
 		return $this->name;
@@ -184,7 +184,7 @@ class SpoonFormMultiCheckbox extends SpoonFormElement
 	public function getValue()
 	{
 		// default value
-		$values = array();
+		$values = [];
 
 		// submitted by post (may be empty)
 		if($this->isSubmitted())
@@ -248,6 +248,7 @@ class SpoonFormMultiCheckbox extends SpoonFormElement
 	 * @return	string
 	 * @param	SpoonTemplate[optional] $template	The template to parse the element in.
 	 */
+	#[\Override]
 	public function parse($template = null)
 	{
 		// name required
@@ -258,14 +259,14 @@ class SpoonFormMultiCheckbox extends SpoonFormElement
 		{
 			// init vars
 			$name = 'chk' . SpoonFilter::toCamelCase($this->name);
-			$element = array();
+			$element = [];
 			$element[$name] = '<input type="checkbox" name="' . $this->name . '[]" value="' . $value . '"';
 
 			// checked status
 			if(in_array($value, $this->getChecked())) $element[$name] .= ' checked="checked"';
 
 			// add attributes
-			$element[$name] .= $this->getAttributesHTML($value, array('[id]' => $this->variables[$value]['id'], '[value]' => $value));
+			$element[$name] .= $this->getAttributesHTML($value, ['[id]' => $this->variables[$value]['id'], '[value]' => $value]);
 
 			// add variables to this element
 			foreach($this->variables[$value] as $variableKey => $variableValue) $element[$variableKey] = $variableValue;

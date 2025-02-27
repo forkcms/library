@@ -98,7 +98,7 @@ class SpoonDatagridPaging implements iSpoonDatagridPaging
 
 		// compile directory
 		if($compileDirectory !== null) $tpl->setCompileDirectory($compileDirectory);
-		else $tpl->setCompileDirectory(dirname(__FILE__));
+		else $tpl->setCompileDirectory(__DIR__);
 
 		// force compiling
 		$tpl->setForceCompile((bool) $debug);
@@ -108,7 +108,7 @@ class SpoonDatagridPaging implements iSpoonDatagridPaging
 		{
 			// label & url
 			$previousLabel = self::$previous;
-			$previousURL = str_replace(array('[offset]', '[order]', '[sort]'), array(($offset - $numPerPage), $order, $sort), $URL);
+			$previousURL = str_replace(['[offset]', '[order]', '[sort]'], [($offset - $numPerPage), $order, $sort], $URL);
 			$tpl->assign('previousLabel', $previousLabel);
 			$tpl->assign('previousURL', $previousURL);
 		}
@@ -118,7 +118,7 @@ class SpoonDatagridPaging implements iSpoonDatagridPaging
 		{
 			// label & url
 			$nextLabel = self::$next;
-			$nextURL = str_replace(array('[offset]', '[order]', '[sort]'), array(($offset + $numPerPage), $order, $sort), $URL);
+			$nextURL = str_replace(['[offset]', '[order]', '[sort]'], [($offset + $numPerPage), $order, $sort], $URL);
 			$tpl->assign('nextLabel', $nextLabel);
 			$tpl->assign('nextURL', $nextURL);
 		}
@@ -126,7 +126,7 @@ class SpoonDatagridPaging implements iSpoonDatagridPaging
 		// limit
 		$limit = 7;
 		$breakpoint = 4;
-		$items = array();
+		$items = [];
 
 		/**
 		 * Less than or 7 pages. We know all the keys, and we put them in the array
@@ -188,7 +188,7 @@ class SpoonDatagridPaging implements iSpoonDatagridPaging
 		}
 
 		// init var
-		$pages = array();
+		$pages = [];
 
 		// loop pages
 		foreach($items as $item)
@@ -223,7 +223,7 @@ class SpoonDatagridPaging implements iSpoonDatagridPaging
 					$pages[$i]['otherPage'] = true;
 
 					// url to this page
-					$pages[$i]['url'] = str_replace(array('[offset]', '[order]', '[sort]'), array((($numPerPage * $item) - $numPerPage), $order, $sort), $URL);
+					$pages[$i]['url'] = str_replace(['[offset]', '[order]', '[sort]'], [(($numPerPage * $item) - $numPerPage), $order, $sort], $URL);
 				}
 			}
 
@@ -239,7 +239,7 @@ class SpoonDatagridPaging implements iSpoonDatagridPaging
 
 		// cough it up
 		ob_start();
-		$tpl->display(dirname(__FILE__) . '/paging.tpl');
+		$tpl->display(__DIR__ . '/paging.tpl');
 		return ob_get_clean();
 	}
 }

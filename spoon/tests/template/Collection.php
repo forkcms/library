@@ -5,17 +5,14 @@
  */
 class Collection implements Countable, IteratorAggregate, ArrayAccess
 {
-	private $array = array();
-
 	public function count()
 	{
 		return count($this->array);
 	}
 
-	public function __construct(array $array)
-	{
-		$this->array = $array;
-	}
+	public function __construct(private array $array)
+    {
+    }
 
 	public function getIterator()
 	{
@@ -29,7 +26,7 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess
 
 	public function offsetGet($offset)
 	{
-		return isset($this->array[$offset]) ? $this->array[$offset] : null;
+		return $this->array[$offset] ?? null;
 	}
 
 	public function offsetSet($offset, $value)

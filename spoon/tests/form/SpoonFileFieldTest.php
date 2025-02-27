@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -36,8 +36,8 @@ class SpoonFileFieldTest extends TestCase
 	{
 		$this->filePDF->setAttribute('rel', 'bauffman.jpg');
 		$this->assertEquals('bauffman.jpg', $this->filePDF->getAttribute('rel'));
-		$this->filePDF->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'pdf', 'class' => 'inputFilefield', 'rel' => 'bauffman.jpg'), $this->filePDF->getAttributes());
+		$this->filePDF->setAttributes(['id' => 'specialID']);
+		$this->assertEquals(['id' => 'specialID', 'name' => 'pdf', 'class' => 'inputFilefield', 'rel' => 'bauffman.jpg'], $this->filePDF->getAttributes());
 	}
 
 	public function testGetExtension()
@@ -65,8 +65,8 @@ class SpoonFileFieldTest extends TestCase
 	public function testIsAllowedExtension()
 	{
 		$_POST['form'] = 'filefield';
-		$this->assertEquals(true, $this->filePDF->isAllowedExtension(array('jpg', 'pdf', 'jpeg')));
-		$this->assertEquals(false, $this->filePDF->isAllowedExtension(array('xpdf')));
+		$this->assertEquals(true, $this->filePDF->isAllowedExtension(['jpg', 'pdf', 'jpeg']));
+		$this->assertEquals(false, $this->filePDF->isAllowedExtension(['xpdf']));
 	}
 
 	public function testIsFileName()

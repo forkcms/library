@@ -151,7 +151,7 @@ class SpoonFormPassword extends SpoonFormInput
 	{
 		// post/get data
 		$data = $this->getMethod(true);
-		$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+		$value = $data[$this->getName()] ?? '';
 		if(is_array($value))
 		{
 			$value = 'Array';
@@ -267,6 +267,7 @@ class SpoonFormPassword extends SpoonFormInput
 	 * @return	string
 	 * @param	SpoonTemplate[optional] $template	The template to parse the element in.
 	 */
+	#[\Override]
 	public function parse($template = null)
 	{
 		// name is required
@@ -276,7 +277,7 @@ class SpoonFormPassword extends SpoonFormInput
 		$output = '<input type="password" value="' . SpoonFilter::htmlspecialchars($this->getValue()) . '"';
 
 		// add attributes
-		$output .= $this->getAttributesHTML(array('[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'], '[value]' => $this->getValue())) . ' />';
+		$output .= $this->getAttributesHTML(['[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'], '[value]' => $this->getValue()]) . ' />';
 
 		// template
 		if($template !== null)

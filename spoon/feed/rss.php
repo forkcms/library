@@ -38,7 +38,7 @@ class SpoonFeedRSS
 	 *
 	 * @var	array
 	 */
-	private $categories = array();
+	private $categories = [];
 
 
 	/**
@@ -94,7 +94,7 @@ class SpoonFeedRSS
 	 *
 	 * @var	array
 	 */
-	private $image = array();
+	private $image = [];
 
 
 	/**
@@ -102,7 +102,7 @@ class SpoonFeedRSS
 	 *
 	 * @var	array
 	 */
-	private $items = array();
+	private $items = [];
 
 
 	/**
@@ -158,7 +158,7 @@ class SpoonFeedRSS
 	 *
 	 * @var	array
 	 */
-	private $skipDays = array();
+	private $skipDays = [];
 
 
 	/**
@@ -166,7 +166,7 @@ class SpoonFeedRSS
 	 *
 	 * @var	array
 	 */
-	private $skipHours = array();
+	private $skipHours = [];
 
 
 	/**
@@ -217,7 +217,7 @@ class SpoonFeedRSS
 	 * @param	string $description		The description of the feed.
 	 * @param	array[optional] $items	An array with SpoonFeedRSSItems.
 	 */
-	public function __construct($title, $link, $description, array $items = array())
+	public function __construct($title, $link, $description, array $items = [])
 	{
 		// set properties
 		$this->setTitle($title);
@@ -238,7 +238,7 @@ class SpoonFeedRSS
 	public function addCategory($category, $domain = null)
 	{
 		// init var
-		$categoryDetails = array();
+		$categoryDetails = [];
 
 		// add category
 		$categoryDetails['category'] = (string) $category;
@@ -270,7 +270,7 @@ class SpoonFeedRSS
 	public function addSkipDay($day)
 	{
 		// allowed days
-		$allowedDays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saterday');
+		$allowedDays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saterday'];
 
 		// redefine var
 		$day = (string) SpoonFilter::getValue(strtolower($day), $allowedDays, 'sunday');
@@ -297,7 +297,7 @@ class SpoonFeedRSS
 		$hour = (int) SpoonFilter::getValue($hour, $allowedHours, 0);
 
 		// validate
-		if(!in_array($hour, $allowedHours)) throw new SpoonFeedException('This (' . $hour . ') isn\'t a valid hour. Only ' . join(', ', $allowedHours) . ' are allowed.)');
+		if(!in_array($hour, $allowedHours)) throw new SpoonFeedException('This (' . $hour . ') isn\'t a valid hour. Only ' . implode(', ', $allowedHours) . ' are allowed.)');
 		if(in_array($hour, $this->skipHours)) throw new SpoonFeedException('This (' . $hour . ') hour is already added.');
 
 		// set property
@@ -750,7 +750,7 @@ class SpoonFeedRSS
 	{
 		// redefine var
 		$URL = (string) $URL;
-		$type = (string) SpoonFilter::getValue($type, array('url', 'string'), 'url');
+		$type = (string) SpoonFilter::getValue($type, ['url', 'string'], 'url');
 
 		// validate
 		if($type == 'url' && !SpoonFilter::isURL($URL)) throw new SpoonFeedException('This (' . $URL . ') isn\'t a valid url.');
@@ -843,7 +843,7 @@ class SpoonFeedRSS
 	{
 		// redefine var
 		$URL = (string) $URL;
-		$type = (string) SpoonFilter::getValue($type, array('url', 'string'), 'url');
+		$type = (string) SpoonFilter::getValue($type, ['url', 'string'], 'url');
 
 		// validate
 		if($type == 'url' && !SpoonFilter::isURL($URL)) throw new SpoonFeedException('This (' . SpoonFilter::htmlentities($URL) . ') isn\'t a valid URL.');
@@ -881,7 +881,7 @@ class SpoonFeedRSS
 			}
 
 			// catch exceptions
-			catch(Exception $e)
+			catch(Exception)
 			{
 				// ignore exceptions
 			}
@@ -911,7 +911,7 @@ class SpoonFeedRSS
 				}
 
 				// catch exception
-				catch(Exception $e)
+				catch(Exception)
 				{
 					// ignore exceptions
 				}
@@ -931,7 +931,7 @@ class SpoonFeedRSS
 				}
 
 				// catch exception
-				catch(Exception $e)
+				catch(Exception)
 				{
 					// ignore exceptions
 				}
@@ -997,7 +997,7 @@ class SpoonFeedRSS
 			}
 
 			// catch exception
-			catch(Exception $e)
+			catch(Exception)
 			{
 				// ignore exceptions
 			}
@@ -1083,7 +1083,7 @@ class SpoonFeedRSS
 		$this->cloud['port'] = (int) $port;
 		$this->cloud['path'] = (string) $path;
 		$this->cloud['register_procedure'] = (string) $registerProcedure;
-		$this->cloud['protocol'] = (string) SpoonFilter::getValue($protocol, array('xml-rpc', 'soap', 'http-post'), 'xml-rpc');
+		$this->cloud['protocol'] = (string) SpoonFilter::getValue($protocol, ['xml-rpc', 'soap', 'http-post'], 'xml-rpc');
 	}
 
 
@@ -1253,7 +1253,7 @@ class SpoonFeedRSS
 	 */
 	public function setSortingMethod($sortingMethod = 'desc')
 	{
-		$aAllowedSortingMethods = array('asc', 'desc');
+		$aAllowedSortingMethods = ['asc', 'desc'];
 
 		// set sorting method
 		self::$sortingMethod = SpoonFilter::getValue($sortingMethod, $aAllowedSortingMethods, 'desc');
@@ -1302,7 +1302,7 @@ class SpoonFeedRSS
 		$items = $this->getItems();
 
 		// sort
-		uasort($items, array('SpoonFeedRSS', 'compareObjects'));
+		uasort($items, ['SpoonFeedRSS', 'compareObjects']);
 
 		// set items
 		$this->items = $items;

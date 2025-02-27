@@ -57,7 +57,7 @@ class SpoonForm
 	 *
 	 * @var	array
 	 */
-	protected $fields = array();
+	protected $fields = [];
 
 
 	/**
@@ -81,7 +81,7 @@ class SpoonForm
 	 *
 	 * @var	array
 	 */
-	protected $objects = array();
+	protected $objects = [];
 
 
 	/**
@@ -89,7 +89,7 @@ class SpoonForm
 	 *
 	 * @var	array
 	 */
-	protected $parameters = array();
+	protected $parameters = [];
 
 
 	/**
@@ -271,7 +271,7 @@ class SpoonForm
 	 * @param	string[optional] $class				The CSS-class to be used.
 	 * @param	string[optional] $classError		The CSS-class to be used when there is an error.
 	 */
-	public function addDropdown($name, array $values = null, $selected = null, $multipleSelection = false, $class = 'inputDropdown', $classError = 'inputDropdownError')
+	public function addDropdown($name, ?array $values = null, $selected = null, $multipleSelection = false, $class = 'inputDropdown', $classError = 'inputDropdownError')
 	{
 		// add element
 		$this->add(new SpoonFormDropdown($name, $values, $selected, $multipleSelection, $class, $classError));
@@ -886,7 +886,7 @@ class SpoonForm
 	public function getValues($excluded = null)
 	{
 		// redefine var
-		$excludedFields = array();
+		$excludedFields = [];
 
 		// has arguments
 		if(func_num_args() != 0)
@@ -900,12 +900,12 @@ class SpoonForm
 		}
 
 		// values
-		$values = array();
+		$values = [];
 
 		// loop objects
 		foreach($this->objects as $object)
 		{
-			if(is_callable(array($object, 'getValue')) && !in_array($object->getName(), $excludedFields)) $values[$object->getName()] = $object->getValue();
+			if(is_callable([$object, 'getValue']) && !in_array($object->getName(), $excludedFields)) $values[$object->getName()] = $object->getValue();
 		}
 
 		// return data
@@ -937,7 +937,7 @@ class SpoonForm
 	public function isSubmitted()
 	{
 		// default array
-		$aForm = array();
+		$aForm = [];
 
 		// post
 		if($this->method == 'post' && isset($_POST)) $aForm = $_POST;
@@ -967,7 +967,7 @@ class SpoonForm
 		foreach($this->objects as $name => $object)
 		{
 			// not excluded
-			if(!in_array($name, array('form', 'form_token'))) $object->parse($template);
+			if(!in_array($name, ['form', 'form_token'])) $object->parse($template);
 		}
 
 		// parse form tag
@@ -982,9 +982,11 @@ class SpoonForm
 	 */
 	public function setAction($action)
 	{
+        $action = (string) $action;
+
 		$action = str_replace('"', '&qout;', $action);
 
-		$this->action = (string) $action;
+		$this->action = $action;
 	}
 
 
@@ -1009,7 +1011,7 @@ class SpoonForm
 	 */
 	public function setMethod($method = 'post')
 	{
-		$this->method = SpoonFilter::getValue((string) $method, array('get', 'post'), 'post');
+		$this->method = SpoonFilter::getValue((string) $method, ['get', 'post'], 'post');
 		return $this;
 	}
 
@@ -1170,8 +1172,8 @@ class SpoonForm
 		foreach($this->objects as $oElement)
 		{
 			// check, since some objects don't have this method!
-			if(is_callable(array($oElement, 'getErrors'))
-				&& trim($oElement->getErrors()) !== ''
+			if(is_callable([$oElement, 'getErrors'])
+				&& trim((string) $oElement->getErrors()) !== ''
 			) {
 				$errors[] = $oElement->getErrors();
 			};

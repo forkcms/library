@@ -216,7 +216,7 @@ class SpoonDirectory
 	 * @param	array[optional] $excluded			An array containing directories/files to exclude.
 	 * @param 	string[optional] $includeRegexp		An regular expression that represents the directories/files to include in the list. Other directories will be excluded.
 	 */
-	public static function getList($path, $showFiles = false, array $excluded = null, $includeRegexp = null)
+	public static function getList($path, $showFiles = false, ?array $excluded = null, $includeRegexp = null)
 	{
 		// redefine arguments
 		$path = (string) $path;
@@ -233,7 +233,7 @@ class SpoonDirectory
 		}
 
 		// define file list
-		$directories = array();
+		$directories = [];
 
 		// directory exists
 		if(self::exists($path))
@@ -261,7 +261,7 @@ class SpoonDirectory
 									if($includeRegexp !== null)
 									{
 										// init var
-										$matches = array();
+										$matches = [];
 
 										// is this a match?
 										if(preg_match($includeRegexp, $file, $matches) != 0) $directories[] = $file;
@@ -278,7 +278,7 @@ class SpoonDirectory
 								if($includeRegexp !== null)
 								{
 									// init var
-									$matches = array();
+									$matches = [];
 
 									// is this a match?
 									if(preg_match($includeRegexp, $file, $matches) != 0) $directories[] = $file;

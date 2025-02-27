@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -27,15 +27,15 @@ class SpoonFormRadiobuttonTest extends TestCase
 	public function setup(): void
 	{
 		$this->frm = new SpoonForm('radiobutton');
-		$gender[] = array('label' => 'Female', 'value' => 'F');
-		$gender[] = array('label' => 'Male', 'value' => 'M');
+		$gender[] = ['label' => 'Female', 'value' => 'F'];
+		$gender[] = ['label' => 'Male', 'value' => 'M'];
 		$this->rbtGender = new SpoonFormRadiobutton('gender', $gender, 'M');
 		$this->frm->add($this->rbtGender);
 
-		$numeric = array(
-			array('value' => 1,   'label' => 'One'),
-			array('value' => 1.5, 'label' => 'One And A Half'),
-		);
+		$numeric = [
+			['value' => 1,   'label' => 'One'],
+			['value' => 1.5, 'label' => 'One And A Half'],
+		];
 		$this->rbtNumeric = new SpoonFormRadiobutton('numeric', $numeric, '1');
 	}
 
@@ -50,7 +50,7 @@ class SpoonFormRadiobuttonTest extends TestCase
 		$this->assertEquals('M', $this->rbtGender->getValue());
 		$_POST['gender'] = 'F';
 		$this->assertEquals('F', $this->rbtGender->getValue());
-		$_POST['gender'] = array('foo', 'bar');
+		$_POST['gender'] = ['foo', 'bar'];
 		$this->assertEquals('F', $this->rbtGender->getValue());
 	}
 
@@ -61,7 +61,7 @@ class SpoonFormRadiobuttonTest extends TestCase
 		$this->assertTrue($this->rbtGender->isFilled());
 		$_POST['gender'] = 'foobar';
 		$this->assertFalse($this->rbtGender->isFilled());
-		$_POST['gender'] = array('foo', 'bar');
+		$_POST['gender'] = ['foo', 'bar'];
 		$this->assertFalse($this->rbtGender->isFilled());
 	}
 
@@ -94,21 +94,21 @@ class SpoonFormRadiobuttonTest extends TestCase
 		$oneChecked = ($checked === '1') ? ' checked="checked"' : '';
 		$oneHalfChecked = ($checked === '1.5') ? ' checked="checked"' : '';
 
-		return array(
-			array(
+		return [
+			[
 				'rbtNumeric' => '<input type="radio" name="numeric" value="1"' . $oneChecked . ' class="inputRadiobutton" id="numeric1" />',
 				'id' => 'numeric1',
 				'label' => 'One',
 				'value' => '1',
 				'element' => '<input type="radio" name="numeric" value="1"' . $oneChecked . ' class="inputRadiobutton" id="numeric1" />',
-			),
-			array(
+			],
+			[
 				'rbtNumeric' => '<input type="radio" name="numeric" value="1.5"' . $oneHalfChecked . ' class="inputRadiobutton" id="numeric1.5" />',
 				'id' => 'numeric1.5',
 				'label' => 'One And A Half',
 				'value' => '1.5',
 				'element' => '<input type="radio" name="numeric" value="1.5"' . $oneHalfChecked . ' class="inputRadiobutton" id="numeric1.5" />',
-			)
-		);
+			]
+		];
 	}
 }

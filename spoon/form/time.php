@@ -169,7 +169,7 @@ class SpoonFormTime extends SpoonFormInput
 			if(strlen($data) == 5)
 			{
 				// allowed characters
-				$aCharacters = array(':', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+				$aCharacters = [':', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 				// replace every character if it's not in the list!
 				for($i = 0; $i < strlen($data); $i++)
@@ -178,7 +178,7 @@ class SpoonFormTime extends SpoonFormInput
 				}
 
 				// maxlength checks out (needs to be equal)
-				if(strlen($time) == 5 && strpos($time, ':') !== false)
+				if(strlen($time) == 5 && str_contains($time, ':'))
 				{
 					// define hour & minutes
 					$hour = (int) substr($time, 0, 2);
@@ -210,6 +210,7 @@ class SpoonFormTime extends SpoonFormInput
 	 * @return	string
 	 * @param	SpoonTemplate[optional] $template	The template to parse the element in.
 	 */
+	#[\Override]
 	public function parse($template = null)
 	{
 		// name is required
@@ -219,7 +220,7 @@ class SpoonFormTime extends SpoonFormInput
 		$output = '<input type="text" value="' . SpoonFilter::htmlspecialchars($this->getValue()) . '"';
 
 		// add attributes
-		$output .= $this->getAttributesHTML(array('[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'], '[value]' => $this->getValue())) . ' />';
+		$output .= $this->getAttributesHTML(['[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'], '[value]' => $this->getValue()]) . ' />';
 
 		// template
 		if($template !== null)

@@ -34,7 +34,7 @@ class SpoonLocale
 	 *
 	 * @var	array
 	 */
-	private static $languages = array('de', 'en', 'es', 'fr', 'nl', 'it');
+	private static $languages = ['de', 'en', 'es', 'fr', 'nl', 'it'];
 
 
 	/**
@@ -60,7 +60,7 @@ class SpoonLocale
 		// init vars
 		$name = (string) $name;
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
+		$locale = [];
 
 		// fetch file
 		require 'data/' . $language . '.php';
@@ -83,7 +83,7 @@ class SpoonLocale
 	{
 		// init vars
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
+		$locale = [];
 
 		// fetch file
 		require 'data/' . $language . '.php';
@@ -105,7 +105,7 @@ class SpoonLocale
 		// init vars
 		$code = (string) $code;
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
+		$locale = [];
 
 		// fetch file
 		require 'data/' . $language . '.php';
@@ -128,7 +128,7 @@ class SpoonLocale
 	{
 		// init vars
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
+		$locale = [];
 
 		// fetch file
 		require 'data/' . $language . '.php';
@@ -149,9 +149,9 @@ class SpoonLocale
 	public static function getContinentForCountry($code, $language = 'en', $returnLocale = true)
 	{
 		// init vars
-		$continentCountries = array();
+		$continentCountries = [];
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
+		$locale = [];
 		$returnLocale = (bool) $returnLocale;
 
 		// fetch file
@@ -190,7 +190,7 @@ class SpoonLocale
 	{
 		// init vars
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
+		$locale = [];
 
 		// fetch file
 		require 'data/' . $language . '.php';
@@ -210,10 +210,10 @@ class SpoonLocale
 	public static function getCountriesForContinent($continent, $language = 'en')
 	{
 		// init vars
-		$continentCountries = array();
+		$continentCountries = [];
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
-		$results = array();
+		$locale = [];
+		$results = [];
 
 		// fetch file
 		require 'data/' . $language . '.php';
@@ -252,7 +252,7 @@ class SpoonLocale
 		// init vars
 		$code = (string) $code;
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
+		$locale = [];
 
 		// fetch file
 		require 'data/' . $language . '.php';
@@ -277,7 +277,7 @@ class SpoonLocale
 		// init vars
 		$code = (string) $code;
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
+		$locale = [];
 
 		// fetch file
 		require 'data/' . $language . '.php';
@@ -300,7 +300,7 @@ class SpoonLocale
 	{
 		// init vars
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
+		$locale = [];
 
 		// fetch file
 		require 'data/' . $language . '.php';
@@ -321,9 +321,9 @@ class SpoonLocale
 	public static function getMonth($month, $language = 'en', $abbreviated = false)
 	{
 		// init vars
-		$months = array(1 => 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december');
+		$months = [1 => 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
+		$locale = [];
 
 		// which month?
 		if(SpoonFilter::isInteger($month)) $month = SpoonFilter::getValue($month, range(1, 12), 1);
@@ -354,7 +354,7 @@ class SpoonLocale
 	{
 		// init vars
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
+		$locale = [];
 
 		// fetch file
 		require 'data/' . $language . '.php';
@@ -375,14 +375,14 @@ class SpoonLocale
 	public static function getWeekDay($day, $language = 'en', $abbreviated = false)
 	{
 		// init vars
-		$dayIndexes = array('sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat');
-		$dayNames = array('sunday' => 'sun', 'monday' => 'mon', 'tuesday' => 'tue', 'wednesday' => 'wed', 'thursday' => 'thu', 'friday' => 'fri', 'saturday' => 'sat');
+		$dayIndexes = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+		$dayNames = ['sunday' => 'sun', 'monday' => 'mon', 'tuesday' => 'tue', 'wednesday' => 'wed', 'thursday' => 'thu', 'friday' => 'fri', 'saturday' => 'sat'];
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$locale = array();
+		$locale = [];
 
 		// which day?
-		if(SpoonFilter::isInteger($day)) $day = $dayIndexes[SpoonFilter::getValue(strtolower($day), range(0, 6), 0)];
-		else $day = $dayNames[SpoonFilter::getValue(strtolower($day), array_keys($dayNames), 'sunday')];
+		if(SpoonFilter::isInteger($day)) $day = $dayIndexes[SpoonFilter::getValue(strtolower((string) $day), range(0, 6), 0)];
+		else $day = $dayNames[SpoonFilter::getValue(strtolower((string) $day), array_keys($dayNames), 'sunday')];
 
 		// fetch file
 		require 'data/' . $language . '.php';
@@ -404,8 +404,8 @@ class SpoonLocale
 	{
 		// init vars
 		$language = SpoonFilter::getValue($language, self::$languages, 'en');
-		$firstDay = SpoonFilter::getValue($firstDay, array('monday', 'sunday'), 'monday');
-		$locale = array();
+		$firstDay = SpoonFilter::getValue($firstDay, ['monday', 'sunday'], 'monday');
+		$locale = [];
 
 		// fetch file
 		require 'data/' . $language . '.php';

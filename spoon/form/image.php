@@ -88,6 +88,7 @@ class SpoonFormImage extends SpoonFormFile
 	 * @return	string
 	 * @param	bool[optional] $lowercase	Should the extensions be returned in lowercase?
 	 */
+	#[\Override]
 	public function getExtension($lowercase = true)
 	{
 		if($this->isSubmitted())

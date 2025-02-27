@@ -32,11 +32,11 @@ class SpoonTemplateModifiers
 	 *
 	 * @var	array
 	 */
-	private static $modifiers = array('addslashes' => 'addslashes',
-										'createhtmllinks' => array('SpoonTemplateModifiers', 'createHTMLLinks'),
-										'date' => array('SpoonTemplateModifiers', 'date'),
-										'htmlentities' => array('SpoonFilter', 'htmlentities'),
-										'lowercase' => array('SpoonTemplateModifiers', 'lowercase'),
+	private static $modifiers = ['addslashes' => 'addslashes',
+										'createhtmllinks' => ['SpoonTemplateModifiers', 'createHTMLLinks'],
+										'date' => ['SpoonTemplateModifiers', 'date'],
+										'htmlentities' => ['SpoonFilter', 'htmlentities'],
+										'lowercase' => ['SpoonTemplateModifiers', 'lowercase'],
 										'ltrim' => 'ltrim',
 										'nl2br' => 'nl2br',
 										'repeat' => 'str_repeat',
@@ -46,9 +46,9 @@ class SpoonTemplateModifiers
 										'stripslashes' => 'stripslashes',
 										'substring' => 'substr',
 										'trim' => 'trim',
-										'ucfirst' => array('SpoonFilter', 'ucfirst'),
+										'ucfirst' => ['SpoonFilter', 'ucfirst'],
 										'ucwords' => 'ucwords',
-										'uppercase' => array('SpoonTemplateModifiers', 'uppercase'));
+										'uppercase' => ['SpoonTemplateModifiers', 'uppercase']];
 
 
 	/**
@@ -56,7 +56,7 @@ class SpoonTemplateModifiers
 	 */
 	public static function clearModifiers()
 	{
-		self::$modifiers = array();
+		self::$modifiers = [];
 	}
 
 
@@ -133,7 +133,7 @@ class SpoonTemplateModifiers
 			if(count($function) != 2) throw new SpoonTemplateException('The array should contain the class and static method.');
 
 			// method doesn't exist
-			if(!is_callable(array($function[0], $function[1]))) throw new SpoonTemplateException('The method "' . $function[1] . '" in the class ' . $function[0] . ' does not exist.');
+			if(!is_callable([$function[0], $function[1]])) throw new SpoonTemplateException('The method "' . $function[1] . '" in the class ' . $function[0] . ' does not exist.');
 
 			// all fine
 			self::$modifiers[(string) $name] = $function;

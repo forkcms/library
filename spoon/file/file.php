@@ -177,7 +177,7 @@ class SpoonFile
 		$filename = (string) $filename;
 
 		// init var
-		$units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
+		$units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
 		// fetch pathinfo
 		$pathInfo = pathinfo($filename);
@@ -186,7 +186,7 @@ class SpoonFile
 		@clearstatcache();
 
 		// build details array
-		$file = array();
+		$file = [];
 		$file['basename'] = $pathInfo['basename'];
 		$file['extension'] = self::getExtension($filename);
 		$file['name'] = substr($file['basename'], 0, strlen($file['basename']) - strlen($file['extension']) -1);
@@ -235,7 +235,7 @@ class SpoonFile
 		}
 
 		// define list
-		$files = array();
+		$files = [];
 
 		// directory exists
 		if(SpoonDirectory::exists($path))
@@ -253,7 +253,7 @@ class SpoonFile
 						if($includeRegexp !== null)
 						{
 							// init var
-							$matches = array();
+							$matches = [];
 
 							// is this a match?
 							if(preg_match($includeRegexp, $file, $matches) != 0) $files[] = $file;

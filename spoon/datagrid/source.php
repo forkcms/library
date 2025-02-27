@@ -32,7 +32,7 @@ class SpoonDatagridSource
 	 *
 	 * @var	array
 	 */
-	protected $data = array();
+	protected $data = [];
 
 
 	/**

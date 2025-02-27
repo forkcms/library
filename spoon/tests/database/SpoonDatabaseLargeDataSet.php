@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
  *
  */
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -77,7 +77,7 @@ class SpoonDatabaseLargeDataSet extends TestCase
 	public function testGetNumRows()
 	{
 		$this->assertEquals(self::NUMBER_OF_ROWS, $this->db->getNumRows('SELECT id FROM users'));
-		$this->assertEquals(10000, $this->db->getNumRows('SELECT id FROM users LIMIT ?', array(10000)));
+		$this->assertEquals(10000, $this->db->getNumRows('SELECT id FROM users LIMIT ?', [10000]));
 	}
 
 }

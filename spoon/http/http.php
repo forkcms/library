@@ -33,7 +33,7 @@ class SpoonHTTP
 	 *
 	 * @var array
 	 */
-	protected static $codes = array(
+	protected static $codes = [
 		200 => '200 OK',
 		301 => '301 Moved Permanently',
 		302 => '302 Found',
@@ -46,7 +46,7 @@ class SpoonHTTP
 		410 => '410 Gone',
 		500 => '500 Internal Server Error',
 		501 => '501 Not Implemented',
-	);
+	];
 
 	/**
 	 * Get content from an URL.
@@ -55,7 +55,7 @@ class SpoonHTTP
 	 * @param	string $URL						The URL of the webpage that should be retrieved.
 	 * @param	array[optional] $cURLoptions	Extra options to be passed on with the cURL-request.
 	 */
-	public static function getContent($URL, array $cURLoptions = null)
+	public static function getContent($URL, ?array $cURLoptions = null)
 	{
 		// check if curl is available
 		if(!function_exists('curl_init')) throw new SpoonFileException('This method requires cURL (http://php.net/curl), it seems like the extension isn\'t installed.');
@@ -91,7 +91,7 @@ class SpoonHTTP
 		curl_close($curl);
 
 		// validate
-		if($errorNumber != '') throw new SpoonHTTPException($errorMessage);
+		if($errorNumber != 0) throw new SpoonHTTPException($errorMessage);
 
 		// return the content
 		return (string) $response;
@@ -116,7 +116,7 @@ class SpoonHTTP
 	 */
 	public static function getIp()
 	{
-		return (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+		return $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'];
 	}
 
 

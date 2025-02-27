@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 date_default_timezone_set('Europe/Brussels');
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -20,7 +20,7 @@ class SpoonFormTest extends TestCase
 		self::assertInstanceOf(SpoonFormCheckbox::class, $frm->getField('agree'));
 		$frm->addDate('date', time(), 'd/m/Y');
 		self::assertInstanceOf(SpoonFormDate::class, $frm->getField('date'));
-		$frm->addDropdown('author', array(1 => 'Davy', 'Tijs', 'Dave'), 1);
+		$frm->addDropdown('author', [1 => 'Davy', 'Tijs', 'Dave'], 1);
 		self::assertInstanceOf(SpoonFormDropdown::class, $frm->getField('author'));
 		$frm->addFile('pdf');
 		self::assertInstanceOf(SpoonFormFile::class, $frm->getField('pdf'));
@@ -28,11 +28,11 @@ class SpoonFormTest extends TestCase
 		self::assertInstanceOf(SpoonFormImage::class, $frm->getField('image'));
 		$frm->addHidden('cant_see_me', 'whoop-tie-doo');
 		self::assertInstanceOf(SpoonFormHidden::class, $frm->getField('cant_see_me'));
-		$frm->addMultiCheckbox('hobbies', array(array('label' => 'Swimming', 'value' => 'swimming')));
+		$frm->addMultiCheckbox('hobbies', [['label' => 'Swimming', 'value' => 'swimming']]);
 		self::assertInstanceOf(SpoonFormMultiCheckbox::class, $frm->getField('hobbies'));
 		$frm->addPassword('top_sekret', 'stars-and-stripes');
 		self::assertInstanceOf(SpoonFormPassword::class, $frm->getField('top_sekret'));
-		$frm->addRadiobutton('gender', array(array('label' => 'Male', 'value' => 'male')));
+		$frm->addRadiobutton('gender', [['label' => 'Male', 'value' => 'male']]);
 		self::assertInstanceOf(SpoonFormRadiobutton::class, $frm->getField('gender'));
 		$frm->addTextarea('message', 'big piece of text');
 		self::assertInstanceOf(SpoonFormTextarea::class, $frm->getField('message'));

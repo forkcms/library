@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -45,8 +45,8 @@ class SpoonFormTextareaTest extends TestCase
 	{
 		$this->txtMessage->setAttribute('rel', 'bauffman.jpg');
 		$this->assertEquals('bauffman.jpg', $this->txtMessage->getAttribute('rel'));
-		$this->txtMessage->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'message', 'cols' => 62, 'rows' => 5, 'class' => 'inputTextarea', 'rel' => 'bauffman.jpg'), $this->txtMessage->getAttributes());
+		$this->txtMessage->setAttributes(['id' => 'specialID']);
+		$this->assertEquals(['id' => 'specialID', 'name' => 'message', 'cols' => 62, 'rows' => 5, 'class' => 'inputTextarea', 'rel' => 'bauffman.jpg'], $this->txtMessage->getAttributes());
 	}
 
 	public function testIsFilled()
@@ -54,7 +54,7 @@ class SpoonFormTextareaTest extends TestCase
 		$this->assertFalse($this->txtMessage->isFilled());
 		$_POST['message'] = 'I am not empty';
 		$this->assertTrue($this->txtMessage->isFilled());
-		$_POST['message'] = array('foo', 'bar');
+		$_POST['message'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtMessage->isFilled());
 	}
 
@@ -64,7 +64,7 @@ class SpoonFormTextareaTest extends TestCase
 		$this->assertFalse($this->txtMessage->isAlphabetical());
 		$_POST['message'] = 'Bauffman';
 		$this->assertTrue($this->txtMessage->isAlphabetical());
-		$_POST['message'] = array('foo', 'bar');
+		$_POST['message'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtMessage->isAlphabetical());
 	}
 
@@ -74,7 +74,7 @@ class SpoonFormTextareaTest extends TestCase
 		$this->assertFalse($this->txtMessage->isAlphaNumeric());
 		$_POST['message'] = 'L33t';
 		$this->assertTrue($this->txtMessage->isAlphaNumeric());
-		$_POST['message'] = array('foo', 'bar');
+		$_POST['message'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtMessage->isAlphaNumeric());
 	}
 
@@ -83,7 +83,7 @@ class SpoonFormTextareaTest extends TestCase
 		$_POST['message'] = 'Writing tests can be pretty frakkin boring';
 		$this->assertTrue($this->txtMessage->isMaximumCharacters(100));
 		$this->assertFalse($this->txtMessage->isMaximumCharacters(10));
-		$_POST['message'] = array('foo', 'bar');
+		$_POST['message'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtMessage->isMaximumCharacters(0));
 	}
 
@@ -93,7 +93,7 @@ class SpoonFormTextareaTest extends TestCase
 		$this->assertTrue($this->txtMessage->isMinimumCharacters(10));
 		$this->assertTrue($this->txtMessage->isMinimumCharacters(2));
 		$this->assertFalse($this->txtMessage->isMinimumCharacters(23));
-		$_POST['message'] = array('foo', 'bar');
+		$_POST['message'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtMessage->isMinimumCharacters(10));
 	}
 
@@ -103,7 +103,7 @@ class SpoonFormTextareaTest extends TestCase
 		$_POST['message'] = '<a href="http://www.spoon-library.be">Bobby Tables, my friends call mééé</a>';
 		$this->assertEquals(SpoonFilter::htmlspecialchars($_POST['message']), $this->txtMessage->getValue());
 		$this->assertEquals($_POST['message'], $this->txtMessage->getValue(true));
-		$_POST['message'] = array('foo', 'bar');
+		$_POST['message'] = ['foo', 'bar'];
 		$this->assertEquals('Array', $this->txtMessage->getValue(true));
 	}
 

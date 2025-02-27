@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -22,28 +22,28 @@ class SpoonFormMultiCheckBoxTest extends TestCase
 	public function setup(): void
 	{
 		$this->frm = new SpoonForm('multicheckbox');
-		$hobbies[] = array('label' => 'Swimming', 'value' => 10);
-		$hobbies[] = array('label' => 'Cycling', 'value' => 20, 'attributes' => array('rel' => 'bauffman.jpg'));
-		$hobbies[] = array('label' => 'Running', 'value' => 30);
-		$this->chkHobbies = new SpoonFormMultiCheckbox('hobbies', $hobbies, array(10, 20));
+		$hobbies[] = ['label' => 'Swimming', 'value' => 10];
+		$hobbies[] = ['label' => 'Cycling', 'value' => 20, 'attributes' => ['rel' => 'bauffman.jpg']];
+		$hobbies[] = ['label' => 'Running', 'value' => 30];
+		$this->chkHobbies = new SpoonFormMultiCheckbox('hobbies', $hobbies, [10, 20]);
 		$this->frm->add($this->chkHobbies);
 	}
 
 	public function testGetChecked()
 	{
-		$this->assertEquals(array('10', '20'), $this->chkHobbies->getChecked());
+		$this->assertEquals(['10', '20'], $this->chkHobbies->getChecked());
 	}
 
 	public function testIsFilled()
 	{
 		$this->assertFalse($this->chkHobbies->isFilled());
-		$_POST['hobbies'] = array('bimbo', 'tramp');
+		$_POST['hobbies'] = ['bimbo', 'tramp'];
 		$this->assertFalse($this->chkHobbies->isFilled());
 		$_POST['form'] = 'multicheckbox';
 		$this->assertFalse($this->chkHobbies->isFilled());
-		$_POST['hobbies'] = array(20);
+		$_POST['hobbies'] = [20];
 		$this->assertTrue($this->chkHobbies->isFilled());
-		$_POST['hobbies'] = array(20, 'bimbo', 'tramp');
+		$_POST['hobbies'] = [20, 'bimbo', 'tramp'];
 		$this->assertTrue($this->chkHobbies->isFilled());
 		$_POST['hobbies'] = 'foobar';
 		$this->assertFalse($this->chkHobbies->isFilled());
@@ -52,46 +52,46 @@ class SpoonFormMultiCheckBoxTest extends TestCase
 	public function testGetValue()
 	{
 		$_POST['form'] = 'multicheckbox';
-		$this->assertEquals(array(), $this->chkHobbies->getValue());
-		$_POST['hobbies'] = array('bimbo', 'tramp');
-		$this->assertEquals(array(), $this->chkHobbies->getValue());
-		$_POST['hobbies'] = array('10');
-		$this->assertEquals(array('10'), $this->chkHobbies->getValue());
-		$_POST['hobbies'] = array('10', 'bimbo', 'tramp');
-		$this->assertEquals(array('10'), $this->chkHobbies->getValue());
-		$_POST['hobbies'] = array('bimbo', 'tramp', '10', '30');
-		$this->assertEquals(array('10', '30'), $this->chkHobbies->getValue());
+		$this->assertEquals([], $this->chkHobbies->getValue());
+		$_POST['hobbies'] = ['bimbo', 'tramp'];
+		$this->assertEquals([], $this->chkHobbies->getValue());
+		$_POST['hobbies'] = ['10'];
+		$this->assertEquals(['10'], $this->chkHobbies->getValue());
+		$_POST['hobbies'] = ['10', 'bimbo', 'tramp'];
+		$this->assertEquals(['10'], $this->chkHobbies->getValue());
+		$_POST['hobbies'] = ['bimbo', 'tramp', '10', '30'];
+		$this->assertEquals(['10', '30'], $this->chkHobbies->getValue());
 		$this->chkHobbies->setAllowExternalData(true);
-		$this->assertEquals(array('bimbo', 'tramp', '10', '30'), $this->chkHobbies->getValue());
+		$this->assertEquals(['bimbo', 'tramp', '10', '30'], $this->chkHobbies->getValue());
 		$_POST['hobbies'] = 'foobar';
-		$this->assertEquals(array(), $this->chkHobbies->getValue());
+		$this->assertEquals([], $this->chkHobbies->getValue());
 	}
 
 	public function testNotSupplyingCorrectFormatThrowsException()
 	{
-		$values = array('12' => 'aaa', '132' => 'bbb', '32' => 'ccc');
+		$values = ['12' => 'aaa', '132' => 'bbb', '32' => 'ccc'];
 		$this->expectException('SpoonFormException');
 		$c = new SpoonFormMultiCheckbox('test', $values);
 	}
 
 	public function testNotSupplyingLabelThrowsException()
 	{
-		$values = array(
-			array('value' => 'aaa'),
-			array('value' => 'bbb'),
-			array('value' => 'ccc')
-		);
+		$values = [
+			['value' => 'aaa'],
+			['value' => 'bbb'],
+			['value' => 'ccc']
+		];
 		$this->expectException('SpoonFormException');
 		$c = new SpoonFormMultiCheckbox('test', $values);
 	}
 
 	public function testNotSupplyingValueThrowsException()
 	{
-		$values = array(
-			array('label' => 'aaa'),
-			array('label' => 'bbb'),
-			array('label' => 'ccc')
-		);
+		$values = [
+			['label' => 'aaa'],
+			['label' => 'bbb'],
+			['label' => 'ccc']
+		];
 		$this->expectException('SpoonFormException');
 		$c = new SpoonFormMultiCheckbox('test', $values);
 	}

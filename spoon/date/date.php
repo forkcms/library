@@ -27,7 +27,7 @@
  */
 class SpoonDate
 {
-	protected static $locales = array();
+	protected static $locales = [];
 
 	/**
 	 * An alias for php's date function that makes weekdays and months language dependant.
@@ -52,8 +52,8 @@ class SpoonDate
 		if($language != 'en')
 		{
 			// weekdays (short & long)
-			$date = str_replace(array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), SpoonLocale::getWeekDays($language), $date);
-			$abbreviatedDaysRegexes = array(
+			$date = str_replace(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], SpoonLocale::getWeekDays($language), $date);
+			$abbreviatedDaysRegexes = [
 				'/\bMon\b/',
 				'/\bTue\b/',
 				'/\bWed\b/',
@@ -61,12 +61,12 @@ class SpoonDate
 				'/\bFri\b/',
 				'/\bSat\b/',
 				'/\bSun\b/',
-			);
+			];
 			$date = preg_replace($abbreviatedDaysRegexes, SpoonLocale::getWeekDays($language, true), $date);
 
 			// months (short & long)
-			$date = str_replace(array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'), SpoonLocale::getMonths($language), $date);
-			$date = str_replace(array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'), SpoonLocale::getMonths($language, true), $date);
+			$date = str_replace(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], SpoonLocale::getMonths($language), $date);
+			$date = str_replace(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], SpoonLocale::getMonths($language, true), $date);
 		}
 
 		return $date;
@@ -86,7 +86,7 @@ class SpoonDate
 		// init vars
 		$timestamp = (int) $timestamp;
 		$language = SpoonFilter::getValue($language, SpoonLocale::getAvailableLanguages(), 'en', 'string');
-		$locale = array();
+		$locale = [];
 
 		// fetch language
 		if(!isset(self::$locales[$language]))

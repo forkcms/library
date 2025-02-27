@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 date_default_timezone_set('Europe/Brussels');
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -47,8 +47,8 @@ class SpoonFormTimeTest extends TestCase
 	{
 		$this->txtTime->setAttribute('rel', 'bauffman.jpg');
 		$this->assertEquals('bauffman.jpg', $this->txtTime->getAttribute('rel'));
-		$this->txtTime->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'time','maxlength' => 5, 'class' => 'inputTimefield', 'rel' => 'bauffman.jpg'), $this->txtTime->getAttributes());
+		$this->txtTime->setAttributes(['id' => 'specialID']);
+		$this->assertEquals(['id' => 'specialID', 'name' => 'time','maxlength' => 5, 'class' => 'inputTimefield', 'rel' => 'bauffman.jpg'], $this->txtTime->getAttributes());
 	}
 
 	public function testIsFilled()
@@ -56,7 +56,7 @@ class SpoonFormTimeTest extends TestCase
 		$this->assertFalse($this->txtTime->isFilled());
 		$_POST['time'] = '14:55';
 		$this->assertTrue($this->txtTime->isFilled());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtTime->isFilled());
 	}
 
@@ -74,7 +74,7 @@ class SpoonFormTimeTest extends TestCase
 		$this->assertFalse($this->txtTime->isValid());
 		$_POST['time'] = '1k:2b';
 		$this->assertFalse($this->txtTime->isValid());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtTime->isValid());
 	}
 
@@ -89,7 +89,7 @@ class SpoonFormTimeTest extends TestCase
 		$_POST['form'] = 'timefield';
 		$_POST['time'] = '14:55';
 		$this->assertEquals('14:55', $this->txtTime->getValue());
-		$_POST['time'] = array('foo', 'bar');
+		$_POST['time'] = ['foo', 'bar'];
 		$this->assertEquals('Array', $this->txtTime->getValue());
 	}
 

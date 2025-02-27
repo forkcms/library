@@ -89,7 +89,7 @@ class SpoonFormTextarea extends SpoonFormInput
 			if(isset($data[$this->getName()]))
 			{
 				// value
-				$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+				$value = $data[$this->getName()] ?? '';
 				if(is_array($value))
 				{
 					$value = 'Array';
@@ -177,7 +177,7 @@ class SpoonFormTextarea extends SpoonFormInput
 	{
 		// post/get data
 		$data = $this->getMethod(true);
-		$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+		$value = $data[$this->getName()] ?? '';
 		if(is_array($value))
 		{
 			$value = 'Array';
@@ -293,6 +293,7 @@ class SpoonFormTextarea extends SpoonFormInput
 	 * @return	string
 	 * @param	SpoonTemplate[optional] $template	The template to parse the element in.
 	 */
+	#[\Override]
 	public function parse($template = null)
 	{
 		// name is required
@@ -302,13 +303,13 @@ class SpoonFormTextarea extends SpoonFormInput
 		$output = '<textarea';
 
 		// add attributes
-		$output .= $this->getAttributesHTML(array('[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'], '[value]' => $this->getValue(false)));
+		$output .= $this->getAttributesHTML(['[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'], '[value]' => $this->getValue(false)]);
 
 		// close first tag
 		$output .= '>';
 
 		// add value
-		$output .= str_replace(array('"', '<', '>'), array('&quot;', '&lt;', '&gt;'), $this->getValue());
+		$output .= str_replace(['"', '<', '>'], ['&quot;', '&lt;', '&gt;'], $this->getValue());
 
 		// end tag
 		$output .= '</textarea>';

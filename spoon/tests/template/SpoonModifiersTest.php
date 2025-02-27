@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 date_default_timezone_set('Europe/Brussels');
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -14,12 +14,12 @@ class SpoonTemplateModifiersTest extends TestCase
 	public function testClearModifiers()
 	{
 		SpoonTemplateModifiers::clearModifiers();
-		$this->assertEquals(array(), SpoonTemplateModifiers::getModifiers());
+		$this->assertEquals([], SpoonTemplateModifiers::getModifiers());
 	}
 
 	public function testCreateHTMLLinks()
 	{
-		$tlds = array(
+		$tlds = [
 			'aero', 'asia', 'biz', 'cat', 'com', 'coop', 'edu', 'gov', 'info', 'int', 'jobs', 'mil', 'mobi',
 			'museum', 'name', 'net', 'org', 'pro', 'tel', 'travel', 'ac', 'ad', 'ae', 'af', 'ag', 'ai', 'al',
 			'am', 'an', 'ao', 'aq', 'ar', 'as', 'at', 'au', 'aw', 'ax', 'az', 'ba', 'bb', 'bd' ,'be', 'bf', 'bg',
@@ -36,7 +36,7 @@ class SpoonTemplateModifiersTest extends TestCase
 			'sn', 'so', 'sr', 'st', 'su', 'sv', 'sy', 'sz', 'tc', 'td', 'tf', 'tg', 'th', 'tj', 'tk', 'tl', 'tm', 'tn',
 			'to', 'tp', 'tr', 'tt', 'tv', 'tw', 'tz', 'ua', 'ug', 'uk', 'us', 'uy', 'uz', 'va', 'vc', 've', 'vg', 'vi',
 			'vn', 'vu', 'wf', 'ws', 'ye', 'yt', 'yu', 'za', 'zm', 'zw', 'arpa'
-		);
+		];
 
 		foreach($tlds as $tld)
 		{

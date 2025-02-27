@@ -1,25 +1,25 @@
 <?php
 
 // initialize variable
-$continentCountries = array();
+$continentCountries = [];
 
 // countries in Africa
-$continentCountries['africa'] = array('DZ', 'AO', 'BJ', 'BW', 'BF', 'BI', 'CM', 'CV', 'CF', 'TD', 'KM', 'CG', 'CD', 'DJ', 'GQ', 'ER', 'ET', 'GA', 'GM', 'GH', 'GN', 'GW', 'CI', 'KE', 'LS', 'LR', 'LY', 'MG', 'MW', 'ML', 'MR', 'MU', 'YT', 'MA', 'MZ', 'NA', 'NE', 'NG', 'RE', 'RW', 'SH', 'ST', 'SD', 'SN', 'SC', 'SL', 'SO', 'ZA', 'LK', 'SZ', 'TZ', 'TG', 'TN', 'UG', 'EH', 'ZW', 'ZM');
+$continentCountries['africa'] = ['DZ', 'AO', 'BJ', 'BW', 'BF', 'BI', 'CM', 'CV', 'CF', 'TD', 'KM', 'CG', 'CD', 'DJ', 'GQ', 'ER', 'ET', 'GA', 'GM', 'GH', 'GN', 'GW', 'CI', 'KE', 'LS', 'LR', 'LY', 'MG', 'MW', 'ML', 'MR', 'MU', 'YT', 'MA', 'MZ', 'NA', 'NE', 'NG', 'RE', 'RW', 'SH', 'ST', 'SD', 'SN', 'SC', 'SL', 'SO', 'ZA', 'LK', 'SZ', 'TZ', 'TG', 'TN', 'UG', 'EH', 'ZW', 'ZM'];
 
 // countries in Antarctica
-$continentCountries['antarctica'] = array('AQ', 'BV', 'TF', 'HM', 'GS');
+$continentCountries['antarctica'] = ['AQ', 'BV', 'TF', 'HM', 'GS'];
 
 // countries in Asia
-$continentCountries['asia'] = array('AF', 'AM', 'AZ', 'BH', 'BD', 'BT', 'IO', 'BN', 'KH', 'CN', 'CX', 'CC', 'EG', 'GE', 'HK', 'IN', 'ID', 'IR', 'IQ', 'IL', 'JP', 'JO', 'KW', 'KG', 'LA', 'LB', 'MO', 'MY', 'MV', 'MN', 'MM', 'NP', 'KP', 'OM', 'PK', 'PS', 'PH', 'QA', 'SA', 'SG', 'KR', 'LK', 'SY', 'TW', 'TJ', 'TH', 'TM', 'AE', 'UZ', 'VN', 'YE');
+$continentCountries['asia'] = ['AF', 'AM', 'AZ', 'BH', 'BD', 'BT', 'IO', 'BN', 'KH', 'CN', 'CX', 'CC', 'EG', 'GE', 'HK', 'IN', 'ID', 'IR', 'IQ', 'IL', 'JP', 'JO', 'KW', 'KG', 'LA', 'LB', 'MO', 'MY', 'MV', 'MN', 'MM', 'NP', 'KP', 'OM', 'PK', 'PS', 'PH', 'QA', 'SA', 'SG', 'KR', 'LK', 'SY', 'TW', 'TJ', 'TH', 'TM', 'AE', 'UZ', 'VN', 'YE'];
 
 // countries in Europe
-$continentCountries['europe'] = array('AX', 'AL', 'AD', 'AT', 'BY', 'BE', 'BA', 'BG', 'CZ', 'HR', 'CY', 'EE', 'QU', 'FO', 'FI', 'FR', 'DE', 'DK', 'GI', 'GR', 'GG', 'HU', 'IS', 'IE', 'IM', 'IT', 'JE', 'KZ', 'LV', 'LI', 'LT', 'LU', 'MK', 'MT', 'MD', 'MC', 'ME', 'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'CS', 'SM', 'RS', 'RS', 'SK', 'SI', 'ES', 'SJ', 'SE', 'TR', 'CH', 'UA', 'GB', 'VA');
+$continentCountries['europe'] = ['AX', 'AL', 'AD', 'AT', 'BY', 'BE', 'BA', 'BG', 'CZ', 'HR', 'CY', 'EE', 'QU', 'FO', 'FI', 'FR', 'DE', 'DK', 'GI', 'GR', 'GG', 'HU', 'IS', 'IE', 'IM', 'IT', 'JE', 'KZ', 'LV', 'LI', 'LT', 'LU', 'MK', 'MT', 'MD', 'MC', 'ME', 'NL', 'NO', 'PL', 'PT', 'RO', 'RU', 'CS', 'SM', 'RS', 'RS', 'SK', 'SI', 'ES', 'SJ', 'SE', 'TR', 'CH', 'UA', 'GB', 'VA'];
 
 // countries in North America
-$continentCountries['northAmerica'] = array('AI', 'AG', 'AW', 'BS', 'BB', 'BZ', 'BM', 'VG', 'CA', 'KY', 'CR', 'CU', 'DM', 'DO', 'SV', 'GD', 'GL', 'GP', 'GT', 'HT', 'HN', 'JM', 'MQ', 'MX', 'MS', 'AN', 'NI', 'PA', 'PR', 'BL', 'KN', 'LC', 'MF', 'PM', 'VC', 'TT', 'TC', 'VI', 'US', 'UM');
+$continentCountries['northAmerica'] = ['AI', 'AG', 'AW', 'BS', 'BB', 'BZ', 'BM', 'VG', 'CA', 'KY', 'CR', 'CU', 'DM', 'DO', 'SV', 'GD', 'GL', 'GP', 'GT', 'HT', 'HN', 'JM', 'MQ', 'MX', 'MS', 'AN', 'NI', 'PA', 'PR', 'BL', 'KN', 'LC', 'MF', 'PM', 'VC', 'TT', 'TC', 'VI', 'US', 'UM'];
 
 // countries in Oceania
-$continentCountries['oceania'] = array('AS', 'AU', 'CK', 'TL', 'FJ', 'PF', 'GU', 'KI', 'MH', 'FM', 'NR', 'NC', 'NZ', 'NU', 'NF', 'MP', 'QO', 'PW', 'PG', 'PN', 'WS', 'SB', 'TK', 'TO', 'TV', 'VU', 'WF');
+$continentCountries['oceania'] = ['AS', 'AU', 'CK', 'TL', 'FJ', 'PF', 'GU', 'KI', 'MH', 'FM', 'NR', 'NC', 'NZ', 'NU', 'NF', 'MP', 'QO', 'PW', 'PG', 'PN', 'WS', 'SB', 'TK', 'TO', 'TV', 'VU', 'WF'];
 
 // countries in South America
-$continentCountries['southAmerica'] = array('AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'FK', 'GF', 'GY', 'PY', 'PE', 'SR', 'UY', 'VE');
+$continentCountries['southAmerica'] = ['AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'FK', 'GF', 'GY', 'PY', 'PE', 'SR', 'UY', 'VE'];

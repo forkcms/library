@@ -32,7 +32,7 @@ class SpoonDataGrid
 	 *
 	 * @var	array
 	 */
-	private $allowedSortingColumns = array();
+	private $allowedSortingColumns = [];
 
 
 	/**
@@ -40,11 +40,11 @@ class SpoonDataGrid
 	 *
 	 * @var	array
 	 */
-	private $attributes = array('datagrid' => array(),
-								'row' => array(),
-								'row_even' => array(),
-								'row_odd' => array(),
-								'footer' => array());
+	private $attributes = ['datagrid' => [],
+								'row' => [],
+								'row_even' => [],
+								'row_odd' => [],
+								'footer' => []];
 
 
 	/**
@@ -60,7 +60,7 @@ class SpoonDataGrid
 	 *
 	 * @var	array
 	 */
-	private $columnFunctions = array();
+	private $columnFunctions = [];
 
 
 	/**
@@ -68,7 +68,7 @@ class SpoonDataGrid
 	 *
 	 * @var	array
 	 */
-	protected $columns = array();
+	protected $columns = [];
 
 
 	/**
@@ -130,7 +130,7 @@ class SpoonDataGrid
 	/**
 	 * Class used to define paging
 	 *
-	 * @var	SpoonDataGridPaging
+	 * @var	string
 	 */
 	private $pagingClass = 'SpoonDataGridPaging';
 
@@ -148,7 +148,7 @@ class SpoonDataGrid
 	 *
 	 * @var	array
 	 */
-	private $rowFunctions = array();
+	private $rowFunctions = [];
 
 
 	/**
@@ -156,7 +156,7 @@ class SpoonDataGrid
 	 *
 	 * @var	string
 	 */
-	private $rowFunctionsParsed = array();
+	private $rowFunctionsParsed = [];
 
 
 	/**
@@ -172,7 +172,7 @@ class SpoonDataGrid
 	 *
 	 * @var	array
 	 */
-	private $sortingColumns = array();
+	private $sortingColumns = [];
 
 
 	/**
@@ -180,10 +180,10 @@ class SpoonDataGrid
 	 *
 	 * @var	array
 	 */
-	private $sortingIcons = array(	'asc' => null,
+	private $sortingIcons = [	'asc' => null,
 									'ascSelected' => null,
 									'desc' => null,
-									'descSelected' => null);
+									'descSelected' => null];
 
 
 	/**
@@ -191,10 +191,10 @@ class SpoonDataGrid
 	 *
 	 * @var	array
 	 */
-	private $sortingLabels = array(	'asc' => 'Sort ascending',
+	private $sortingLabels = [	'asc' => 'Sort ascending',
 									'ascSelected' => 'Sorted ascending',
 									'desc' => 'Sort descending',
-									'descSelected' => 'Sorted descending');
+									'descSelected' => 'Sorted descending'];
 
 
 	/**
@@ -293,7 +293,7 @@ class SpoonDataGrid
 		$this->columns[$name] = new SpoonDatagridColumn($name, $label, $value, $URL, $title, $image, $sequence);
 
 		// add the class as an attribute to this column
-		$this->columns[$name]->setAttributes(array('class' => $name));
+		$this->columns[$name]->setAttributes(['class' => $name]);
 	}
 
 
@@ -307,7 +307,7 @@ class SpoonDataGrid
 	 */
 	private function buildURL($offset, $order, $sort)
 	{
-		return str_replace(array('[offset]', '[order]', '[sort]'), array($offset, $order, $sort), $this->URL);
+		return str_replace(['[offset]', '[order]', '[sort]'], [$offset, $order, $sort], $this->URL);
 	}
 
 
@@ -316,7 +316,7 @@ class SpoonDataGrid
 	 */
 	public function clearAttributes()
 	{
-		$this->attributes['datagrid'] = array();
+		$this->attributes['datagrid'] = [];
 	}
 
 
@@ -344,7 +344,7 @@ class SpoonDataGrid
 	 */
 	public function clearEvenRowAttributes()
 	{
-		$this->attributes['row_even'] = array();
+		$this->attributes['row_even'] = [];
 	}
 
 
@@ -353,7 +353,7 @@ class SpoonDataGrid
 	 */
 	public function clearOddRowAttributes()
 	{
-		$this->attributes['row_odd'] = array();
+		$this->attributes['row_odd'] = [];
 	}
 
 
@@ -362,7 +362,7 @@ class SpoonDataGrid
 	 */
 	public function clearRowAttributes()
 	{
-		$this->attributes['row'] = array();
+		$this->attributes['row'] = [];
 	}
 
 
@@ -381,7 +381,7 @@ class SpoonDataGrid
 				$this->addColumn($column, $column, '[' . $column . ']', null, null, null, (count($this->columns) +1));
 
 				// by default the column name will be added as a class
-				$this->columns[$column]->setAttributes(array('class' => $column));
+				$this->columns[$column]->setAttributes(['class' => $column]);
 
 				// may be sorted on
 				$this->allowedSortingColumns[] = $column;
@@ -393,7 +393,7 @@ class SpoonDataGrid
 	/**
 	 * Shows the output & stops script execution.
 	 */
-	public function display()
+	public function display(): never
 	{
 		echo $this->getContent();
 		exit;
@@ -406,7 +406,7 @@ class SpoonDataGrid
 	private function generateOrder()
 	{
 		// delete current cache of sortable columns
-		$this->sortingColumns = array();
+		$this->sortingColumns = [];
 
 		// columns present
 		if(count($this->columns) != 0)
@@ -484,7 +484,7 @@ class SpoonDataGrid
 	private function getColumnsSequence()
 	{
 		// init var
-		$columns = array();
+		$columns = [];
 
 		// loop all the columns
 		foreach($this->columns as $column) $columns[$column->getSequence()] = $column->getName();
@@ -526,7 +526,7 @@ class SpoonDataGrid
 	 * @return	string
 	 * @param	array[optional] $array	The attributes to be converted into HTML-attributes.
 	 */
-	private function getHTMLAttributes(array $array = array())
+	private function getHTMLAttributes(array $array = [])
 	{
 		// output
 		$html = '';
@@ -662,13 +662,13 @@ class SpoonDataGrid
 	public function getSort()
 	{
 		// default sort
-		$sort = ($this->sortParameter !== null) ? $this->sortParameter : null;
+		$sort = $this->sortParameter ?? null;
 
 		// redefine
 		$sort = (isset($_GET['sort'])) ? (string) $_GET['sort'] : $sort;
 
 		// retrieve sort
-		return SpoonFilter::getValue($sort, array('asc', 'desc'), 'asc');
+		return SpoonFilter::getValue($sort, ['asc', 'desc'], 'asc');
 	}
 
 
@@ -716,7 +716,7 @@ class SpoonDataGrid
 	 */
 	private function getTemplatePath()
 	{
-		return ($this->template != null) ? $this->template : dirname(__FILE__) . '/datagrid.tpl';
+		return ($this->template != null) ? $this->template : __DIR__ . '/datagrid.tpl';
 	}
 
 
@@ -746,7 +746,7 @@ class SpoonDataGrid
 			if(count($aRecords) != 0)
 			{
 				// compile directory
-				$compileDirectory = ($this->compileDirectory !== null) ? $this->compileDirectory : dirname(realpath(__FILE__));
+				$compileDirectory = $this->compileDirectory ?? dirname(realpath(__FILE__));
 				$this->tpl->setCompileDirectory($compileDirectory);
 
 				// only force compiling when debug is enabled
@@ -799,7 +799,7 @@ class SpoonDataGrid
 	private function parseBody(array $records)
 	{
 		// init var
-		$rows = array();
+		$rows = [];
 
 		// columns sequence
 		$sequence = $this->getColumnsSequence();
@@ -817,7 +817,7 @@ class SpoonDataGrid
 			$this->parseRowFunctions($record, $this->attributes['row']);
 
 			// reset row
-			$row = array('attributes' => '', 'columns' => array());
+			$row = ['attributes' => '', 'columns' => []];
 
 			// row attributes
 			$row['attributes'] = str_replace($record['labels'], $record['values'], $this->getHtmlAttributes($this->attributes['row']));
@@ -829,7 +829,7 @@ class SpoonDataGrid
 				$row['attributes'] = str_replace($record['labels'], $record['values'], $this->getHtmlAttributes($this->rowFunctionsParsed));
 
 				// clear for the next row
-				$this->rowFunctionsParsed = array();
+				$this->rowFunctionsParsed = [];
 			}
 
 			// default row behaviour
@@ -844,8 +844,8 @@ class SpoonDataGrid
 			// no longer overwrite default attributes with odd/even attributes.
 			if(!empty($row['attributes']))
 			{
-				$cycleData = array();
-				$rowData = array();
+				$cycleData = [];
+				$rowData = [];
 				preg_match_all('/( (.*?)=\"(.*?)\")/', $row['attributes'], $rowData);
 				preg_match_all('/( (.*?)=\"(.*?)\")/', $cycleAttributes, $cycleData);
 
@@ -873,7 +873,7 @@ class SpoonDataGrid
 			else $row['attributes'] = $cycleAttributes;
 
 			// define the columns
-			$columns = array();
+			$columns = [];
 
 			// loop columns
 			foreach($sequence as $name)
@@ -965,7 +965,7 @@ class SpoonDataGrid
 				if(!$column->getHidden())
 				{
 					// add this column
-					$columns[] = array('attributes' => $columnAttributes, 'value' => $columnValue);
+					$columns[] = ['attributes' => $columnAttributes, 'value' => $columnValue];
 
 					// add to custom list
 					$row['column'][$name] = $columnValue;
@@ -1116,7 +1116,7 @@ class SpoonDataGrid
 	private function parseHeader()
 	{
 		// init vars
-		$header = array();
+		$header = [];
 
 		// sequence
 		$sequence = $this->getColumnsSequence();
@@ -1125,14 +1125,14 @@ class SpoonDataGrid
 		$sorting = $this->getSorting();
 
 		// sortable columns
-		$sortingColumns = array();
+		$sortingColumns = [];
 		foreach($sequence as $oColumn) if($this->columns[$oColumn]->getSorting()) $sortingColumns[] = $oColumn;
 
 		// loop columns
 		foreach($sequence as $name)
 		{
 			// define column
-			$column = array();
+			$column = [];
 
 			// column
 			$oColumn = $this->columns[$name];
@@ -1266,7 +1266,7 @@ class SpoonDataGrid
 		if($this->paging)
 		{
 			// offset, order & sort
-			$this->tpl->assign(array('offset', 'order', 'sort'), array($this->getOffset(), $this->getOrder(), $this->getSort()));
+			$this->tpl->assign(['offset', 'order', 'sort'], [$this->getOffset(), $this->getOrder(), $this->getSort()]);
 
 			// number of results
 			$this->tpl->assign('iResults', $this->source->getNumResults());
@@ -1281,7 +1281,7 @@ class SpoonDataGrid
 			$this->tpl->assign('iPerPage', $this->pagingLimit);
 
 			// parse paging
-			$content = call_user_func(array($this->pagingClass, 'getContent'), $this->URL, $this->getOffset(), $this->getOrder(), $this->getSort(), $this->source->getNumResults(), $this->pagingLimit, $this->debug, $this->compileDirectory);
+			$content = call_user_func([$this->pagingClass, 'getContent'], $this->URL, $this->getOffset(), $this->getOrder(), $this->getSort(), $this->source->getNumResults(), $this->pagingLimit, $this->debug, $this->compileDirectory);
 
 			// asign content
 			$this->tpl->assign('paging', $content);
@@ -1298,7 +1298,7 @@ class SpoonDataGrid
 	private function parseRecord(array $record)
 	{
 		// init var
-		$array = array('labels' => array(), 'values' => array());
+		$array = ['labels' => [], 'values' => []];
 
 		// create labels/values array
 		foreach($record as $label => $value)
@@ -1346,7 +1346,7 @@ class SpoonDataGrid
 	 * @param	array $record					The row-data.
 	 * @param	array[optional] $rowAttributes	The attributes on the row.
 	 */
-	private function parseRowFunctions($record, array $rowAttributes = null)
+	private function parseRowFunctions($record, ?array $rowAttributes = null)
 	{
 		// store old error reporting settings
 		$currentErrorReporting = ini_get('error_reporting');
@@ -1498,11 +1498,11 @@ class SpoonDataGrid
 				if(count($function) != 2) throw new SpoonDatagridException('When providing a method for a column function it must be like array(\'class\', \'method\')');
 
 				// method doesn't exist
-				elseif(!is_callable(array($function[0], $function[1]))) throw new SpoonDatagridException('The method ' . (string) $function[0] . '::' . (string) $function[1] . ' does not exist.');
+				elseif(!is_callable([$function[0], $function[1]])) throw new SpoonDatagridException('The method ' . (string) $function[0] . '::' . (string) $function[1] . ' does not exist.');
 			}
 
 			// add to function stack
-			$this->columnFunctions[] = array('function' => $function, 'arguments' => $arguments, 'columns' => $columns, 'overwrite' => (bool) $overwrite);
+			$this->columnFunctions[] = ['function' => $function, 'arguments' => $arguments, 'columns' => $columns, 'overwrite' => (bool) $overwrite];
 		}
 	}
 
@@ -1601,7 +1601,7 @@ class SpoonDataGrid
 		if($this->source->getNumResults() > 0)
 		{
 			// array
-			if(is_array($columns)) call_user_func_array(array($this, 'setColumnsSequence'), $columns);
+			if(is_array($columns)) array_walk($columns, $this->setSequence(...));
 
 			// multiple arguments
 			else
@@ -1855,11 +1855,11 @@ class SpoonDataGrid
 				if(count($function) != 2) throw new SpoonDatagridException('When providing a method for a column function it must be like array(\'class\', \'method\')');
 
 				// method doesn't exist
-				elseif(!is_callable(array($function[0], $function[1]))) throw new SpoonDatagridException('The method ' . (string) $function[0] . '::' . (string) $function[1] . ' does not exist.');
+				elseif(!is_callable([$function[0], $function[1]])) throw new SpoonDatagridException('The method ' . (string) $function[0] . '::' . (string) $function[1] . ' does not exist.');
 			}
 
 			// add to function stack
-			$this->rowFunctions[] = array('function' => $function, 'arguments' => $arguments, 'overwrite' => (bool) $overwrite);
+			$this->rowFunctions[] = ['function' => $function, 'arguments' => $arguments, 'overwrite' => (bool) $overwrite];
 		}
 	}
 
@@ -1952,7 +1952,7 @@ class SpoonDataGrid
 	 */
 	public function setSortParameter($value = 'desc')
 	{
-		$this->sortParameter = SpoonFilter::getValue($value, array('asc', 'desc'), 'asc');
+		$this->sortParameter = SpoonFilter::getValue($value, ['asc', 'desc'], 'asc');
 	}
 
 

@@ -146,7 +146,7 @@ class SpoonFormFile extends SpoonFormAttributes
 	 */
 	public function getFileName($includeExtension = true)
 	{
-		if($this->isFilled()) return (!$includeExtension) ? substr($_FILES[$this->attributes['name']]['name'], 0, strripos($_FILES[$this->attributes['name']]['name'], '.' . SpoonFile::getExtension($_FILES[$this->attributes['name']]['name'], false))) : $_FILES[$this->attributes['name']]['name'];
+		if($this->isFilled()) return (!$includeExtension) ? substr((string) $_FILES[$this->attributes['name']]['name'], 0, strripos((string) $_FILES[$this->attributes['name']]['name'], '.' . SpoonFile::getExtension($_FILES[$this->attributes['name']]['name'], false))) : $_FILES[$this->attributes['name']]['name'];
 		return '';
 	}
 
@@ -163,7 +163,7 @@ class SpoonFormFile extends SpoonFormAttributes
 		if($this->isFilled())
 		{
 			// redefine unit
-			$unit = SpoonFilter::getValue(strtolower($unit), array('b', 'kb', 'mb', 'gb'), 'kb');
+			$unit = SpoonFilter::getValue(strtolower((string) $unit), ['b', 'kb', 'mb', 'gb'], 'kb');
 
 			// fetch size
 			$size = $_FILES[$this->attributes['name']]['size'];
@@ -246,7 +246,6 @@ class SpoonFormFile extends SpoonFormAttributes
 		// file has been uploaded
 		if($this->isFilled())
 		{
-			
 			if (!is_file($_FILES[$this->attributes['name']]['tmp_name'])) return false;
 
 			// get image properties
@@ -312,7 +311,7 @@ class SpoonFormFile extends SpoonFormAttributes
 			$actualSize = $this->getFileSize($unit, 0);
 
 			// operator
-			$operator = SpoonFilter::getValue(strtolower($operator), array('smaller', 'equal', 'greater'), 'smaller');
+			$operator = SpoonFilter::getValue(strtolower((string) $operator), ['smaller', 'equal', 'greater'], 'smaller');
 
 			// smaller
 			if($operator == 'smaller' && $actualSize < $size) return true;
@@ -388,6 +387,7 @@ class SpoonFormFile extends SpoonFormAttributes
 	 * @return	string
 	 * @param	SpoonTemplate[optional] $template	The template to parse the element in.
 	 */
+	#[\Override]
 	public function parse($template = null)
 	{
 		// name is required
@@ -397,7 +397,7 @@ class SpoonFormFile extends SpoonFormAttributes
 		$output = '<input type="file"';
 
 		// add attributes
-		$output .= $this->getAttributesHTML(array('[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'])) . ' />';
+		$output .= $this->getAttributesHTML(['[id]' => $this->attributes['id'], '[name]' => $this->attributes['name']]) . ' />';
 
 		// parse to template
 		if($template !== null)
