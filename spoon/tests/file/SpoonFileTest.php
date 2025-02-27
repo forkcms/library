@@ -9,6 +9,10 @@ require_once 'spoon/spoon.php';
 
 class SpoonFileTest extends TestCase
 {
+    private string $existingUrl;
+    private string $nonExistingUrl;
+    private string $destinationFile;
+
 	public function setup(): void
 	{
 		if(!defined('TMPPATH')) define('TMPPATH', dirname(realpath(__DIR__)) . '/tmp');
