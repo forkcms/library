@@ -73,6 +73,7 @@ class SpoonFile
 		if($fileHandle === false) return false;
 
 		$options[CURLOPT_URL] = $sourceURL;
+		$options[CURLOPT_FOLLOWLOCATION] = true;
 		$options[CURLOPT_FILE] = $fileHandle;
 		$options[CURLOPT_HEADER] = false;
 		if(ini_get('open_basedir') == '' && ini_get('safe_mode' == 'Off')) $options[CURLOPT_FOLLOWLOCATION] = true;

@@ -17,7 +17,7 @@ class SpoonFileTest extends TestCase
 	{
 		if(!defined('TMPPATH')) define('TMPPATH', dirname(realpath(__DIR__)) . '/tmp');
 
-		$this->existingUrl = 'http://www.spoon-library.be/downloads/1.0.3/spoon-1.0.3.zip';
+		$this->existingUrl = 'https://github.com/forkcms/library/archive/refs/tags/3.2.12.zip';
 		$this->nonExistingUrl = 'http://wowbesturleverforspoonlibrary.dev/' . time() . '.txt';
 		$this->destinationFile = TMPPATH . '/spoon.zip';
 	}
