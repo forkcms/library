@@ -1111,7 +1111,7 @@ class SpoonTemplateCompiler
 		while(1)
 		{
 			// replace iteration names to ensure that they're unique
-			$content = preg_replace_callback($pattern, [$this, 'prepareIterationsCallback'], (string) $content, -1, $count);
+			$content = preg_replace_callback($pattern, $this->prepareIterationsCallback(...), (string) $content, -1, $count);
 
 			// break the loop, no matches were found
 			if(!$count) break;

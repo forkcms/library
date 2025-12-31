@@ -248,7 +248,7 @@ class SpoonDatabase
 	 */
 	public function drop($tables)
 	{
-		$this->execute('DROP TABLE ' . implode(', ', array_map([$this, 'quoteName'], (array) $tables)));
+		$this->execute('DROP TABLE ' . implode(', ', array_map($this->quoteName(...), (array) $tables)));
 	}
 
 
@@ -825,7 +825,7 @@ class SpoonDatabase
 			$subKeys = array_keys($actualValues[0]);
 
 			// prefix with table name
-			array_walk($subKeys, [$this, 'prefixTableNames'], $table);
+			array_walk($subKeys, $this->prefixTableNames(...), $table);
 
 			// build query
 			$query .= implode(', ', $subKeys) . ') VALUES ';
@@ -882,7 +882,7 @@ class SpoonDatabase
 			$numFields = count($actualValues);
 
 			// prefix with table name
-			array_walk($keys, [$this, 'prefixTableNames'], $table);
+			array_walk($keys, $this->prefixTableNames(...), $table);
 
 			// build query
 			$query .= implode(', ', $keys) . ') VALUES (';
@@ -955,7 +955,7 @@ class SpoonDatabase
 		$tables = (func_num_args() == 1) ? (array) $tables : func_get_args();
 
 		// build & execute query
-		return $this->getRecords('OPTIMIZE TABLE ' . implode(', ', array_map([$this, 'quoteName'], $tables)));
+		return $this->getRecords('OPTIMIZE TABLE ' . implode(', ', array_map($this->quoteName(...), $tables)));
 	}
 
 
@@ -1145,7 +1145,7 @@ class SpoonDatabase
 			foreach($parameters as $key => $value)
 			{
 				// key such as ':id' starting
-				if(str_starts_with($key, ':'))
+				if(str_starts_with((string) $key, ':'))
 				{
 					$namedParameters = true;
 					break;

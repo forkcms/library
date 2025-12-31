@@ -216,7 +216,7 @@ class SpoonFileCSV
 		$handle = @fopen($path, 'r');
 
 		// loop lines and store the rows
-		while(($row = @fgetcsv($handle, 0, (($delimiter == '') ? ',' : $delimiter), (($enclosure == '') ? '"' : $enclosure))) !== false) $rows[] = $row;
+		while(($row = @fgetcsv($handle, 0, (($delimiter == '') ? ',' : $delimiter), (($enclosure == '') ? '"' : $enclosure), escape: '\\')) !== false) $rows[] = $row;
 
 		// close file
 		@fclose($handle);

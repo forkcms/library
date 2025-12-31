@@ -712,7 +712,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 	 */
 	private function setValues(?array $values = null)
 	{
-		$values = $values ?? [];
+		$values ??= [];
 
 		// has no items
 		if(count($values) == 0) $this->setDefaultElement('');

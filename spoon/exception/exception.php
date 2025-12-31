@@ -84,7 +84,7 @@ class SpoonException extends Exception
 
 // Redefine the exception handler if we are not running in the command line.
 if (!Spoon::inCli()) {
-    set_exception_handler('exceptionHandler');
+    set_exception_handler(exceptionHandler(...));
 }
 
 /**

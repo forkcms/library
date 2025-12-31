@@ -156,16 +156,16 @@ class SpoonFilter
 				 */
 				function fixMagicQuotes($value)
 				{
-					$value = is_array($value) ? array_map('fixMagicQuotes', $value) : stripslashes((string) $value);
+					$value = is_array($value) ? array_map(fixMagicQuotes(...), $value) : stripslashes((string) $value);
 					return $value;
 				}
 			}
 
 			// fix the thing with magic dust!
-			$_POST = array_map('fixMagicQuotes', $_POST);
-			$_GET = array_map('fixMagicQuotes', $_GET);
-			$_COOKIE = array_map('fixMagicQuotes', $_COOKIE);
-			$_REQUEST = array_map('fixMagicQuotes', $_REQUEST);
+			$_POST = array_map(fixMagicQuotes(...), $_POST);
+			$_GET = array_map(fixMagicQuotes(...), $_GET);
+			$_COOKIE = array_map(fixMagicQuotes(...), $_COOKIE);
+			$_REQUEST = array_map(fixMagicQuotes(...), $_REQUEST);
 		}
 	}
 

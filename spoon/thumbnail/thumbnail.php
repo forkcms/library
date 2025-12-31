@@ -599,9 +599,6 @@ class SpoonThumbnail
 		// resize
 		$success = @imagecopyresampled($tempImage, $currentImage, 0, 0, 0, 0, $tempWidth, $tempHeight, $currentWidth, $currentHeight);
 
-		// destroy original image
-		imagedestroy($currentImage);
-
 		// image creation fail
 		if(!$success)
 		{
