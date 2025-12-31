@@ -1484,8 +1484,14 @@ class SpoonDataGrid
 		// has results
 		if($this->source->getNumResults() > 0)
 		{
+			if (is_object($function)) {
+				if (!is_callable($function)) {
+					throw new SpoonDatagridException('The object "' . $function::class . '" is not callable.');
+				}
+			}
+
 			// regular function
-			if(!is_array($function))
+			else if(!is_array($function))
 			{
 				// function checks
 				if(!function_exists((string) $function)) throw new SpoonDatagridException('The function "' . (string) $function . '" doesn\'t exist.');
@@ -1841,8 +1847,14 @@ class SpoonDataGrid
 		// has results
 		if($this->source->getNumResults() > 0)
 		{
+			if (is_object($function)) {
+				if (!is_callable($function)) {
+					throw new SpoonDatagridException('The object "' . $function::class . '" is not callable.');
+				}
+			}
+
 			// regular function
-			if(!is_array($function))
+			else if(!is_array($function))
 			{
 				// function checks
 				if(!function_exists((string) $function)) throw new SpoonDatagridException('The function "' . (string) $function . '" doesn\'t exist.');
