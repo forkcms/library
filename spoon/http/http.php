@@ -87,9 +87,6 @@ class SpoonHTTP
 		$errorNumber = curl_errno($curl);
 		$errorMessage = curl_error($curl);
 
-		// close
-		curl_close($curl);
-
 		// validate
 		if($errorNumber != 0) throw new SpoonHTTPException($errorMessage);
 

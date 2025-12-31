@@ -169,7 +169,7 @@ class SpoonDatabase
 				// mysql only option
 				if($this->driver == 'mysql')
 				{
-					$this->handler->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+					$this->handler->setAttribute(Pdo\Mysql::ATTR_USE_BUFFERED_QUERY, true);
 				}
 			}
 

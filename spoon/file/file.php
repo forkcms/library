@@ -93,7 +93,6 @@ class SpoonFile
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
 		// close
-		curl_close($curl);
 		fclose($fileHandle);
 
 		// validate the errornumber
