@@ -1,3 +1,4 @@
 composer.lock
 /vendor
 spoon/tests/tmp/spoon.zip
+.phpunit.result.cache
