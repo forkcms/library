@@ -1,6 +1,6 @@
 2.0.0 (2025-xx-xx)
 ---
-- Upgrade to php 8.4
+- Upgrade to PHP 8.5
 - The default value for SpoonFilter::getValue parameter defaultValue is now null
 - E_STRICT is no longer supported
 
