@@ -694,7 +694,7 @@ class SpoonFilter
 		{
 			$value = 'Array';
 		}
-		return (bool) preg_match('/^[^\x-\x1F]+$/', (string) $value);
+		return (bool) preg_match('/^[^\x00-\x1F]+$/', (string) $value);
 	}
 
 
