@@ -180,10 +180,12 @@ class SpoonDataGrid
 	 *
 	 * @var	array
 	 */
-	private $sortingIcons = [	'asc' => null,
-									'ascSelected' => null,
-									'desc' => null,
-									'descSelected' => null];
+	private $sortingIcons = [
+        'asc' => null,
+        'ascSelected' => null,
+        'desc' => null,
+        'descSelected' => null,
+    ];
 
 
 	/**
@@ -191,10 +193,12 @@ class SpoonDataGrid
 	 *
 	 * @var	array
 	 */
-	private $sortingLabels = [	'asc' => 'Sort ascending',
-									'ascSelected' => 'Sorted ascending',
-									'desc' => 'Sort descending',
-									'descSelected' => 'Sorted descending'];
+	private $sortingLabels = [
+        'asc' => 'Sort ascending',
+        'ascSelected' => 'Sorted ascending',
+        'desc' => 'Sort descending',
+        'descSelected' => 'Sorted descending',
+    ];
 
 
 	/**
