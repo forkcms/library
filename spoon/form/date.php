@@ -65,7 +65,7 @@ class SpoonFormDate extends SpoonFormInput
 		 * before the value is set, or the old mask (in case it differs)
 		 * will automatically be used.
 		 */
-		$this->setMask(($mask !== null) ? $mask : $this->mask);
+		$this->setMask($mask ?? $this->mask);
 
 		/**
 		 * The value will be filled based on the default input mask
@@ -88,6 +88,7 @@ class SpoonFormDate extends SpoonFormInput
 	 *
 	 * @return	string
 	 */
+	#[\Override]
 	public function getDefaultValue()
 	{
 		return $this->value;
@@ -128,24 +129,24 @@ class SpoonFormDate extends SpoonFormInput
 			if($this->isValid())
 			{
 				// define long mask
-				$longMask = str_replace(array('d', 'm', 'Y'), array('dd', 'mm', 'yy'), $this->mask);
+				$longMask = str_replace(['d', 'm', 'Y'], ['dd', 'mm', 'yy'], $this->mask);
 
 				// year found
-				if(strpos($longMask, 'yy') !== false && $year === null)
+				if(str_contains($longMask, 'yy') && $year === null)
 				{
 					// redefine year
 					$year = substr($data[$this->attributes['name']], strpos($longMask, 'yy'), 4);
 				}
 
 				// month found
-				if(strpos($longMask, 'mm') !== false && $month === null)
+				if(str_contains($longMask, 'mm') && $month === null)
 				{
 					// redefine month
 					$month = substr($data[$this->attributes['name']], strpos($longMask, 'mm'), 2);
 				}
 
 				// day found
-				if(strpos($longMask, 'dd') !== false && $day === null)
+				if(str_contains($longMask, 'dd') && $day === null)
 				{
 					// redefine day
 					$day = substr($data[$this->attributes['name']], strpos($longMask, 'dd'), 2);
@@ -181,7 +182,7 @@ class SpoonFormDate extends SpoonFormInput
 		{
 			// post/get data
 			$data = $this->getMethod(true);
-			$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+			$value = $data[$this->getName()] ?? '';
 
 			// submitted by post (may be empty)
 			if(is_scalar($value))
@@ -212,7 +213,7 @@ class SpoonFormDate extends SpoonFormInput
 		{
 			// post/get data
 			$data = $this->getMethod(true);
-			$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+			$value = $data[$this->getName()] ?? '';
 			$value = is_array($value) ? 'Array' : trim((string) $value);
 
 			// check filled status
@@ -250,7 +251,7 @@ class SpoonFormDate extends SpoonFormInput
 			if(strlen((string) $data[$this->attributes['name']]) == $this->attributes['maxlength'])
 			{
 				// define long mask
-				$longMask = str_replace(array('d', 'm', 'y', 'Y'), array('dd', 'mm', 'y', 'yy'), $this->mask);
+				$longMask = str_replace(['d', 'm', 'y', 'Y'], ['dd', 'mm', 'y', 'yy'], $this->mask);
 
 				// init vars
 				$year = (int) date('Y');
@@ -258,7 +259,7 @@ class SpoonFormDate extends SpoonFormInput
 				$day = (int) date('d');
 
 				// validate year (yyyy)
-				if(strpos($longMask, 'yy') !== false)
+				if(str_contains($longMask, 'yy'))
 				{
 					// redefine year
 					$year = substr($data[$this->attributes['name']], strpos($longMask, 'yy'), 4);
@@ -279,7 +280,7 @@ class SpoonFormDate extends SpoonFormInput
 				}
 
 				// validate year (yy)
-				if(strpos($longMask, 'y') !== false && strpos($longMask, 'yy') === false)
+				if(str_contains($longMask, 'y') && !str_contains($longMask, 'yy'))
 				{
 					// redefine year
 					$year = substr($data[$this->attributes['name']], strpos($longMask, 'y'), 2);
@@ -300,7 +301,7 @@ class SpoonFormDate extends SpoonFormInput
 				}
 
 				// validate month (mm)
-				if(strpos($longMask, 'mm') !== false)
+				if(str_contains($longMask, 'mm'))
 				{
 					// redefine month
 					$month = substr($data[$this->attributes['name']], strpos($longMask, 'mm'), 2);
@@ -321,7 +322,7 @@ class SpoonFormDate extends SpoonFormInput
 				}
 
 				// validate day (dd)
-				if(strpos($longMask, 'dd') !== false)
+				if(str_contains($longMask, 'dd'))
 				{
 					// redefine day
 					$day = substr($data[$this->attributes['name']], strpos($longMask, 'dd'), 2);
@@ -371,6 +372,7 @@ class SpoonFormDate extends SpoonFormInput
 	 * @return	string
 	 * @param	SpoonTemplate[optional] $template	The template to parse the element in.
 	 */
+	#[\Override]
 	public function parse($template = null)
 	{
 		// name is required
@@ -380,7 +382,7 @@ class SpoonFormDate extends SpoonFormInput
 		$output = '<input type="text" value="' . SpoonFilter::htmlspecialchars($this->getValue()) . '"';
 
 		// add attributes
-		$output .= $this->getAttributesHTML(array('[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'], '[value]' => $this->getValue())) . ' />';
+		$output .= $this->getAttributesHTML(['[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'], '[value]' => $this->getValue()]) . ' />';
 
 		// template
 		if($template !== null)
@@ -405,7 +407,7 @@ class SpoonFormDate extends SpoonFormInput
 		$mask = ($mask !== null) ? (string) $mask : $this->mask;
 
 		// allowed characters
-		$aCharachters = array(
+		$aCharachters = [
 			'.',
 			' ',
 			'-',
@@ -422,7 +424,7 @@ class SpoonFormDate extends SpoonFormInput
 			'n',
 			'Y',
 			'y',
-		);
+		];
 
 		// new mask
 		$maskCorrected = '';
@@ -434,7 +436,7 @@ class SpoonFormDate extends SpoonFormInput
 			if(in_array(substr($mask, $i, 1), $aCharachters)) $maskCorrected .= substr($mask, $i, 1);
 		}
 
-		$formatMap = array(
+		$formatMap = [
 			'd' => 'dd',
 			'D' => 'D',
 			'j' => 'd',
@@ -446,7 +448,7 @@ class SpoonFormDate extends SpoonFormInput
 			'n' => 'm',
 			'Y' => 'yy',
 			'y' => 'y',
-		);
+		];
 		// new mask
 		$this->mask = $maskCorrected;
 

@@ -1,7 +1,7 @@
 <?php
 
 // initialize variable
-$locale = array();
+$locale = [];
 
 // continents
 $locale['continents']['africa'] = 'Afrique';
@@ -13,7 +13,7 @@ $locale['continents']['oceania'] = 'Oceania';
 $locale['continents']['southAmerica'] = 'Amérique du Sud';
 
 // countries
-$locale['countries'] = array();
+$locale['countries'] = [];
 $locale['countries']['AF'] = 'Afghanistan';
 $locale['countries']['ZA'] = 'Afrique du Sud';
 $locale['countries']['AL'] = 'Albanie';
@@ -266,7 +266,7 @@ $locale['countries']['ZM'] = 'Zambie';
 $locale['countries']['ZW'] = 'Zimbabwe';
 
 // languages
-$locale['languages'] = array();
+$locale['languages'] = [];
 $locale['languages']['de'] = 'allemand';
 $locale['languages']['en'] = 'anglais';
 $locale['languages']['es'] = 'espagnol';
@@ -274,13 +274,13 @@ $locale['languages']['fr'] = 'français';
 $locale['languages']['nl'] = 'néerlandais';
 
 // date
-$locale['date'] = array();
+$locale['date'] = [];
 
 // date - months
-$locale['date']['months'] = array();
+$locale['date']['months'] = [];
 
 // date - months full
-$locale['date']['months']['full'] = array();
+$locale['date']['months']['full'] = [];
 $locale['date']['months']['full'][1] = 'janvier';
 $locale['date']['months']['full'][2] = 'février';
 $locale['date']['months']['full'][3] = 'mars';
@@ -295,7 +295,7 @@ $locale['date']['months']['full'][11] = 'novembre';
 $locale['date']['months']['full'][12] = 'décembre';
 
 // date - months abbreviated
-$locale['date']['months']['abbreviated'] = array();
+$locale['date']['months']['abbreviated'] = [];
 $locale['date']['months']['abbreviated'][1] = 'janv.';
 $locale['date']['months']['abbreviated'][2] = 'févr.';
 $locale['date']['months']['abbreviated'][3] = 'mars';
@@ -310,10 +310,10 @@ $locale['date']['months']['abbreviated'][11] = 'nov.';
 $locale['date']['months']['abbreviated'][12] = 'déc.';
 
 // date - days
-$locale['date']['days'] = array();
+$locale['date']['days'] = [];
 
 // date - days full
-$locale['date']['days']['full'] = array();
+$locale['date']['days']['full'] = [];
 $locale['date']['days']['full']['sun'] = 'dimanche';
 $locale['date']['days']['full']['mon'] = 'lundi';
 $locale['date']['days']['full']['tue'] = 'mardi';
@@ -323,7 +323,7 @@ $locale['date']['days']['full']['fri'] = 'vendredi';
 $locale['date']['days']['full']['sat'] = 'samedi';
 
 // date - days abbreviated
-$locale['date']['days']['abbreviated'] = array();
+$locale['date']['days']['abbreviated'] = [];
 $locale['date']['days']['abbreviated']['sun'] = 'dim.';
 $locale['date']['days']['abbreviated']['mon'] = 'lun.';
 $locale['date']['days']['abbreviated']['tue'] = 'mar.';

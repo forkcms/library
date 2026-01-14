@@ -5,34 +5,31 @@
  */
 class Collection implements Countable, IteratorAggregate, ArrayAccess
 {
-	private $array = array();
-
-	public function count()
+	public function count(): int
 	{
 		return count($this->array);
 	}
 
-	public function __construct(array $array)
-	{
-		$this->array = $array;
-	}
+	public function __construct(private array $array)
+    {
+    }
 
-	public function getIterator()
+	public function getIterator(): Traversable
 	{
 		return new ArrayIterator($this->array);
 	}
 
-	public function offsetExists($offset)
+	public function offsetExists(mixed $offset): bool
 	{
-		isset($this->array[$offset]);
+		return isset($this->array[$offset]);
 	}
 
-	public function offsetGet($offset)
+	public function offsetGet(mixed $offset): mixed
 	{
-		return isset($this->array[$offset]) ? $this->array[$offset] : null;
+		return $this->array[$offset] ?? null;
 	}
 
-	public function offsetSet($offset, $value)
+	public function offsetSet(mixed $offset, mixed $value): void
 	{
 		if(is_null($offset))
 		{
@@ -44,8 +41,8 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess
 		}
 	}
 
-	public function offsetUnset($offset)
+	public function offsetUnset(mixed $offset): void
 	{
-		unset($this->container[$offset]);
+		unset($this->array[$offset]);
 	}
 }

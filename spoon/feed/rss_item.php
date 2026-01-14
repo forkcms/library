@@ -39,7 +39,7 @@ class SpoonFeedRSSItem
 	 *
 	 * @var	array
 	 */
-	private $categories = array();
+	private $categories = [];
 
 
 	/**
@@ -71,7 +71,7 @@ class SpoonFeedRSSItem
 	 *
 	 * @var	array
 	 */
-	private $guid = array();
+	private $guid = [];
 
 
 	/**
@@ -95,7 +95,7 @@ class SpoonFeedRSSItem
 	 *
 	 * @var	array
 	 */
-	private $source = array();
+	private $source = [];
 
 
 	/**
@@ -408,7 +408,7 @@ class SpoonFeedRSSItem
 			}
 
 			// catch exceptions
-			catch(Exception $e)
+			catch(Exception)
 			{
 				// ignore exceptions
 			}
@@ -430,7 +430,7 @@ class SpoonFeedRSSItem
 			}
 
 			// catch exceptions
-			catch(Exception $e)
+			catch(Exception)
 			{
 				// ignore exceptions
 			}
@@ -451,7 +451,7 @@ class SpoonFeedRSSItem
 			}
 
 			// catch exceptions
-			catch(Exception $e)
+			catch(Exception)
 			{
 				// ignore exceptions
 			}
@@ -475,7 +475,7 @@ class SpoonFeedRSSItem
 			}
 
 			// catch exceptions
-			catch(Exception $e)
+			catch(Exception)
 			{
 				// ignore exceptions
 			}

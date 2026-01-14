@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -13,10 +13,10 @@ class SpoonFilterTest extends TestCase
 	{
 		/* without allowedKeys parameter */
 		// test array
-		$testArray = array(0 => array('string1' => 'This%20is%20a%20string'), 1 => array('string2' => 'This%20is%20a%20string'));
+		$testArray = [0 => ['string1' => 'This%20is%20a%20string'], 1 => ['string2' => 'This%20is%20a%20string']];
 
 		// expected result
-		$testResult = array(0 => array('string1' => 'This is a string'), 1 => array('string2' => 'This is a string'));
+		$testResult = [0 => ['string1' => 'This is a string'], 1 => ['string2' => 'This is a string']];
 
 		// perform test
 		$this->assertEquals($testResult, SpoonFilter::arrayMapRecursive('urldecode', $testArray));
@@ -24,10 +24,10 @@ class SpoonFilterTest extends TestCase
 
 		/* with allowedKeys parameter */
 		// test array
-		$testArray = array(0 => serialize(array('string1' => 'spoon')), 1 => serialize(array('string2' => 'rocks')));
+		$testArray = [0 => serialize(['string1' => 'spoon']), 1 => serialize(['string2' => 'rocks'])];
 
 		// expected result
-		$testResult= array(0 => 'a:1:{s:7:"string1";s:5:"spoon";}', 1 => array('string2' => 'rocks'));
+		$testResult= [0 => 'a:1:{s:7:"string1";s:5:"spoon";}', 1 => ['string2' => 'rocks']];
 
 		// perform test
 		$this->assertEquals($testResult, SpoonFilter::arrayMapRecursive('unserialize', $testArray, '1'));
@@ -35,22 +35,22 @@ class SpoonFilterTest extends TestCase
 
 		/* with allowedKeys parameter, depth of 4 */
 		// test array
-		$testArray = array(0 => array('array1' => array(array('spoon' => serialize('kicks'), 'serious' => serialize('ass')))), 1 => serialize(array('string2' => 'ass')));
+		$testArray = [0 => ['array1' => [['spoon' => serialize('kicks'), 'serious' => serialize('ass')]]], 1 => serialize(['string2' => 'ass'])];
 
 		// expected result
-		$testResult = array(0 => array('array1' => array(array('spoon' => 's:5:"kicks";', 'serious' => 'ass'))), 1 => array('string2' => 'ass'));
+		$testResult = [0 => ['array1' => [['spoon' => 's:5:"kicks";', 'serious' => 'ass']]], 1 => ['string2' => 'ass']];
 
 		// perform test
-		$this->assertEquals($testResult, SpoonFilter::arrayMapRecursive('unserialize', $testArray, array('serious', '1')));
+		$this->assertEquals($testResult, SpoonFilter::arrayMapRecursive('unserialize', $testArray, ['serious', '1']));
 	}
 
 	public function testArraySortKeys()
 	{
 		// test array
-		$testArray = array(-2 => 'Davy Hellemans', 1 => 'Tijs Verkoyen', 4 => 'Dave Lens');
+		$testArray = [-2 => 'Davy Hellemans', 1 => 'Tijs Verkoyen', 4 => 'Dave Lens'];
 
 		// expected result
-		$expectedArray = array('Davy Hellemans', 'Tijs Verkoyen', 'Dave Lens');
+		$expectedArray = ['Davy Hellemans', 'Tijs Verkoyen', 'Dave Lens'];
 
 		// perform test
 		$this->assertEquals($expectedArray, SpoonFilter::arraySortKeys($testArray));
@@ -62,16 +62,16 @@ class SpoonFilterTest extends TestCase
 		$id = '1337';
 		$type = 'web';
 		$animal = 'donkey';
-		$animals = array('1337', 'web', 'donkey');
+		$animals = ['1337', 'web', 'donkey'];
 
 		// perform tests
 		$this->assertEquals(1337, SpoonFilter::getValue($id, null, 0, 'int'));
-		$this->assertEquals('web', SpoonFilter::getValue($type, array('web', 'print'), 'print'));
-		$this->assertEquals('whale', SpoonFilter::getValue($animal, array('whale', 'horse'), 'whale'));
+		$this->assertEquals('web', SpoonFilter::getValue($type, ['web', 'print'], 'print'));
+		$this->assertEquals('whale', SpoonFilter::getValue($animal, ['whale', 'horse'], 'whale'));
 		$this->assertEquals('donkey', SpoonFilter::getValue($animal, null, 'whale'));
-		$this->assertEquals(array('1337', 'web', 'donkey'), SpoonFilter::getValue($animals, null, null, 'array'));
-		$this->assertEquals(array('1337', 'web'), SpoonFilter::getValue($animals, array('1337', 'web'), array('soep'), 'array'));
-		$this->assertEquals(array('soep'), SpoonFilter::getValue(array('blikken doos'), array('1337', 'web'), array('soep'), 'array'));
+		$this->assertEquals(['1337', 'web', 'donkey'], SpoonFilter::getValue($animals, null, null, 'array'));
+		$this->assertEquals(['1337', 'web'], SpoonFilter::getValue($animals, ['1337', 'web'], ['soep'], 'array'));
+		$this->assertEquals(['soep'], SpoonFilter::getValue(['blikken doos'], ['1337', 'web'], ['soep'], 'array'));
 	}
 
 	public function testHtmlentities()
@@ -81,7 +81,7 @@ class SpoonFilterTest extends TestCase
 		$expectedResult = 'Ik heb "g&eacute;&eacute;n" bananen vandaag';
 
 		// perform test
-		$this->assertEquals($expectedResult, SpoonFilter::htmlentities(utf8_decode($input), 'iso-8859-1'));
+		$this->assertEquals($expectedResult, SpoonFilter::htmlentities(mb_convert_encoding($input, 'ISO-8859-1'), 'iso-8859-1'));
 		$this->assertEquals($expectedResult, SpoonFilter::htmlentities($input, 'utf-8'));
 		$expectedResult = 'Ik heb &quot;g&eacute;&eacute;n&quot; bananen vandaag';
 		$this->assertEquals($expectedResult, SpoonFilter::htmlentities($input, null, ENT_QUOTES));
@@ -104,7 +104,7 @@ class SpoonFilterTest extends TestCase
 		$expectedResult = 'Ik heb géén bananen vandaag';
 
 		// perform test
-		$this->assertEquals(utf8_decode($expectedResult), SpoonFilter::htmlentitiesDecode(utf8_decode($input), 'iso-8859-1'));
+		$this->assertEquals(mb_convert_encoding($expectedResult, 'ISO-8859-1'), SpoonFilter::htmlentitiesDecode(mb_convert_encoding($input, 'ISO-8859-1'), 'iso-8859-1'));
 		$this->assertEquals($expectedResult, SpoonFilter::htmlentitiesDecode($input, 'utf-8'));
 	}
 
@@ -116,7 +116,7 @@ class SpoonFilterTest extends TestCase
 		$this->assertFalse(SpoonFilter::isAlphabetical('gééN'));
 
 		// Simulating PHP < 5.4 behaviour
-		$this->assertTrue(SpoonFilter::isAlphabetical(array('a', 'b')));
+		$this->assertTrue(SpoonFilter::isAlphabetical(['a', 'b']));
 	}
 
 	public function testIsAlphaNumeric()
@@ -125,7 +125,7 @@ class SpoonFilterTest extends TestCase
 		$this->assertFalse(SpoonFilter::isAlphaNumeric('Johan Mayer 007'));
 
 		// Simulating PHP < 5.4 behaviour
-		$this->assertTrue(SpoonFilter::isAlphaNumeric(array('a', 'b')));
+		$this->assertTrue(SpoonFilter::isAlphaNumeric(['a', 'b']));
 	}
 
 	public function testIsBetween()
@@ -149,7 +149,7 @@ class SpoonFilterTest extends TestCase
 		$this->assertFalse(SpoonFilter::isBool(100));
 		$this->assertFalse(SpoonFilter::isBool(900));
 		$this->assertFalse(SpoonFilter::isBool(077));
-		$this->assertFalse(SpoonFilter::isBool(array()));
+		$this->assertFalse(SpoonFilter::isBool([]));
 	}
 
 	public function testIsDigital()
@@ -157,7 +157,7 @@ class SpoonFilterTest extends TestCase
 		$this->assertTrue(SpoonFilter::isDigital('010192029'));
 		$this->assertTrue(SpoonFilter::isDigital(1337));
 		$this->assertFalse(SpoonFilter::isDigital('I can has cheezeburger'));
-		$this->assertFalse(SpoonFilter::isDigital(array()));
+		$this->assertFalse(SpoonFilter::isDigital([]));
 	}
 
 	public function testIsEmail()
@@ -168,8 +168,8 @@ class SpoonFilterTest extends TestCase
 		$this->assertTrue(SpoonFilter::isEmail('erik.bauffman@spoon-library.be'));
 		$this->assertTrue(SpoonFilter::isEmail('a.osterhaus@erasmusnc.nl'));
 		$this->assertTrue(SpoonFilter::isEmail('asmonto@umich.edu'));
-		$this->assertFalse(SpoonFilter::isEmail(array()));
-		$this->assertFalse(SpoonFilter::isEmail(array('foo@example.com')));
+		$this->assertFalse(SpoonFilter::isEmail([]));
+		$this->assertFalse(SpoonFilter::isEmail(['foo@example.com']));
 	}
 
 	public function testIsEven()
@@ -181,8 +181,8 @@ class SpoonFilterTest extends TestCase
 
 		// I don't know man, semantically speaking, this bull shit, but it does
 		// adhere to PHP's idiosyncratic casting rules.
-		$this->assertTrue(SpoonFilter::isEven(array()));
-		$this->assertFalse(SpoonFilter::isEven(array(2)));
+		$this->assertTrue(SpoonFilter::isEven([]));
+		$this->assertFalse(SpoonFilter::isEven([2]));
 	}
 
 	public function testIsFilename()
@@ -192,7 +192,7 @@ class SpoonFilterTest extends TestCase
 		$this->assertFalse(SpoonFilter::isFilename('/Users/bauffman/Desktop/test.txt'));
 
 		// Simulating PHP < 5.4 behaviour
-		$this->assertTrue(SpoonFilter::isFilename(array()));
+		$this->assertTrue(SpoonFilter::isFilename([]));
 	}
 
 	public function testIsFloat()
@@ -214,7 +214,7 @@ class SpoonFilterTest extends TestCase
 		$this->assertTrue(SpoonFilter::isFloat('65.00'));
 		$this->assertTrue(SpoonFilter::isFloat(65.010, true));
 		$this->assertTrue(SpoonFilter::isFloat('65.010', true));
-		$this->assertFalse(SpoonFilter::isFloat(array()));
+		$this->assertFalse(SpoonFilter::isFloat([]));
 	}
 
 	public function testIsGreaterThan()
@@ -224,7 +224,7 @@ class SpoonFilterTest extends TestCase
 		$this->assertTrue(SpoonFilter::isGreaterThan(-1, 10));
 		$this->assertFalse(SpoonFilter::isGreaterThan(1, -10));
 		$this->assertFalse(SpoonFilter::isGreaterThan(0, 0));
-		$this->assertTrue(SpoonFilter::isGreaterThan(array(), array(1)));
+		$this->assertTrue(SpoonFilter::isGreaterThan([], [1]));
 	}
 
 	public function testIsInteger()
@@ -235,7 +235,7 @@ class SpoonFilterTest extends TestCase
 		$this->assertTrue(SpoonFilter::isInteger(-1234567890));
 		$this->assertFalse(SpoonFilter::isInteger(1.337));
 		$this->assertFalse(SpoonFilter::isInteger(-1.337));
-		$this->assertFalse(SpoonFilter::isInteger(array()));
+		$this->assertFalse(SpoonFilter::isInteger([]));
 
 	}
 
@@ -248,14 +248,14 @@ class SpoonFilterTest extends TestCase
 		// new referrer
 		$_SERVER['HTTP_REFERER'] = 'http://www.spoon-library.com/about-us';
 		$_SERVER['HTTP_HOST'] = 'spoon-library.com';
-		$this->assertTrue(SpoonFilter::isInternalReferrer(array('spoon-library.com')));
+		$this->assertTrue(SpoonFilter::isInternalReferrer(['spoon-library.com']));
 
 		// multiple domains
-		$this->assertTrue(SpoonFilter::isInternalReferrer(array('docs.spoon-library.com', 'blog.spoon-library.com', 'spoon-library.com')));
+		$this->assertTrue(SpoonFilter::isInternalReferrer(['docs.spoon-library.com', 'blog.spoon-library.com', 'spoon-library.com']));
 
 		// incorrect!
-		$this->assertFalse(SpoonFilter::isInternalReferrer(array('rotten.com')));
-		$this->assertFalse(SpoonFilter::isInternalReferrer(array('rotten.com', 'rotn.com')));
+		$this->assertFalse(SpoonFilter::isInternalReferrer(['rotten.com']));
+		$this->assertFalse(SpoonFilter::isInternalReferrer(['rotten.com', 'rotn.com']));
 	}
 
 	public function testIsIP()
@@ -263,7 +263,7 @@ class SpoonFilterTest extends TestCase
 		$this->assertTrue(SpoonFilter::isIp('127.0.0.1'));
 		$this->assertTrue(SpoonFilter::isIp('192.168.1.101'));
 		$this->assertFalse(SpoonFilter::isIp('kfsl'));
-		$this->assertFalse(SpoonFilter::isIp(array()));
+		$this->assertFalse(SpoonFilter::isIp([]));
 	}
 
 	public function testIsMaximum()
@@ -276,14 +276,14 @@ class SpoonFilterTest extends TestCase
 
 		// Again, showing the downright dangerous implications of casting as a
 		// defensive programming technique.
-		$this->assertTrue(SpoonFilter::isMaximum(array(), array()));
-		$this->assertTrue(SpoonFilter::isMaximum(array(1), array()));
-		$this->assertFalse(SpoonFilter::isMaximum(array(), array(1)));
-		$this->assertFalse(SpoonFilter::isMaximum(array(), 10));
-		$this->assertTrue(SpoonFilter::isMaximum(array(), 0));
-		$this->assertTrue(SpoonFilter::isMaximum(array(1), 0));
-		$this->assertTrue(SpoonFilter::isMaximum(array(1), 1));
-		$this->assertFalse(SpoonFilter::isMaximum(array(1), 2));
+		$this->assertTrue(SpoonFilter::isMaximum([], []));
+		$this->assertTrue(SpoonFilter::isMaximum([1], []));
+		$this->assertFalse(SpoonFilter::isMaximum([], [1]));
+		$this->assertFalse(SpoonFilter::isMaximum([], 10));
+		$this->assertTrue(SpoonFilter::isMaximum([], 0));
+		$this->assertTrue(SpoonFilter::isMaximum([1], 0));
+		$this->assertTrue(SpoonFilter::isMaximum([1], 1));
+		$this->assertFalse(SpoonFilter::isMaximum([1], 2));
 	}
 
 	public function testIsMaximumCharacters()
@@ -291,7 +291,7 @@ class SpoonFilterTest extends TestCase
 		$string = 'Ik heb er géén gedacht van';
 		$this->assertTrue(SpoonFilter::isMaximumCharacters(26, $string, 'utf-8'));
 		$this->assertFalse(SpoonFilter::isMaximumCharacters(10, $string, 'utf-8'));
-		$this->assertTrue(SpoonFilter::isMaximumCharacters(26, utf8_decode($string), 'iso-8859-1'));
+		$this->assertTrue(SpoonFilter::isMaximumCharacters(26, mb_convert_encoding($string, 'ISO-8859-1'), 'iso-8859-1'));
 	}
 
 	public function testIsMinimum()
@@ -308,7 +308,7 @@ class SpoonFilterTest extends TestCase
 		$string = 'Ik heb er géén gedacht van';
 		$this->assertTrue(SpoonFilter::isMinimumCharacters(10, $string, 'utf-8'));
 		$this->assertFalse(SpoonFilter::isMinimumCharacters(30, $string, 'utf-8'));
-		$this->assertTrue(SpoonFilter::isMinimumCharacters(10, utf8_decode($string), 'iso-8859-1'));
+		$this->assertTrue(SpoonFilter::isMinimumCharacters(10, mb_convert_encoding($string, 'ISO-8859-1'), 'iso-8859-1'));
 	}
 
 	public function testIsNumeric()
@@ -340,7 +340,7 @@ class SpoonFilterTest extends TestCase
 		$this->assertTrue(SpoonFilter::isString('This should qualify as a string.'));
 
 		// Simulating (string) casting behaviour in PHP < 5.4
-		$this->assertTrue(SpoonFilter::isString(array()));
+		$this->assertTrue(SpoonFilter::isString([]));
 	}
 
 	public function testIsValidAgainstRegexp()
@@ -365,7 +365,7 @@ class SpoonFilterTest extends TestCase
 
 	public function testReplaceURLsWithAnchors()
 	{
-		$tlds = array('ac', 'ad', 'ae', 'aero', 'af', 'ag', 'ai', 'al', 'am', 'an', 'ao', 'aq', 'ar', 'arpa', 'as', 'asia', 'at', 'au', 'aw', 'ax', 'az',
+		$tlds = ['ac', 'ad', 'ae', 'aero', 'af', 'ag', 'ai', 'al', 'am', 'an', 'ao', 'aq', 'ar', 'arpa', 'as', 'asia', 'at', 'au', 'aw', 'ax', 'az',
 						'ba', 'bb', 'bd' ,'be', 'bf', 'bg', 'bh', 'bi', 'biz', 'bj', 'bm', 'bn', 'bo', 'br', 'bs', 'bt', 'bv', 'bw', 'by' ,'bz',
 						'ca', 'cat', 'cc' ,'cd', 'cf', 'cg', 'ch', 'ci', 'ck', 'cl', 'cm', 'cn', 'co', 'com', 'coop', 'cr', 'cu', 'cv', 'cx', 'cy', 'cz',
 						'de', 'dj', 'dk', 'dm', 'do', 'dz',
@@ -389,7 +389,7 @@ class SpoonFilterTest extends TestCase
 						'va', 'vc', 've', 'vg', 'vi', 'vn', 'vu',
 						'wf', 'ws',
 						'ye', 'yt', 'yu',
-						'za', 'zm', 'zw');
+						'za', 'zm', 'zw'];
 
 		foreach($tlds as $tld)
 		{

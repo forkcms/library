@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(__FILE__)));
+$includePath = dirname(__FILE__, 3);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -35,7 +35,7 @@ class SpoonTest extends TestCase
 	public function testSet()
 	{
 		// set value
-		$value = array('Davy Hellemans', 'Tijs Verkoyen', 'Dave Lens', 'Matthias Mullie');
+		$value = ['Davy Hellemans', 'Tijs Verkoyen', 'Dave Lens', 'Matthias Mullie'];
 		$this->assertEquals(Spoon::set('salad_fingers', $value), $value);
 
 		// get rid of value

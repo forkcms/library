@@ -40,7 +40,7 @@ class SpoonFormText extends SpoonFormInput
 	 *
 	 * @var array
 	 */
-	protected $reservedAttributes = array('name', 'value');
+	protected $reservedAttributes = ['name', 'value'];
 
 
 	/**
@@ -335,9 +335,7 @@ class SpoonFormText extends SpoonFormInput
 	{
 		// post/get data
 		$data = $this->getMethod(true);
-		$value = isset($data[$this->getName()])
-			? $data[$this->getName()]
-			: '';
+		$value = $data[$this->getName()] ?? '';
 		$value = is_array($value) ? 'Array' : trim((string) $value);
 
 		// validate
@@ -782,6 +780,7 @@ class SpoonFormText extends SpoonFormInput
 	 * @return	string
 	 * @param	SpoonTemplate[optional] $template	The template to parse the element in.
 	 */
+	#[\Override]
 	public function parse($template = null)
 	{
 		// name is required
@@ -792,7 +791,7 @@ class SpoonFormText extends SpoonFormInput
 		$output = '<input value="' . $this->getValue(false) . '"';
 
 		// add attributes
-		$output .= $this->getAttributesHTML(array('[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'], '[value]' => $this->getValue())) . ' />';
+		$output .= $this->getAttributesHTML(['[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'], '[value]' => $this->getValue()]) . ' />';
 
 		// template
 		if($template !== null)

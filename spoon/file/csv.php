@@ -44,7 +44,7 @@ class SpoonFileCSV
 	 * @param	string[optional] $enclosure			The enclosure character of the CSV.
 	 * @param	bool[optional] $download			Should the file be downloaded?
 	 */
-	public static function arrayToFile($path, array $array, array $columns = null, array $excludeColumns = null, $delimiter = ',', $enclosure = '"', $download = false)
+	public static function arrayToFile($path, array $array, ?array $columns = null, ?array $excludeColumns = null, $delimiter = ',', $enclosure = '"', $download = false)
 	{
 		// get the content of the file
 		$csv = self::arrayToString($array, $columns, $excludeColumns, $delimiter, $enclosure);
@@ -68,7 +68,7 @@ class SpoonFileCSV
 	 * @param	string[optional] $enclosure			The enclosure character of the CSV.
 	 * @param	string[optional] $lineEnding		The line-ending of the CSV.
 	 */
-	public static function arrayToString(array $array, array $columns = null, array $excludeColumns = null, $delimiter = ',', $enclosure = '"', $lineEnding = null)
+	public static function arrayToString(array $array, ?array $columns = null, ?array $excludeColumns = null, $delimiter = ',', $enclosure = '"', $lineEnding = null)
 	{
 		// validate array
 		if(!empty($array) && !isset($array[0])) throw new SpoonFileException('Invalid array format.');
@@ -140,7 +140,7 @@ class SpoonFileCSV
 		$filename = end($explodedFilename);
 
 		// set headers for download
-		$headers = array();
+		$headers = [];
 		$headers[] = 'Content-type: text/csv; charset=utf-8';
 		$headers[] = 'Content-Disposition: attachment; filename="' . $filename . '"';
 
@@ -171,7 +171,7 @@ class SpoonFileCSV
 	public static function escapeEnclosure($row, $enclosure)
 	{
 		// init var
-		$escaped = array();
+		$escaped = [];
 
 		// apply enclosure
 		foreach($row as $key => $value)
@@ -193,7 +193,7 @@ class SpoonFileCSV
 	 * @param	string[optional] $delimiter		The field delimiter of the CSV.
 	 * @param	string[optional] $enclosure		The enclosure character of the CSV.
 	 */
-	public static function fileToArray($path, array $columns = array(), array $excludeColumns = null, $delimiter = ',', $enclosure = '"')
+	public static function fileToArray($path, array $columns = [], ?array $excludeColumns = null, $delimiter = ',', $enclosure = '"')
 	{
 		// reset variables
 		$path = (string) $path;
@@ -210,13 +210,13 @@ class SpoonFileCSV
 		@ini_set('auto_detect_line_endings', 1);
 
 		// init var
-		$rows = array();
+		$rows = [];
 
 		// open file
 		$handle = @fopen($path, 'r');
 
 		// loop lines and store the rows
-		while(($row = @fgetcsv($handle, 0, (($delimiter == '') ? ',' : $delimiter), (($enclosure == '') ? '"' : $enclosure))) !== false) $rows[] = $row;
+		while(($row = @fgetcsv($handle, 0, (($delimiter == '') ? ',' : $delimiter), (($enclosure == '') ? '"' : $enclosure), escape: '\\')) !== false) $rows[] = $row;
 
 		// close file
 		@fclose($handle);
@@ -231,7 +231,7 @@ class SpoonFileCSV
 		array_shift($rows);
 
 		// loop the rows
-		foreach($rows as $rowId => &$row)
+		foreach($rows as &$row)
 		{
 			// the keys of this row
 			$keys = array_keys($row);
@@ -354,7 +354,7 @@ class SpoonFileCSV
 		}
 
 		// return the results
-		return array($delimiter, $enclosure);
+		return [$delimiter, $enclosure];
 	}
 
 
@@ -368,11 +368,11 @@ class SpoonFileCSV
 	 * @param	string[optional] $delimiter		The field delimiter of the CSV.
 	 * @param	string[optional] $enclosure		The enclosure character of the CSV.
 	 */
-	public static function stringToArray($string, array $columns = array(), array $excludeColumns = null, $delimiter = ',', $enclosure = '"')
+	public static function stringToArray($string, array $columns = [], ?array $excludeColumns = null, $delimiter = ',', $enclosure = '"')
 	{
 		// reset variables
 		$string = (string) $string;
-		$filename = dirname(__FILE__) . '/' . uniqid();
+		$filename = __DIR__ . '/' . uniqid();
 
 		// save a tempfile
 		SpoonFile::setContent($filename, $string);

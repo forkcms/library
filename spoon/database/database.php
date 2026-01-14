@@ -92,7 +92,7 @@ class SpoonDatabase
 	 *
 	 * @var	array
 	 */
-	private $queries = array();
+	private $queries = [];
 
 
 	/**
@@ -169,11 +169,11 @@ class SpoonDatabase
 				// mysql only option
 				if($this->driver == 'mysql')
 				{
-					$this->handler->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+					$this->handler->setAttribute(Pdo\Mysql::ATTR_USE_BUFFERED_QUERY, true);
 				}
 			}
 
-			catch(PDOException $e)
+			catch(PDOException)
 			{
 				throw new SpoonDatabaseException('A database connection could not be established.', 0, $this->password);
 			}
@@ -189,7 +189,7 @@ class SpoonDatabase
 	 * @param	string[optional] $where			The WHERE-clause.
 	 * @param	mixed[optional] $parameters		The parameters that will be used in the query.
 	 */
-	public function delete($table, $where = null, $parameters = array())
+	public function delete($table, $where = null, $parameters = [])
 	{
 		// create connection
 		if(!$this->handler) $this->connect();
@@ -234,7 +234,7 @@ class SpoonDatabase
 		}
 
 		// debug enabled
-		if($this->debug) $this->queries[] = array('query' => $query, 'parameters' => $parameters);
+		if($this->debug) $this->queries[] = ['query' => $query, 'parameters' => $parameters];
 
 		// number of affected rows
 		return (int) $statement->rowCount();
@@ -248,7 +248,7 @@ class SpoonDatabase
 	 */
 	public function drop($tables)
 	{
-		$this->execute('DROP TABLE ' . implode(', ', array_map(array($this, 'quoteName'), (array) $tables)));
+		$this->execute('DROP TABLE ' . implode(', ', array_map($this->quoteName(...), (array) $tables)));
 	}
 
 
@@ -258,7 +258,7 @@ class SpoonDatabase
 	 * @param	string $query					The query to execute, only use with queries that don't return a result.
 	 * @param	mixed[optional] $parameters		The parameters that will be used in the query.
 	 */
-	public function execute($query, $parameters = array())
+	public function execute($query, $parameters = [])
 	{
 		// create connection
 		if(!$this->handler) $this->connect();
@@ -298,7 +298,7 @@ class SpoonDatabase
 		}
 
 		// debug enabled
-		if($this->debug) $this->queries[] = array('query' => $query, 'parameters' => $parameters);
+		if($this->debug) $this->queries[] = ['query' => $query, 'parameters' => $parameters];
 	}
 
 
@@ -309,7 +309,7 @@ class SpoonDatabase
 	 * @param	string $query					The query, specify maximum one field in the SELECT-statement.
 	 * @param	mixed[optional] $parameters		The parameters that will be used in the query.
 	 */
-	public function getColumn($query, $parameters = array())
+	public function getColumn($query, $parameters = [])
 	{
 		// create connection
 		if(!$this->handler) $this->connect();
@@ -349,7 +349,7 @@ class SpoonDatabase
 		}
 
 		// debug enabled
-		if($this->debug) $this->queries[] = array('query' => $query, 'parameters' => $parameters);
+		if($this->debug) $this->queries[] = ['query' => $query, 'parameters' => $parameters];
 
 		// retrieve column data
 		return $statement->fetchAll(PDO::FETCH_COLUMN);
@@ -411,10 +411,10 @@ class SpoonDatabase
 		if(!isset($row['Type'])) throw new SpoonDatabaseException('There is no type information available about this field', 0, $this->password);
 
 		// has a type but it's not an enum
-		if(strtolower(substr($row['Type'], 0, 4) != 'enum')) throw new SpoonDatabaseException('This field "' . $field . '" is not an enum field.', 0, $this->password);
+		if(strtolower(!str_starts_with($row['Type'], 'enum'))) throw new SpoonDatabaseException('This field "' . $field . '" is not an enum field.', 0, $this->password);
 
 		// process values
-		$aSearch = array('enum', '(', ')', '\'');
+		$aSearch = ['enum', '(', ')', '\''];
 		$types = str_replace($aSearch, '', $row['Type']);
 
 		// return
@@ -451,7 +451,7 @@ class SpoonDatabase
 	 * @param	string $query					Teh query to perform.
 	 * @param	mixed[optional] $parameters		The parameters that will be used in the query.
 	 */
-	public function getNumRows($query, $parameters = array())
+	public function getNumRows($query, $parameters = [])
 	{
 		// create connection
 		if(!$this->handler) $this->connect();
@@ -491,7 +491,7 @@ class SpoonDatabase
 		}
 
 		// debug enabled
-		if($this->debug) $this->queries[] = array('query' => $query, 'parameters' => $parameters);
+		if($this->debug) $this->queries[] = ['query' => $query, 'parameters' => $parameters];
 
 		// number of results
 		return $statement->rowCount();
@@ -505,7 +505,7 @@ class SpoonDatabase
 	 * @param	string $query					The query to perform.
 	 * @param	mixed[optional] $parameters		The parameters that will be used in the query.
 	 */
-	public function getPairs($query, $parameters = array())
+	public function getPairs($query, $parameters = [])
 	{
 		// create connection
 		if(!$this->handler) $this->connect();
@@ -515,7 +515,7 @@ class SpoonDatabase
 		$parameters = (array) $parameters;
 
 		// init var
-		$results = array();
+		$results = [];
 		$keys = null;
 
 		// fetch results
@@ -571,7 +571,7 @@ class SpoonDatabase
 	 * @param	string $query					The query to perform. If multiple rows are selected only the first row will be returned.
 	 * @param	mixed[optional] $parameters		The parameters that will be used in the query.
 	 */
-	public function getRecord($query, $parameters = array())
+	public function getRecord($query, $parameters = [])
 	{
 		// create connection
 		if(!$this->handler) $this->connect();
@@ -611,7 +611,7 @@ class SpoonDatabase
 		}
 
 		// debug enabled
-		if($this->debug) $this->queries[] = array('query' => $query, 'parameters' => $parameters);
+		if($this->debug) $this->queries[] = ['query' => $query, 'parameters' => $parameters];
 
 		// fetch the keys
 		$aRecord = $statement->fetch(PDO::FETCH_ASSOC);
@@ -629,7 +629,7 @@ class SpoonDatabase
 	 * @param	mixed[optional] $parameters		The parameters that will be used in the query.
 	 * @param	string[optional] $key			The field that should be used as key, make sure this is unique for each row.
 	 */
-	public function getRecords($query, $parameters = array(), $key = null)
+	public function getRecords($query, $parameters = [], $key = null)
 	{
 		// create connection
 		if(!$this->handler) $this->connect();
@@ -669,7 +669,7 @@ class SpoonDatabase
 		}
 
 		// debug enabled
-		if($this->debug) $this->queries[] = array('query' => $query, 'parameters' => $parameters);
+		if($this->debug) $this->queries[] = ['query' => $query, 'parameters' => $parameters];
 
 		// fetch the keys
 		$aRecords = (array) $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -685,7 +685,7 @@ class SpoonDatabase
 			}
 
 			// data or no data
-			return (isset($aData)) ? $aData : null;
+			return $aData ?? null;
 		}
 
 		// has results
@@ -746,7 +746,7 @@ class SpoonDatabase
 	 * @param	string $query					The query to perform.
 	 * @param	mixed[optional] $parameters		The parameters that will be used in the query.
 	 */
-	public function getVar($query, $parameters = array())
+	public function getVar($query, $parameters = [])
 	{
 		// create connection
 		if(!$this->handler) $this->connect();
@@ -786,7 +786,7 @@ class SpoonDatabase
 		}
 
 		// debug enabled
-		if($this->debug) $this->queries[] = array('query' => $query, 'parameters' => $parameters);
+		if($this->debug) $this->queries[] = ['query' => $query, 'parameters' => $parameters];
 
 		// fetch the var
 		return $statement->fetchColumn();
@@ -812,7 +812,7 @@ class SpoonDatabase
 		$query = 'INSERT INTO ' . $this->quoteName((string) $table) . ' (';
 		$keys = array_keys($values);
 		$actualValues = array_values($values);
-		$parameters = array();
+		$parameters = [];
 
 		// multidimensional array
 		if(is_array($actualValues[0]))
@@ -825,7 +825,7 @@ class SpoonDatabase
 			$subKeys = array_keys($actualValues[0]);
 
 			// prefix with table name
-			array_walk($subKeys, array($this, 'prefixTableNames'), $table);
+			array_walk($subKeys, $this->prefixTableNames(...), $table);
 
 			// build query
 			$query .= implode(', ', $subKeys) . ') VALUES ';
@@ -882,7 +882,7 @@ class SpoonDatabase
 			$numFields = count($actualValues);
 
 			// prefix with table name
-			array_walk($keys, array($this, 'prefixTableNames'), $table);
+			array_walk($keys, $this->prefixTableNames(...), $table);
 
 			// build query
 			$query .= implode(', ', $keys) . ') VALUES (';
@@ -937,7 +937,7 @@ class SpoonDatabase
 		}
 
 		// debug enabled
-		if($this->debug) $this->queries[] = array('query' => $query, 'parameters' => $parameters);
+		if($this->debug) $this->queries[] = ['query' => $query, 'parameters' => $parameters];
 
 		// fetch the keys
 		return (int) $this->handler->lastInsertId();
@@ -955,7 +955,7 @@ class SpoonDatabase
 		$tables = (func_num_args() == 1) ? (array) $tables : func_get_args();
 
 		// build & execute query
-		return $this->getRecords('OPTIMIZE TABLE ' . implode(', ', array_map(array($this, 'quoteName'), $tables)));
+		return $this->getRecords('OPTIMIZE TABLE ' . implode(', ', array_map($this->quoteName(...), $tables)));
 	}
 
 
@@ -995,7 +995,7 @@ class SpoonDatabase
 	 * @param	mixed[optional] $parameters		The parameters that will be used in the query.
 	 * @param	string[optional] $key			The field that should be used as key, make sure this is unique for each row.
 	 */
-	public function retrieve($query, $parameters = array(), $key = null)
+	public function retrieve($query, $parameters = [], $key = null)
 	{
 		return $this->getRecords($query, $parameters, $key);
 	}
@@ -1120,7 +1120,7 @@ class SpoonDatabase
 	 * @param	string[optional] $where			The WHERE-clause.
 	 * @param	mixed[optional] $parameters		The parameters that will be used in the query.
 	 */
-	public function update($table, array $values, $where = null, $parameters = array())
+	public function update($table, array $values, $where = null, $parameters = [])
 	{
 		// create connection
 		if(!$this->handler) $this->connect();
@@ -1145,7 +1145,7 @@ class SpoonDatabase
 			foreach($parameters as $key => $value)
 			{
 				// key such as ':id' starting
-				if(substr($key, 0, 1) == ':')
+				if(str_starts_with((string) $key, ':'))
 				{
 					$namedParameters = true;
 					break;
@@ -1223,7 +1223,7 @@ class SpoonDatabase
 		}
 
 		// debug enabled
-		if($this->debug) $this->queries[] = array('query' => $query, 'parameters' => $parameters);
+		if($this->debug) $this->queries[] = ['query' => $query, 'parameters' => $parameters];
 
 		// number of results
 		return (int) $statement->rowCount();

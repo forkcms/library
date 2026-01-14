@@ -140,26 +140,13 @@ class SpoonThumbnail
 	public static function isSupportedFileType($filename)
 	{
 		// get watermarkfile properties
-		list($width, $height, $type) = @getimagesize($filename);
+		[$width, $height, $type] = @getimagesize($filename);
 
 		// create image from sourcefile
-		switch($type)
-		{
-			// gif
-			case IMG_GIF:
-
-			// jpg
-			case IMG_JPG:
-
-			// png
-			case 3:
-			case IMG_PNG:
-				return true;
-			break;
-
-			default:
-				return false;
-		}
+		return match ($type) {
+			IMG_GIF, IMG_JPG, 3, IMG_PNG => true,
+			default => false,
+		};
 	}
 
 
@@ -236,7 +223,7 @@ class SpoonThumbnail
 		}
 
 		// invalid extension
-		if(SpoonFilter::getValue($extension, array('gif', 'jpeg', 'jpg', 'png'), '') == '')
+		if(SpoonFilter::getValue($extension, ['gif', 'jpeg', 'jpg', 'png'], '') == '')
 		{
 			if($this->strict) throw new SpoonThumbnailException('Only gif, jpeg, jpg or png are allowed types.');
 			return false;
@@ -260,7 +247,7 @@ class SpoonThumbnail
 		$currentMime = (string) $imageProperties['mime'];
 
 		// file is the same?
-		if(($currentType == IMAGETYPE_GIF && $extension == 'gif') || ($currentType == IMAGETYPE_JPEG && in_array($extension, array('jpg', 'jpeg'))) || ($currentType == IMAGETYPE_PNG && $extension == 'png'))
+		if(($currentType == IMAGETYPE_GIF && $extension == 'gif') || ($currentType == IMAGETYPE_JPEG && in_array($extension, ['jpg', 'jpeg'])) || ($currentType == IMAGETYPE_PNG && $extension == 'png'))
 		{
 			if($currentWidth == $this->width && $currentHeight == $this->height)
 			{
@@ -425,24 +412,12 @@ class SpoonThumbnail
 		}
 
 		// read current image
-		switch($currentType)
-		{
-			case IMG_GIF:
-				$currentImage = @imagecreatefromgif($this->filename);
-			break;
-
-			case IMG_JPG:
-				$currentImage = @imagecreatefromjpeg($this->filename);
-			break;
-
-			case 3:
-			case IMG_PNG:
-				$currentImage = @imagecreatefrompng($this->filename);
-			break;
-
-			default:
-				throw new SpoonThumbnailException('The file you specified "' . $currentMime . '" is not supported. Only gif, jpeg, jpg and png are supported.');
-		}
+		$currentImage = match ($currentType) {
+			IMG_GIF => @imagecreatefromgif($this->filename),
+			IMG_JPG => @imagecreatefromjpeg($this->filename),
+			3, IMG_PNG => @imagecreatefrompng($this->filename),
+			default => throw new SpoonThumbnailException('The file you specified "' . $currentMime . '" is not supported. Only gif, jpeg, jpg and png are supported.'),
+		};
 
 		// validate image
 		if($currentImage === false) throw new SpoonThumbnailException('The file you specified is corrupt.');
@@ -451,7 +426,7 @@ class SpoonThumbnail
 		@imagealphablending($currentImage, false);
 
 		// transparency supported for current image
-		if(in_array($currentType, array(IMG_GIF, 3, IMG_PNG)))
+		if(in_array($currentType, [IMG_GIF, 3, IMG_PNG]))
 		{
 			// get transparent color
 			$colorTransparent = @imagecolorallocatealpha($currentImage, 0, 0, 0, 127);
@@ -474,7 +449,7 @@ class SpoonThumbnail
 		@imagealphablending($this->image, false);
 
 		// transparency supported
-		if(in_array($currentType, array(IMG_GIF, 3, IMG_PNG)))
+		if(in_array($currentType, [IMG_GIF, 3, IMG_PNG]))
 		{
 			// get transparent color
 			$colorTransparent = @imagecolorallocatealpha($this->image, 0, 0, 0, 127);
@@ -548,24 +523,12 @@ class SpoonThumbnail
 		$newHeight = $this->height;
 
 		// read current image
-		switch($currentType)
-		{
-			case IMG_GIF:
-				$currentImage = @imagecreatefromgif($this->filename);
-			break;
-
-			case IMG_JPG:
-				$currentImage = @imagecreatefromjpeg($this->filename);
-			break;
-
-			case 3:
-			case IMG_PNG:
-				$currentImage = @imagecreatefrompng($this->filename);
-			break;
-
-			default:
-				throw new SpoonThumbnailException('The file you specified "' . $currentMime . '" is not supported. Only gif, jpeg, jpg and png are supported.');
-		}
+		$currentImage = match ($currentType) {
+			IMG_GIF => @imagecreatefromgif($this->filename),
+			IMG_JPG => @imagecreatefromjpeg($this->filename),
+			3, IMG_PNG => @imagecreatefrompng($this->filename),
+			default => throw new SpoonThumbnailException('The file you specified "' . $currentMime . '" is not supported. Only gif, jpeg, jpg and png are supported.'),
+		};
 
 		// current width is larger then current height
 		if($currentWidth > $currentHeight)
@@ -635,9 +598,6 @@ class SpoonThumbnail
 
 		// resize
 		$success = @imagecopyresampled($tempImage, $currentImage, 0, 0, 0, 0, $tempWidth, $tempHeight, $currentWidth, $currentHeight);
-
-		// destroy original image
-		imagedestroy($currentImage);
 
 		// image creation fail
 		if(!$success)
@@ -757,14 +717,14 @@ class SpoonThumbnail
 		$vertical = (string) $vertical;
 
 		// validate horizontal
-		if(SpoonFilter::getValue($horizontal, array('left', 'center', 'right'), '') == '')
+		if(SpoonFilter::getValue($horizontal, ['left', 'center', 'right'], '') == '')
 		{
 			if($this->strict) throw new SpoonThumbnailException('The horizontal crop-position "' . $horizontal . '" isn\'t valid.');
 			return false;
 		}
 
 		// validte vertical
-		if(SpoonFilter::getValue($vertical, array('top', 'middle', 'bottom'), '') == '')
+		if(SpoonFilter::getValue($vertical, ['top', 'middle', 'bottom'], '') == '')
 		{
 			if($this->strict) throw new SpoonThumbnailException('The vertical crop-position "' . $vertical . '" isn\'t valid.');
 			return false;

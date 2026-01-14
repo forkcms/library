@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -18,7 +18,7 @@ class SpoonTemplateCompilerTest extends TestCase
 		// create a spoon template
 		$this->tpl = new SpoonTemplate();
 		$this->tpl->setForceCompile(true);
-		$this->tpl->setCompileDirectory(dirname(__FILE__) . '/cache');
+		$this->tpl->setCompileDirectory(__DIR__ . '/cache');
 	}
 
 	function testParseVariables()
@@ -31,7 +31,7 @@ class SpoonTemplateCompilerTest extends TestCase
 	{
 		$this->tpl->assign(
 			'array',
-			array('name' => 'Array name')
+			['name' => 'Array name']
 		);
 		$this->runTests('Array name', 'array.tpl');
 	}
@@ -49,11 +49,11 @@ class SpoonTemplateCompilerTest extends TestCase
 	{
 		$this->tpl->assign(
 			'array',
-			array(
-				'inner_array' => array(
+			[
+				'inner_array' => [
 					'name' => 'Array name'
-				)
-			)
+				]
+			]
 		);
 		$this->runTests('Array name', 'nested_array.tpl');
 	}
@@ -72,7 +72,7 @@ class SpoonTemplateCompilerTest extends TestCase
 
 	function testParseArrayInObject()
 	{
-		$nestedArray = array('name' => 'Inside an object');
+		$nestedArray = ['name' => 'Inside an object'];
 
 		$object = new TestObject();
 		$object->setArray($nestedArray);
@@ -85,10 +85,10 @@ class SpoonTemplateCompilerTest extends TestCase
 	{
 		$this->tpl->assign(
 			'array',
-			array(
-				array('name' => 'Foo'),
-				array('name' => 'Bar'),
-			)
+			[
+				['name' => 'Foo'],
+				['name' => 'Bar'],
+			]
 		);
 		$this->runTests('FooBar', 'iteration_over_array.tpl');
 	}
@@ -97,12 +97,12 @@ class SpoonTemplateCompilerTest extends TestCase
 	{
 		$this->tpl->assign(
 			'array',
-			array(
-				'nested_array' => array(
-					array('name' => 'Foo'),
-					array('name' => 'Bar'),
-				)
-			)
+			[
+				'nested_array' => [
+					['name' => 'Foo'],
+					['name' => 'Bar'],
+				]
+			]
 		);
 		$this->runTests('FooBar', 'iteration_over_nested_array.tpl');
 	}
@@ -111,10 +111,10 @@ class SpoonTemplateCompilerTest extends TestCase
 	{
 		$object = new TestObject();
 		$object->setArray(
-			array(
-				array('name' => 'Foo'),
-				array('name' => 'Bar'),
-			)
+			[
+				['name' => 'Foo'],
+				['name' => 'Bar'],
+			]
 		);
 
 		$this->tpl->assign('object', $object);
@@ -129,17 +129,17 @@ class SpoonTemplateCompilerTest extends TestCase
 		$object2 = new TestObject();
 		$object2->setName('Bar');
 
-		$this->tpl->assign('array', array($object1, $object2));
+		$this->tpl->assign('array', [$object1, $object2]);
 		$this->runTests('FooBar', 'iteration_over_array_of_objects.tpl');
 	}
 
 	function testIterationOverCollection()
 	{
 		$collection = new Collection(
-			array(
-				array('name' => 'Foo'),
-				array('name' => 'Bar'),
-			)
+			[
+				['name' => 'Foo'],
+				['name' => 'Bar'],
+			]
 		);
 
 		$this->tpl->assign('collection', $collection);
@@ -155,7 +155,7 @@ class SpoonTemplateCompilerTest extends TestCase
 		$object2->setName('Object2');
 
 		$collection = new Collection(
-			array($object1, $object2)
+			[$object1, $object2]
 		);
 
 		$this->tpl->assign('collection', $collection);
@@ -166,22 +166,22 @@ class SpoonTemplateCompilerTest extends TestCase
 	{
 		$this->tpl->assign(
 			'array',
-			array(
-				array('number' => 'One'),
-				array('number' => 'Two'),
-				array('number' => 'Three'),
-			)
+			[
+				['number' => 'One'],
+				['number' => 'Two'],
+				['number' => 'Three'],
+			]
 		);
 		$this->runTests('One: Odd, Two: Even, Three: Odd, ', 'cycle.tpl');
 	}
 
 	function testCycleOverArrayInObject()
 	{
-		$array = array(
-			array('number' => '1'),
-			array('number' => '2'),
-			array('number' => '3'),
-		);
+		$array = [
+			['number' => '1'],
+			['number' => '2'],
+			['number' => '3'],
+		];
 		$object = new TestObject();
 		$object->setArray($array);
 		$this->tpl->assign('object', $array);
@@ -190,11 +190,11 @@ class SpoonTemplateCompilerTest extends TestCase
 
 	function testCycleOverCollection()
 	{
-		$array = array(
-			array('number' => '0'),
-			array('number' => '1'),
-			array('number' => '2'),
-		);
+		$array = [
+			['number' => '0'],
+			['number' => '1'],
+			['number' => '2'],
+		];
 		$collection = new Collection($array);
 		$this->tpl->assign('collection', $collection);
 		$this->runTests('0: Even, 1: Odd, 2: Even, ', 'cycle_over_collection.tpl');
@@ -204,22 +204,22 @@ class SpoonTemplateCompilerTest extends TestCase
 	{
 		$this->tpl->assign(
 			'array',
-			array(
-				array('number' => 'One'),
-				array('number' => 'Two'),
-				array('number' => 'Three'),
-			)
+			[
+				['number' => 'One'],
+				['number' => 'Two'],
+				['number' => 'Three'],
+			]
 		);
 		$this->runTests('First: One, Last: Three', 'first_last.tpl');
 	}
 
 	function testFirstAndLastForArrayInObject()
 	{
-		$array = array(
-			array('number' => '1'),
-			array('number' => '2'),
-			array('number' => '3'),
-		);
+		$array = [
+			['number' => '1'],
+			['number' => '2'],
+			['number' => '3'],
+		];
 		$object = new TestObject();
 		$object->setArray($array);
 		$this->tpl->assign('object', $array);
@@ -228,11 +228,11 @@ class SpoonTemplateCompilerTest extends TestCase
 
 	function testFirstAndLastForCollection()
 	{
-		$array = array(
-			array('number' => '0'),
-			array('number' => '1'),
-			array('number' => '2'),
-		);
+		$array = [
+			['number' => '0'],
+			['number' => '1'],
+			['number' => '2'],
+		];
 		$collection = new Collection($array);
 		$this->tpl->assign('object', $collection);
 		$this->runTests('First: 0, Last: 2', 'first_last_array_in_object.tpl');
@@ -253,7 +253,7 @@ class SpoonTemplateCompilerTest extends TestCase
 		$this->runTests('Yes', 'option.tpl');
 
 		// array with content
-		$this->tpl->assign('test', array('tralala'));
+		$this->tpl->assign('test', ['tralala']);
 		$this->runTests('Yes', 'option.tpl');
 
 		// object
@@ -273,16 +273,16 @@ class SpoonTemplateCompilerTest extends TestCase
 		$this->runTests('No', 'option.tpl');
 
 		// empty array
-		$this->tpl->assign('test', array());
+		$this->tpl->assign('test', []);
 		$this->runTests('No', 'option.tpl');
 	}
 
 	function testOptionInArray()
 	{
-		$this->tpl->assign('array', array('boolean' => true));
+		$this->tpl->assign('array', ['boolean' => true]);
 		$this->runTests('Yes', 'option_in_array.tpl');
 
-		$this->tpl->assign('array', array('boolean' => false));
+		$this->tpl->assign('array', ['boolean' => false]);
 		$this->runTests('No', 'option_in_array.tpl');
 	}
 
@@ -310,16 +310,16 @@ class SpoonTemplateCompilerTest extends TestCase
 	function testOptionInIteration()
 	{
 		// in an array
-		$array = array(
-			array(
+		$array = [
+			[
 				'boolean' => true,
 				'name' => 'True',
-			),
-			array(
+			],
+			[
 				'boolean' => false,
 				'name' => 'False',
-			),
-		);
+			],
+		];
 		$this->tpl->assign('items', $array);
 		$this->runTests('True', 'option_in_iteration.tpl');
 
@@ -330,7 +330,7 @@ class SpoonTemplateCompilerTest extends TestCase
 		$object2 = new TestObject();
 		$object2->setBoolean(false);
 		$object2->setName('False');
-		$array = array($object1, $object2);
+		$array = [$object1, $object2];
 
 		$this->tpl->assign('items', $array);
 		$this->runTests('True', 'option_in_iteration.tpl');
@@ -339,16 +339,16 @@ class SpoonTemplateCompilerTest extends TestCase
 	function testOptionNotInIteration()
 	{
 		// in an array
-		$array = array(
-			array(
+		$array = [
+			[
 				'boolean' => true,
 				'name' => 'True',
-			),
-			array(
+			],
+			[
 				'boolean' => false,
 				'name' => 'False',
-			),
-		);
+			],
+		];
 		$this->tpl->assign('items', $array);
 		$this->runTests('False', 'option_not_in_iteration.tpl');
 
@@ -359,7 +359,7 @@ class SpoonTemplateCompilerTest extends TestCase
 		$object2 = new TestObject();
 		$object2->setBoolean(false);
 		$object2->setName('False');
-		$array = array($object1, $object2);
+		$array = [$object1, $object2];
 
 		$this->tpl->assign('items', $array);
 		$this->runTests('False', 'option_not_in_iteration.tpl');
@@ -398,7 +398,7 @@ class SpoonTemplateCompilerTest extends TestCase
 	function testTemplateModifierWithVariables()
 	{
 		$this->tpl->assign('string', '%1$s %2$s');
-		$this->tpl->assign('array', array('foo' => 'foo', 'bar' => 'bar'));
+		$this->tpl->assign('array', ['foo' => 'foo', 'bar' => 'bar']);
 		$this->runTests('foo bar', 'template_modifier_with_vars.tpl');
 	}
 
@@ -410,7 +410,7 @@ class SpoonTemplateCompilerTest extends TestCase
 		$object2 = new TestObject();
 		$object2->setName('bar');
 
-		$this->tpl->assign('array', array($object1, $object2));
+		$this->tpl->assign('array', [$object1, $object2]);
 		$this->runTests('FooBar', 'template_modifier_iteration_over_array_of_objects.tpl');
 	}
 
@@ -435,6 +435,6 @@ class SpoonTemplateCompilerTest extends TestCase
 
 	protected function getTemplatePath($templateName)
 	{
-		return dirname(__FILE__) . '/templates/' . $templateName;
+		return __DIR__ . '/templates/' . $templateName;
 	}
 }

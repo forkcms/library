@@ -32,7 +32,7 @@ class SpoonFormElement
 	 *
 	 * @var	array
 	 */
-	protected $attributes = array();
+	protected $attributes = [];
 
 
 	/**
@@ -56,7 +56,7 @@ class SpoonFormElement
 	 *
 	 * @var	array
 	 */
-	protected $reservedAttributes = array('type', 'name', 'value');
+	protected $reservedAttributes = ['type', 'name', 'value'];
 
 
 	/**
@@ -152,7 +152,7 @@ class SpoonFormElement
 	 */
 	public function setMethod($method = 'post')
 	{
-		$this->method = SpoonFilter::getValue($method, array('get', 'post'), 'post');
+		$this->method = SpoonFilter::getValue($method, ['get', 'post'], 'post');
 		return $this;
 	}
 }

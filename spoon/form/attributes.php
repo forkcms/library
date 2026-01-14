@@ -36,7 +36,7 @@ class SpoonFormAttributes extends SpoonFormElement
 	 */
 	public function getAttribute($name)
 	{
-		return (isset($this->attributes[(string) $name])) ? $this->attributes[(string) $name] : null;
+		return $this->attributes[(string) $name] ?? null;
 	}
 
 
@@ -66,7 +66,7 @@ class SpoonFormAttributes extends SpoonFormElement
 		foreach($this->attributes as $key => $value)
 		{
 			// class?
-			if($key == 'class' && is_callable(array($this, 'getClassHTML')))
+			if($key == 'class' && is_callable([$this, 'getClassHTML']))
 			{
 				$html .= $this->getClassHTML();
 			}

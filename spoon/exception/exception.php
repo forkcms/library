@@ -53,7 +53,7 @@ class SpoonException extends Exception
         parent::__construct((string) $message, (int) $code);
 
         // set name
-        $this->name = get_class($this);
+        $this->name = static::class;
 
         // obfuscating?
         if ($obfuscate !== null) {
@@ -84,7 +84,7 @@ class SpoonException extends Exception
 
 // Redefine the exception handler if we are not running in the command line.
 if (!Spoon::inCli()) {
-    set_exception_handler('exceptionHandler');
+    set_exception_handler(exceptionHandler(...));
 }
 
 /**
@@ -99,7 +99,7 @@ function exceptionHandler($exception)
     $trace = $exception->getTrace();
 
     // specific name
-    $name = (method_exists($exception, 'getName')) ? $exception->getName() : get_class($exception);
+    $name = (method_exists($exception, 'getName')) ? $exception->getName() : $exception::class;
 
     // spoon type exception
     if (method_exists($exception, 'getName') && strtolower(substr($exception->getName(), 0, 5)) == 'spoon' && $exception->getCode() != 0) {
@@ -118,7 +118,7 @@ function exceptionHandler($exception)
     }
 
     // user agent
-    $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '<i>(Unknown)</i>';
+    $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '<i>(Unknown)</i>';
 
     // custom callback?
     if (Spoon::getExceptionCallback() != '') {
@@ -170,7 +170,7 @@ function exceptionHandler($exception)
         $headers .= "From: Spoon Library <no-reply@spoon-library.com>\n";
 
         // send email
-        @mail(Spoon::getDebugEmail(), 'Exception Occured', getOutput($exception), $headers);
+        @mail(Spoon::getDebugEmail(), 'Exception Occured', (string) getOutput($exception), $headers);
     }
 
     // stop script execution
@@ -180,8 +180,8 @@ function exceptionHandler($exception)
 function getOutput($exception)
 {
     // specific name
-    $name = (method_exists($exception, 'getName')) ? $exception->getName() : get_class($exception);
-    $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '<i>(Unknown)</i>';
+    $name = (method_exists($exception, 'getName')) ? $exception->getName() : $exception::class;
+    $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '<i>(Unknown)</i>';
 
     // generate output
     $output = '
@@ -292,7 +292,7 @@ function getOutput($exception)
 													</tr>
 													<tr>
 														<th width="110px" style="vertical-align: top; text-align: left; font-weight: 700; padding: 0 0 0 10px; font-family: Verdana, Tahoma, Arial; font-size: 10px; color: #000000;">Line</th>
-														<td style="vertical-align: top; font-family: Verdana, Tahoma, Arial; font-size: 10px; color: #000000;">' . ((isset($traceStack['line'])) ? $traceStack['line'] : '<i>(Unknown)</i>') . '
+														<td style="vertical-align: top; font-family: Verdana, Tahoma, Arial; font-size: 10px; color: #000000;">' . ($traceStack['line'] ?? '<i>(Unknown)</i>') . '
 														</td>
 													</tr>';
 
@@ -410,9 +410,9 @@ function exceptionHandlerDumper($var)
 function dimCommonPathPrefix($path)
 {
     // determine the longest shared prefix
-    $prefix = dirname(__FILE__);
+    $prefix = __DIR__;
     while (!empty($prefix) && $prefix !== '/' && $prefix !== '.') {
-        if (strpos($path, $prefix . DIRECTORY_SEPARATOR) === 0) {
+        if (str_starts_with($path, $prefix . DIRECTORY_SEPARATOR)) {
             break;
         }
         $prefix = dirname($prefix);

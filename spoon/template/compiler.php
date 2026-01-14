@@ -69,7 +69,7 @@ class SpoonTemplateCompiler
 	 *
 	 * @var	array
 	 */
-	protected $forms = array();
+	protected $forms = [];
 
 
 	/**
@@ -77,7 +77,7 @@ class SpoonTemplateCompiler
 	 *
 	 * @var	array
 	 */
-	protected $iterations = array();
+	protected $iterations = [];
 
 
 	/**
@@ -93,7 +93,7 @@ class SpoonTemplateCompiler
 	 *
 	 * @var	array
 	 */
-	protected $modifiers = array();
+	protected $modifiers = [];
 
 
 	/**
@@ -117,7 +117,7 @@ class SpoonTemplateCompiler
 	 *
 	 * @var	array
 	 */
-	protected $templateVariables = array();
+	protected $templateVariables = [];
 
 
 	/**
@@ -125,10 +125,14 @@ class SpoonTemplateCompiler
 	 *
 	 * @var	array
 	 */
-	protected $variables = array();
+	protected $variables = [];
 
 	private $debug;
 
+	/**
+	 * @var array
+	 */
+	private array $files;
 
 	/**
 	 * Class constructor.
@@ -184,7 +188,7 @@ class SpoonTemplateCompiler
 		if(!$this->parsed)
 		{
 			// while developing, you might want to know about the undefined indexes
-			$errorReporting = ($this->debug) ? 'E_ALL | E_STRICT' : 0;
+			$errorReporting = ($this->debug) ? 'E_ALL' : 0;
 			$displayErrors = ($this->debug) ? 'On' : 'Off';
 
 			// add to the list of parsed files
@@ -296,7 +300,7 @@ class SpoonTemplateCompiler
 		if(preg_match_all($pattern, $content, $matches, PREG_SET_ORDER))
 		{
 			// loop matches
-			foreach($matches as $i => $match)
+			foreach($matches as $match)
 			{
 				// cycles pattern
 				$pattern = '/:("[^"]*?"|\'[^\']*?\'|[^:]*)/';
@@ -313,7 +317,7 @@ class SpoonTemplateCompiler
 					foreach($arguments[1] as &$argument)
 					{
 						// inside a string
-						if(in_array(substr($argument, 0, 1), array('\'', '"')))
+						if(in_array(substr($argument, 0, 1), ['\'', '"']))
 						{
 							// strip quotes
 							$argument = substr($argument, 1, -1);
@@ -359,11 +363,11 @@ class SpoonTemplateCompiler
 			foreach($matches[1] as $name)
 			{
 				// init vars
-				$search = array();
-				$replace = array();
+				$search = [];
+				$replace = [];
 
 				// start & close tag
-				$search = array('{form:' . $name . '}', '{/form:' . $name . '}');
+				$search = ['{form:' . $name . '}', '{/form:' . $name . '}'];
 
 				// using UTF-8 as charset
 				if(Spoon::getCharset() == 'utf-8')
@@ -426,7 +430,7 @@ class SpoonTemplateCompiler
 				$search = $match[0];
 
 				// inside a string
-				if(in_array(substr($match[1], 0, 1), array('\'', '"')))
+				if(in_array(substr($match[1], 0, 1), ['\'', '"']))
 				{
 					// strip quotes
 					$match[1] = substr($match[1], 1, -1);
@@ -659,7 +663,7 @@ class SpoonTemplateCompiler
 		$pattern = '/\{option:(\!?)([a-z0-9_]*)((\.[a-z0-9_]*)*)(-\>[a-z0-9_]*((\.[a-z0-9_]*)*))?}.*?\{\/option:\\1\\2\\3\\5?\}/is';
 
 		// init vars
-		$options = array();
+		$options = [];
 		$variable = '';
 		$objectVariable = '';
 		$baseVariable = '';
@@ -739,14 +743,14 @@ class SpoonTemplateCompiler
 					}
 
 					// init vars
-					$search = array();
-					$replace = array();
+					$search = [];
+					$replace = [];
 
 					// not yet used
 					$options[] = $match;
 
 					// set option
-					$option = $match[2] . $match[3] . (isset($match[5]) ? $match[5] : '');
+					$option = $match[2] . $match[3] . ($match[5] ?? '');
 
 					// search for
 					$search[] = '{option:' . $option . '}';
@@ -956,7 +960,7 @@ class SpoonTemplateCompiler
 												foreach($arguments[1] as $argument)
 												{
 													// string argument?
-													if(in_array(substr($argument, 0, 1), array('\'', '"')))
+													if(in_array(substr($argument, 0, 1), ['\'', '"']))
 													{
 														// in compiled code: single quotes! (and escape single quotes in the content!)
 														$argument = '\'' . str_replace('\'', '\\\'', substr($argument, 1, -1)) . '\'';
@@ -985,7 +989,7 @@ class SpoonTemplateCompiler
 							 * certainly already be parsed because we parse our variables outwards.
 							 */
 							// temporary variable which is a list of 'variables to check before parsing'
-							$variables = array($variable);
+							$variables = [$variable];
 
 							// loop all known template variables
 							foreach($this->templateVariables as $key => $value)
@@ -997,7 +1001,7 @@ class SpoonTemplateCompiler
 								if($this->debug)
 								{
 									// check if this variable is found
-									if(strpos($match[0], '[$' . $key . ']') !== false)
+									if(str_contains($match[0], '[$' . $key . ']'))
 									{
 										// add variable name to list of 'variables to check before parsing'
 										$variables = array_merge($variables, $value['variables']);
@@ -1009,22 +1013,22 @@ class SpoonTemplateCompiler
 							$this->templateVariables[$varKey]['content'] = $PHP;
 
 							// holds checks to see if this variable can be parsed (along with the variables that may be used inside it)
-							$exists = array();
+							$exists = [];
 
 							// loop variables
 							foreach((array) $variables as $variable)
 							{
 								// get array containing variable
-								if(preg_match('/->get([a-zA-Z_]*)\(\)$/i', $variable))
+								if(preg_match('/->get([a-zA-Z_]*)\(\)$/i', (string) $variable))
 								{
 									// we're working with objects
-									$object = preg_replace('/->(get[a-zA-Z_]*)\(\)$/i', '', $variable);
+									$object = preg_replace('/->(get[a-zA-Z_]*)\(\)$/i', '', (string) $variable);
 
 									// get method name
-									preg_match('/->(get[a-zA-Z_]*)\(\)$/i', $variable, $variable);
+									preg_match('/->(get[a-zA-Z_]*)\(\)$/i', (string) $variable, $variable);
 									$method = $variable[1];
 
-									if(preg_match('/\[\'[a-z_][a-z0-9_]*\'\]/i', $object, $matches))
+									if(preg_match('/\[\'[a-z_][a-z0-9_]*\'\]/i', (string) $object, $matches))
 									{
 										$exists[] = 'is_object(' . $object . ')';
 										$exists[] = 'method_exists(' . $object . ', \'' . $method . '\')';
@@ -1034,18 +1038,18 @@ class SpoonTemplateCompiler
 								}
 								else
 								{
-									$array = preg_replace('/(\[\'[a-z_][a-z0-9_]*\'\])$/i', '', $variable);
+									$array = preg_replace('/(\[\'[a-z_][a-z0-9_]*\'\])$/i', '', (string) $variable);
 
 									// get variable name
-									preg_match('/\[\'([a-z_][a-z0-9_]*)\'\]$/i', $variable, $variable);
+									preg_match('/\[\'([a-z_][a-z0-9_]*)\'\]$/i', (string) $variable, $variable);
 									$variable = $variable[1];
 
 									// container array is index of higher array
-									if(preg_match('/\[\'[a-z_][a-z0-9_]*\'\](?!->)/i', $array)) $exists[] = 'isset(' . $array . ')';
+									if(preg_match('/\[\'[a-z_][a-z0-9_]*\'\](?!->)/i', (string) $array)) $exists[] = 'isset(' . $array . ')';
 									$exists[] = 'array_key_exists(\'' . $variable . '\', (array) ' . $array . ')';
 
 									// it could be an object in an iteration, add if statements for objects
-									$existsObject = array();
+									$existsObject = [];
 									$existsObject[] = 'is_object(' . $array . ')';
 									$existsObject[] = 'method_exists(' . $array . ', \'get' . SpoonFilter::toCamelCase($variable) . '\')';
 									$this->templateVariables[$varKey]['if_object'] = implode(' && ', $existsObject);
@@ -1107,7 +1111,7 @@ class SpoonTemplateCompiler
 		while(1)
 		{
 			// replace iteration names to ensure that they're unique
-			$content = preg_replace_callback($pattern, array($this, 'prepareIterationsCallback'), $content, -1, $count);
+			$content = preg_replace_callback($pattern, $this->prepareIterationsCallback(...), (string) $content, -1, $count);
 
 			// break the loop, no matches were found
 			if(!$count) break;
@@ -1259,7 +1263,7 @@ class SpoonTemplateCompiler
 		do
 		{
 			// strip comments from output
-			$content = preg_replace('/\{\*(?!.*?\{\*).*?\*\}/s', '', $content, -1, $count);
+			$content = preg_replace('/\{\*(?!.*?\{\*).*?\*\}/s', '', (string) $content, -1, $count);
 		}
 		while($count > 0);
 

@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -43,11 +43,11 @@ class SpoonFormButtonTest extends TestCase
 		$this->assertEquals('bauffman.jpg', $this->btnSubmit->getAttribute('rel'));
 		$this->assertEquals('bauffman.jpg', $this->btnReset->getAttribute('rel'));
 		$this->assertEquals('bauffman.jpg', $this->btnSpecial->getAttribute('rel'));
-		$this->btnSubmit->setAttributes(array('id' => 'specialID'));
-		$this->btnReset->setAttributes(array('id' => 'specialID'));
-		$this->btnSpecial->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'submit', 'class' => 'inputButton', 'rel' => 'bauffman.jpg'), $this->btnSubmit->getAttributes());
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'reset', 'class' => 'inputButton', 'rel' => 'bauffman.jpg'), $this->btnReset->getAttributes());
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'special', 'class' => 'inputButton', 'rel' => 'bauffman.jpg'), $this->btnSpecial->getAttributes());
+		$this->btnSubmit->setAttributes(['id' => 'specialID']);
+		$this->btnReset->setAttributes(['id' => 'specialID']);
+		$this->btnSpecial->setAttributes(['id' => 'specialID']);
+		$this->assertEquals(['id' => 'specialID', 'name' => 'submit', 'class' => 'inputButton', 'rel' => 'bauffman.jpg'], $this->btnSubmit->getAttributes());
+		$this->assertEquals(['id' => 'specialID', 'name' => 'reset', 'class' => 'inputButton', 'rel' => 'bauffman.jpg'], $this->btnReset->getAttributes());
+		$this->assertEquals(['id' => 'specialID', 'name' => 'special', 'class' => 'inputButton', 'rel' => 'bauffman.jpg'], $this->btnSpecial->getAttributes());
 	}
 }

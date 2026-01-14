@@ -50,7 +50,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 	 *
 	 * @var	array
 	 */
-	private $defaultElement = array();
+	private $defaultElement = [];
 
 
 	/**
@@ -66,15 +66,15 @@ class SpoonFormDropdown extends SpoonFormAttributes
 	 *
 	 * @var	array
 	 */
-	private $optionAttributes = array();
+	private $optionAttributes = [];
 
 
 	/**
 	 * Contains optgroups
 	 *
-	 * @var	bool
+	 * @var	array<bool>
 	 */
-	private $optionGroups = false;
+	private $optionGroups = [];
 
 
 	/**
@@ -98,7 +98,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 	 *
 	 * @var	array
 	 */
-	protected $values = array();
+	protected $values = [];
 
 
 	/**
@@ -111,7 +111,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 	 * @param	string[optional] $class				The CSS-class to be used.
 	 * @param	string[optional] $classError		The CSS-class to be used when there is an error.
 	 */
-	public function __construct($name, array $values = null, $selected = null, $multipleSelection = false, $class = 'inputDropdown', $classError = 'inputDropdownError')
+	public function __construct($name, ?array $values = null, $selected = null, $multipleSelection = false, $class = 'inputDropdown', $classError = 'inputDropdownError')
 	{
 		// obligates fields
 		$this->attributes['id'] = SpoonFilter::toCamelCase($name, '_', true);
@@ -147,6 +147,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 	 * @return	string
 	 * @param	array $variables	The variables to get the attributes-HTML for.
 	 */
+	#[\Override]
 	protected function getAttributesHTML(array $variables)
 	{
 		// init var
@@ -248,7 +249,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 	 */
 	public function getOptionAttributes($value)
 	{
-		return (isset($this->optionAttributes[(string) $value])) ? $this->optionAttributes[(string) $value] : array();
+		return $this->optionAttributes[(string) $value] ?? [];
 	}
 
 
@@ -277,13 +278,13 @@ class SpoonFormDropdown extends SpoonFormAttributes
 				$name = $this->attributes['name'];
 
 				// reset selected
-				$this->selected = array();
+				$this->selected = [];
 
 				// field has been submitted
 				if(isset($data[$name]) && is_array($data[$name]) && count($data[$name]) != 0)
 				{
 					// loop elements and add the value to the array
-					foreach($data[$name] as $label => $value) $this->selected[] = $value;
+					foreach($data[$name] as $value) $this->selected[] = $value;
 				}
 			}
 
@@ -306,7 +307,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 		$data = $this->getMethod(true);
 
 		// loop initial values and fill the array of allowed values
-		$allowedValues = array();
+		$allowedValues = [];
 		foreach($this->values as $key => $value)
 		{
 			// the current key represents an optgroup
@@ -326,7 +327,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 			if(!$this->single)
 			{
 				// reset
-				$values = array();
+				$values = [];
 
 				// loop choices
 				foreach((array) $data[$this->attributes['name']] as $value)
@@ -347,7 +348,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 			{
 				// rest
 				$values = null;
-				$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+				$value = $data[$this->getName()] ?? '';
 				$value = is_scalar($value) ? (string) $value : 'Array';
 				$value = htmlspecialchars($value, ENT_QUOTES);
 
@@ -452,6 +453,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 	 * @return	string
 	 * @param	SpoonTemplate[optional] $template	The template to parse the element in.
 	 */
+	#[\Override]
 	public function parse($template = null)
 	{
 		// name is required
@@ -469,7 +471,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 		}
 
 		// add attributes
-		$output .= $this->getAttributesHTML(array('[id]' => $this->attributes['id'], '[name]' => $name));
+		$output .= $this->getAttributesHTML(['[id]' => $this->attributes['id'], '[name]' => $name]);
 
 		// end select tag
 		$output .= ">\r\n";
@@ -621,7 +623,7 @@ class SpoonFormDropdown extends SpoonFormAttributes
 	 */
 	public function setDefaultElement($label, $value = null)
 	{
-		$this->defaultElement = array((string) $label, (string) $value);
+		$this->defaultElement = [(string) $label, (string) $value];
 		if($value !== null) $this->values[$value] = (string) $label;
 		return $this;
 	}
@@ -708,8 +710,10 @@ class SpoonFormDropdown extends SpoonFormAttributes
 	 *
 	 * @param	array[optional] $values		The possible values. Each value should have a label and value-key.
 	 */
-	private function setValues(array $values = null)
+	private function setValues(?array $values = null)
 	{
+		$values ??= [];
+
 		// has no items
 		if(count($values) == 0) $this->setDefaultElement('');
 

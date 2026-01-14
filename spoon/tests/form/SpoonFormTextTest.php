@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -45,8 +45,8 @@ class SpoonFormTextTest extends TestCase
 	{
 		$this->txtName->setAttribute('rel', 'bauffman.jpg');
 		$this->assertEquals('bauffman.jpg', $this->txtName->getAttribute('rel'));
-		$this->txtName->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'name', 'type' => 'text', 'class' => 'inputText', 'rel' => 'bauffman.jpg'), $this->txtName->getAttributes());
+		$this->txtName->setAttributes(['id' => 'specialID']);
+		$this->assertEquals(['id' => 'specialID', 'name' => 'name', 'type' => 'text', 'class' => 'inputText', 'rel' => 'bauffman.jpg'], $this->txtName->getAttributes());
 	}
 
 	public function testIsFilled()
@@ -55,7 +55,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertFalse($this->txtName->isFilled());
 		$_POST['name'] = 'I am not empty';
 		$this->assertTrue($this->txtName->isFilled());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtName->isFilled());
 	}
 
@@ -67,7 +67,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertTrue($this->txtName->isAlphabetical());
 
 		// since the array will be casted to a string, this will be 'Array' and that is alphabetical :)
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtName->isAlphabetical());
 	}
 
@@ -79,7 +79,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertTrue($this->txtName->isAlphaNumeric());
 
 		// since the array will be casted to a string, this will be 'Array' and that is alphabetical :)
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtName->isAlphaNumeric());
 	}
 
@@ -91,7 +91,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertFalse($this->txtName->isBetween(200, 201));
 		$this->assertFalse($this->txtName->isBetween(1000, 200));
 
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtName->isBetween(10, 200));
 	}
 
@@ -111,7 +111,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertFalse($this->txtName->isBool());
 		$_POST['name'] = '090';
 		$this->assertFalse($this->txtName->isBool());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtName->isBool());
 	}
 
@@ -123,7 +123,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertFalse($this->txtName->isDigital());
 		$_POST['name'] = '';
 		$this->assertFalse($this->txtName->isDigital());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtName->isDigital());
 	}
 
@@ -134,7 +134,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertTrue($this->txtName->isEmail());
 		$_POST['name'] = '';
 		$this->assertFalse($this->txtName->isEmail());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtName->isEmail());
 	}
 
@@ -146,7 +146,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertTrue($this->txtName->isFilename());
 
 		// since the array will be casted to a string, this will be 'Array' and that is a possible filename :)
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtName->isFilename());
 	}
 
@@ -164,7 +164,7 @@ class SpoonFormTextTest extends TestCase
 		$_POST['name'] = '-1,35';
 		$this->assertTrue($this->txtName->isFloat(null, true));
 
-		$_POST['name'] = array('foo', 'bar', 190);
+		$_POST['name'] = ['foo', 'bar', 190];
 		$this->assertFalse($this->txtName->isFloat());
 	}
 
@@ -175,7 +175,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertTrue($this->txtName->isGreaterThan(-199));
 		$this->assertFalse($this->txtName->isGreaterThan(199));
 
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtName->isGreaterThan(1337));
 	}
 
@@ -189,7 +189,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertFalse($this->txtName->isInteger());
 		$_POST['name'] = '1,9';
 		$this->assertFalse($this->txtName->isInteger());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtName->isInteger());
 	}
 
@@ -200,7 +200,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertTrue($this->txtName->isIp());
 		$_POST['name'] = '192.168.1.101';
 		$this->assertTrue($this->txtName->isIp());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtName->isIp());
 	}
 
@@ -211,7 +211,7 @@ class SpoonFormTextTest extends TestCase
 		$_POST['name'] = 199;
 		$this->assertFalse($this->txtName->isMaximum(18));
 		$this->assertTrue($this->txtName->isMaximum(300));
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtName->isMaximum(200));
 	}
 
@@ -220,7 +220,7 @@ class SpoonFormTextTest extends TestCase
 		$_POST['name'] = 'Writing tests can be pretty frakkin boring';
 		$this->assertTrue($this->txtName->isMaximumCharacters(100));
 		$this->assertFalse($this->txtName->isMaximumCharacters(10));
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtName->isMaximumCharacters(10));
 	}
 
@@ -230,7 +230,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertTrue($this->txtName->isMinimum(5));
 		$this->assertTrue($this->txtName->isMinimum(4));
 		$this->assertFalse($this->txtName->isMinimum(7));
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtName->isMinimum(7));
 	}
 
@@ -240,7 +240,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertTrue($this->txtName->isMinimumCharacters(10));
 		$this->assertTrue($this->txtName->isMinimumCharacters(2));
 		$this->assertFalse($this->txtName->isMinimumCharacters(23));
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtName->isMinimumCharacters(23));
 	}
 
@@ -252,7 +252,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertTrue($this->txtName->isNumeric());
 		$_POST['name'] = 'I can haz two cheezeburgers?';
 		$this->assertFalse($this->txtName->isNumeric());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtName->isNumeric());
 	}
 
@@ -263,7 +263,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertTrue($this->txtName->isSmallerThan(200));
 		$this->assertFalse($this->txtName->isSmallerThan(0));
 		$this->assertFalse($this->txtName->isSmallerThan(-16));
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtName->isSmallerThan(0));
 	}
 
@@ -275,7 +275,7 @@ class SpoonFormTextTest extends TestCase
 		$this->assertTrue($this->txtName->isURL());
 		$_POST['name'] = 'www.spoon-library.com';
 		$this->assertTrue($this->txtName->isURL());
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertFalse($this->txtName->isURL());
 	}
 
@@ -284,7 +284,7 @@ class SpoonFormTextTest extends TestCase
 		$_POST['name'] = 'Spoon';
 		$this->assertTrue($this->txtName->isValidAgainstRegexp('/([a-z]+)/'));
 		$this->assertFalse($this->txtName->isValidAgainstRegexp('/([0-9]+)/'));
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertTrue($this->txtName->isValidAgainstRegexp('/Array/'));
 	}
 
@@ -294,7 +294,7 @@ class SpoonFormTextTest extends TestCase
 		$_POST['name'] = '<a href="http://www.spoon-library.be">Bobby Tables, my friends call mééé</a>';
 		$this->assertEquals(SpoonFilter::htmlspecialchars($_POST['name']), $this->txtName->getValue());
 		$this->assertEquals($_POST['name'], $this->txtName->getValue(true));
-		$_POST['name'] = array('foo', 'bar');
+		$_POST['name'] = ['foo', 'bar'];
 		$this->assertEquals('Array', $this->txtName->getValue());
 	}
 

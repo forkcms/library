@@ -34,7 +34,7 @@ class SpoonFilter
 	 *
 	 * @var	array
 	 */
-	private static $tlds = array(
+	private static $tlds = [
 		'ac', 'ad', 'ae', 'aero', 'af', 'ag', 'ai', 'al', 'am', 'an', 'ao', 'aq', 'ar', 'arpa', 'as', 'asia', 'at', 'au', 'aw', 'ax', 'az',
 		'ba', 'bb', 'bd' ,'be', 'bf', 'bg', 'bh', 'bi', 'biz', 'bj', 'bm', 'bn', 'bo', 'br', 'bs', 'bt', 'bv', 'bw', 'by' ,'bz',
 		'ca', 'cat', 'cc' ,'cd', 'cf', 'cg', 'ch', 'ci', 'ck', 'cl', 'cm', 'cn', 'co', 'com', 'coop', 'cr', 'cu', 'cv', 'cx', 'cy', 'cz',
@@ -60,7 +60,7 @@ class SpoonFilter
 		'wf', 'ws',
 		'ye', 'yt', 'yu',
 		'za', 'zm', 'zw'
-	);
+	];
 
 
 	/**
@@ -74,7 +74,7 @@ class SpoonFilter
 	public static function arrayMapRecursive($callback, array $array, $allowedKeys = null)
 	{
 		// has no elements
-		if(empty($array)) return array();
+		if(empty($array)) return [];
 
 		// check if there is a key restriction
 		if(!empty($allowedKeys))
@@ -84,7 +84,7 @@ class SpoonFilter
 		}
 
 		// declare our result array
-		$results = array();
+		$results = [];
 
 		// loop the array
 		foreach($array as $key => $value)
@@ -106,7 +106,7 @@ class SpoonFilter
 				}
 
 				// more than 1 function given, so apply them all
-				if(is_array($callback)) $results[$key] = call_user_func_array($callback, array($value));
+				if(is_array($callback)) $results[$key] = call_user_func_array($callback, [$value]);
 
 				// just 1 function given
 				else $results[$key] = $callback($value);
@@ -156,16 +156,16 @@ class SpoonFilter
 				 */
 				function fixMagicQuotes($value)
 				{
-					$value = is_array($value) ? array_map('fixMagicQuotes', $value) : stripslashes($value);
+					$value = is_array($value) ? array_map(fixMagicQuotes(...), $value) : stripslashes((string) $value);
 					return $value;
 				}
 			}
 
 			// fix the thing with magic dust!
-			$_POST = array_map('fixMagicQuotes', $_POST);
-			$_GET = array_map('fixMagicQuotes', $_GET);
-			$_COOKIE = array_map('fixMagicQuotes', $_COOKIE);
-			$_REQUEST = array_map('fixMagicQuotes', $_REQUEST);
+			$_POST = array_map(fixMagicQuotes(...), $_POST);
+			$_GET = array_map(fixMagicQuotes(...), $_GET);
+			$_COOKIE = array_map(fixMagicQuotes(...), $_COOKIE);
+			$_REQUEST = array_map(fixMagicQuotes(...), $_REQUEST);
 		}
 	}
 
@@ -178,7 +178,7 @@ class SpoonFilter
 	 * @param	mixed $defaultValue				The default-value.
 	 * @param	string[optional] $returnType	The type that should be returned.
 	 */
-	public static function getValue($variable, array $values = null, $defaultValue, $returnType = 'string')
+	public static function getValue($variable, ?array $values = null, $defaultValue = null, $returnType = 'string')
 	{
 		// redefine arguments
 		$variable = !is_array($variable) ? (string) $variable : $variable;
@@ -217,34 +217,14 @@ class SpoonFilter
 		 * We have to define the return type. Too bad we cant force it within
 		 * a certain list of types, since that's what this method actually does.
 		 */
-		switch($returnType)
-		{
-			// array
-			case 'array':
-				$value = ($value == '') ? array() : (array) $value;
-			break;
-
-			// bool
-			case 'bool':
-				$value = (bool) $value;
-			break;
-
-			// double/float
-			case 'double':
-			case 'float':
-				$value = (float) $value;
-			break;
-
-			// int
-			case 'int':
-				$value = (int) $value;
-			break;
-
-			// string
-			case 'string':
-				$value = (string) $value;
-			break;
-		}
+		$value = match ($returnType) {
+			'array' => ($value == '') ? [] : (array) $value,
+			'bool' => (bool) $value,
+			'double', 'float' => (float) $value,
+			'int' => (int) $value,
+			'string' => (string) $value,
+			default => $value,
+		};
 
 		return $value;
 	}
@@ -262,7 +242,7 @@ class SpoonFilter
 	{
 		// init vars
 		$charset = ($charset !== null) ? self::getValue($charset, Spoon::getCharsets(), Spoon::getCharset()) : Spoon::getCharset();
-		$quoteStyle = self::getValue($quoteStyle, array(ENT_COMPAT, ENT_QUOTES, ENT_NOQUOTES), ENT_NOQUOTES);
+		$quoteStyle = self::getValue($quoteStyle, [ENT_COMPAT, ENT_QUOTES, ENT_NOQUOTES], ENT_NOQUOTES);
 
 		// apply htmlentities
 		$return = htmlentities((string) $value, $quoteStyle, $charset);
@@ -273,7 +253,7 @@ class SpoonFilter
 		 * we're using a decent database layer, we don't need this shit and we're replacing
 		 * the double backslashes by its' html entity equivalent.
 		 */
-		return str_replace(array('\\'), array('&#92;'), $return);
+		return str_replace(['\\'], ['&#92;'], $return);
 	}
 
 
@@ -289,7 +269,7 @@ class SpoonFilter
 	{
 		// init vars
 		$charset = ($charset !== null) ? self::getValue($charset, Spoon::getCharsets(), Spoon::getCharset()) : Spoon::getCharset();
-		$quoteStyle = self::getValue($quoteStyle, array(ENT_COMPAT, ENT_QUOTES, ENT_NOQUOTES), ENT_NOQUOTES);
+		$quoteStyle = self::getValue($quoteStyle, [ENT_COMPAT, ENT_QUOTES, ENT_NOQUOTES], ENT_NOQUOTES);
 
 		// apply method
 		return html_entity_decode((string) $value, $quoteStyle, $charset);
@@ -475,7 +455,7 @@ class SpoonFilter
 		if(mb_strpos((string) $value, '.') !== false)
 		{
 			$value = rtrim($value, '0');
-			if(substr($value, -1) == '.') $value = substr($value, 0, -1);
+			if(str_ends_with($value, '.')) $value = substr($value, 0, -1);
 		}
 
 		// validate
@@ -515,20 +495,20 @@ class SpoonFilter
 	 * @return	bool						True if the request is coming from this site, false if not.
 	 * @param	array[optional] $domains	An array containing all known domains.
 	 */
-	public static function isInternalReferrer(array $domains = null)
+	public static function isInternalReferrer(?array $domains = null)
 	{
 		// no referrer or host found
 		if(!isset($_SERVER['HTTP_REFERER'])) return true;
 		if(!isset($_SERVER['HTTP_HOST'])) return true;
 
 		// get own & referrer host names
-		$referrer = parse_url($_SERVER['HTTP_REFERER']);
+		$referrer = parse_url((string) $_SERVER['HTTP_REFERER']);
 		$referrer = $referrer['host'];
 		$hostname = $_SERVER['HTTP_HOST'];
 
 		// redefine hostname & domains
-		if(strpos($referrer, 'www.') === 0) $referrer = substr($referrer, 4);
-		if(strpos($hostname, 'www.') === 0) $hostname = substr($hostname, 4);
+		if(str_starts_with($referrer, 'www.')) $referrer = substr($referrer, 4);
+		if(str_starts_with((string) $hostname, 'www.')) $hostname = substr((string) $hostname, 4);
 		$domains = ($domains === null) ? (array) $hostname : (array) $domains;
 
 		// internal?
@@ -678,7 +658,7 @@ class SpoonFilter
 		if(mb_strpos($value, '.') !== false)
 		{
 			$value = rtrim($value, '0');
-			if(substr($value, -1) == '.') $value = substr($value, 0, -1);
+			if(str_ends_with($value, '.')) $value = substr($value, 0, -1);
 		}
 
 		// no negatives allowed
@@ -714,7 +694,7 @@ class SpoonFilter
 		{
 			$value = 'Array';
 		}
-		return (bool) preg_match('/^[^\x-\x1F]+$/', (string) $value);
+		return (bool) preg_match('/^[^\x00-\x1F]+$/', (string) $value);
 	}
 
 
@@ -806,7 +786,7 @@ class SpoonFilter
 		$pattern = '/(((http|ftp|https):\/{2})?(([0-9a-z_-]+\.)+(' . implode('|', self::$tlds) . ')(:[0-9]+)?((\/([~0-9a-zA-Z\#\+\%@\.\/_-]+))?(\?[0-9a-zA-Z\+\%@\/&\[\];=_-]+)?)?))\b/imu';
 
 		// get matches
-		$value = preg_replace_callback($pattern, array('SpoonFilter', 'replaceURLsCallback'), $value);
+		$value = preg_replace_callback($pattern, ['SpoonFilter', 'replaceURLsCallback'], $value);
 
 		// add noFollow-attribute
 		if($noFollow) $value = str_replace('<a href=', '<a rel="nofollow" href=', $value);
@@ -837,42 +817,42 @@ class SpoonFilter
 
 		// remove ugly and mac endlines
 		$string = preg_replace('/\r\n/', PHP_EOL, $string);
-		$string = preg_replace('/\r/', PHP_EOL, $string);
+		$string = preg_replace('/\r/', PHP_EOL, (string) $string);
 
 		// remove tabs
-		if($stripTabs) $string = preg_replace("/\t/", '', $string);
+		if($stripTabs) $string = preg_replace("/\t/", '', (string) $string);
 
 		// remove the style- and head-tags and all their contents
-		$string = preg_replace('|\<style.*\>(.*\n*)\</style\>|isU', '', $string);
-		$string = preg_replace('|\<head.*\>(.*\n*)\</head\>|isU', '', $string);
+		$string = preg_replace('|\<style.*\>(.*\n*)\</style\>|isU', '', (string) $string);
+		$string = preg_replace('|\<head.*\>(.*\n*)\</head\>|isU', '', (string) $string);
 
 		// replace images with their alternative content
 		// eg. <img src="path/to/the/image.jpg" alt="My image" /> => My image
-		if($replaceImagesWithAltText) $string = preg_replace('|\<img[^>]*alt="(.*)".*/\>|isU', '$1', $string);
+		if($replaceImagesWithAltText) $string = preg_replace('|\<img[^>]*alt="(.*)".*/\>|isU', '$1', (string) $string);
 
 		// replace links with the inner html of the link with the url between ()
 		// eg.: <a href="http://site.domain.com">My site</a> => My site (http://site.domain.com)
-		if($replaceAnchorsWithURL) $string = preg_replace('|<a.*href="(.*)".*>(.*)</a>|isU', '$2 ($1)', $string);
+		if($replaceAnchorsWithURL) $string = preg_replace('|<a.*href="(.*)".*>(.*)</a>|isU', '$2 ($1)', (string) $string);
 
 		// check if we need to preserve paragraphs and/or breaks
 		$exceptions = ($preserveParagraphLinebreaks) ? $exceptions . '<p>' : $exceptions;
 
 		// strip HTML tags and preserve paragraphs
-		$string = strip_tags($string, $exceptions);
+		$string = strip_tags((string) $string, $exceptions);
 
 		// remove multiple with a single one
 		$string = preg_replace('/\n\s/', PHP_EOL, $string);
-		$string = preg_replace('/\n{2,}/', PHP_EOL, $string);
+		$string = preg_replace('/\n{2,}/', PHP_EOL, (string) $string);
 
 		// for each linebreak, table row or- paragraph end we want an additional linebreak at the end
 		if($preserveParagraphLinebreaks)
 		{
-			$string = preg_replace('|<p>|', '', $string);
-			$string = preg_replace('|</p>|', PHP_EOL, $string);
+			$string = preg_replace('|<p>|', '', (string) $string);
+			$string = preg_replace('|</p>|', PHP_EOL, (string) $string);
 		}
 
 		// trim whitespace and strip HTML tags
-		$string = trim($string);
+		$string = trim((string) $string);
 
 		// replace html entities that aren't replaced by SpoonFilter::htmlentitiesDecode (should be solved when using a newer Spoon Library)
 		$string = str_replace('&euro;', 'EUR', $string);
@@ -960,11 +940,11 @@ class SpoonFilter
 		$charset = ($charset !== null) ? self::getValue($charset, Spoon::getCharsets(), Spoon::getCharset()) : Spoon::getCharset();
 
 		// reserved characters (RFC 3986)
-		$reservedCharacters = array(
+		$reservedCharacters = [
 			'/', '?', ':', '@', '#', '[', ']',
 			'!', '$', '&', '\'', '(', ')', '*',
 			'+', ',', ';', '='
-		);
+		];
 
 		// remove reserved characters
 		$value = str_replace($reservedCharacters, ' ', $value);
@@ -989,7 +969,7 @@ class SpoonFilter
 		$value = preg_replace('/\-+/', '-', $value);
 
 		// trim - signs
-		return trim($value, '-');
+		return trim((string) $value, '-');
 	}
 }
 

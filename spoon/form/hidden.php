@@ -94,7 +94,7 @@ class SpoonFormHidden extends SpoonFormAttributes
 	{
 		// post/get data
 		$data = $this->getMethod(true);
-		$value = isset($data[$this->getName()]) ? $data[$this->getName()] : '';
+		$value = $data[$this->getName()] ?? '';
 		$value = is_array($value) ? 'Array' : trim((string) $value);
 		return $value != '';
 	}
@@ -106,13 +106,14 @@ class SpoonFormHidden extends SpoonFormAttributes
 	 * @return	string
 	 * @param	SpoonTemplate[optional] $template	The template to parse the element in.
 	 */
-	public function parse($template = null)
+	#[\Override]
+    public function parse($template = null)
 	{
 		// start html generation
 		$output = '<input type="hidden" value="' . $this->getValue(false) . '"';
 
 		// build attributes
-		$attributes = array();
+		$attributes = [];
 		if(isset($this->attributes['id'])) $attributes['[id]'] = $this->attributes['id'];
 		$attributes['[name]'] = $this->attributes['name'];
 		$attributes['[value]'] = $this->getValue();

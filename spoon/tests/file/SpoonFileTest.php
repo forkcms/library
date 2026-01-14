@@ -2,18 +2,22 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
 
 class SpoonFileTest extends TestCase
 {
+    private string $existingUrl;
+    private string $nonExistingUrl;
+    private string $destinationFile;
+
 	public function setup(): void
 	{
-		if(!defined('TMPPATH')) define('TMPPATH', dirname(realpath(dirname(__FILE__))) . '/tmp');
+		if(!defined('TMPPATH')) define('TMPPATH', dirname(realpath(__DIR__)) . '/tmp');
 
-		$this->existingUrl = 'http://www.spoon-library.be/downloads/1.0.3/spoon-1.0.3.zip';
+		$this->existingUrl = 'https://github.com/forkcms/library/archive/refs/tags/3.2.12.zip';
 		$this->nonExistingUrl = 'http://wowbesturleverforspoonlibrary.dev/' . time() . '.txt';
 		$this->destinationFile = TMPPATH . '/spoon.zip';
 	}

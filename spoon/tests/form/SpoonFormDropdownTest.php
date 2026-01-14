@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -22,11 +22,11 @@ class SpoonFormDropdownTest extends TestCase
 	public function setup(): void
 	{
 		$this->frm = new SpoonForm('dropdown');
-		$this->ddmSingle = new SpoonFormDropdown('single', array(1 => 'Davy Hellemans', 'Tys Verkoyen', 'Dave Lens'));
-		$this->ddmMultiple = new SpoonFormDropdown('multiple', array(1 => 'Swimming', 'Running', 'Cycling', 'Boxing', 'Slackin'), null, true);
-		$this->ddmOptGroupSingle = new SpoonFormDropdown('optgroup_single', array('foo', 123 => 'bar', 'foobar' => array('foo', 'baz')));
-		$this->ddmOptGroupMultiple = new SpoonFormDropdown('optgroup_multiple', array('foo', 123 => 'bar', 'foobar' => array('foo', 'baz')), null, true);
-		$this->ddmDefaultElement = new SpoonFormDropdown('default_element', array(1 => 'Davy Hellemans'));
+		$this->ddmSingle = new SpoonFormDropdown('single', [1 => 'Davy Hellemans', 'Tys Verkoyen', 'Dave Lens']);
+		$this->ddmMultiple = new SpoonFormDropdown('multiple', [1 => 'Swimming', 'Running', 'Cycling', 'Boxing', 'Slackin'], null, true);
+		$this->ddmOptGroupSingle = new SpoonFormDropdown('optgroup_single', ['foo', 123 => 'bar', 'foobar' => ['foo', 'baz']]);
+		$this->ddmOptGroupMultiple = new SpoonFormDropdown('optgroup_multiple', ['foo', 123 => 'bar', 'foobar' => ['foo', 'baz']], null, true);
+		$this->ddmDefaultElement = new SpoonFormDropdown('default_element', [1 => 'Davy Hellemans']);
 		$this->ddmDefaultElement->setDefaultElement('Baz', 1337);
 		$this->frm->add($this->ddmSingle, $this->ddmMultiple, $this->ddmOptGroupSingle, $this->ddmOptGroupMultiple, $this->ddmDefaultElement);
 	}
@@ -36,26 +36,26 @@ class SpoonFormDropdownTest extends TestCase
 		// single dropdown
 		$this->ddmSingle->setAttribute('rel', 'bauffman.jpg');
 		$this->assertEquals('bauffman.jpg', $this->ddmSingle->getAttribute('rel'));
-		$this->ddmSingle->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'single', 'class' => 'inputDropdown', 'size' => 1, 'rel' => 'bauffman.jpg'), $this->ddmSingle->getAttributes());
+		$this->ddmSingle->setAttributes(['id' => 'specialID']);
+		$this->assertEquals(['id' => 'specialID', 'name' => 'single', 'class' => 'inputDropdown', 'size' => 1, 'rel' => 'bauffman.jpg'], $this->ddmSingle->getAttributes());
 
 		// single dropdown (optgroups)
 		$this->ddmOptGroupSingle->setAttribute('rel', 'bauffman.jpg');
 		$this->assertEquals('bauffman.jpg', $this->ddmOptGroupSingle->getAttribute('rel'));
-		$this->ddmOptGroupSingle->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'optgroup_single', 'class' => 'inputDropdown', 'size' => 1, 'rel' => 'bauffman.jpg'), $this->ddmOptGroupSingle->getAttributes());
+		$this->ddmOptGroupSingle->setAttributes(['id' => 'specialID']);
+		$this->assertEquals(['id' => 'specialID', 'name' => 'optgroup_single', 'class' => 'inputDropdown', 'size' => 1, 'rel' => 'bauffman.jpg'], $this->ddmOptGroupSingle->getAttributes());
 
 		// multiple dropdown
 		$this->ddmMultiple->setAttribute('rel', 'bauffman.jpg');
 		$this->assertEquals('bauffman.jpg', $this->ddmMultiple->getAttribute('rel'));
-		$this->ddmMultiple->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'multiple', 'class' => 'inputDropdown', 'rel' => 'bauffman.jpg'), $this->ddmMultiple->getAttributes());
+		$this->ddmMultiple->setAttributes(['id' => 'specialID']);
+		$this->assertEquals(['id' => 'specialID', 'name' => 'multiple', 'class' => 'inputDropdown', 'rel' => 'bauffman.jpg'], $this->ddmMultiple->getAttributes());
 
 		// multiple dropdown (optgroups)
 		$this->ddmOptGroupMultiple->setAttribute('rel', 'bauffman.jpg');
 		$this->assertEquals('bauffman.jpg', $this->ddmOptGroupMultiple->getAttribute('rel'));
-		$this->ddmOptGroupMultiple->setAttributes(array('id' => 'specialID'));
-		$this->assertEquals(array('id' => 'specialID', 'name' => 'optgroup_multiple', 'class' => 'inputDropdown', 'rel' => 'bauffman.jpg'), $this->ddmOptGroupMultiple->getAttributes());
+		$this->ddmOptGroupMultiple->setAttributes(['id' => 'specialID']);
+		$this->assertEquals(['id' => 'specialID', 'name' => 'optgroup_multiple', 'class' => 'inputDropdown', 'rel' => 'bauffman.jpg'], $this->ddmOptGroupMultiple->getAttributes());
 	}
 
 	public function testIsFilled()
@@ -75,7 +75,7 @@ class SpoonFormDropdownTest extends TestCase
 		$this->assertFalse($this->ddmSingle->isFilled());
 
 		// arrays
-		$_POST['single'] = array('foo', 'bar');
+		$_POST['single'] = ['foo', 'bar'];
 		$this->assertFalse($this->ddmSingle->isFilled());
 
 		// single dropdown (optgroups)
@@ -95,35 +95,35 @@ class SpoonFormDropdownTest extends TestCase
 		// multiple dropdown
 		$_POST['multiple'] = [];
 		$this->assertFalse($this->ddmMultiple->isFilled());
-		$_POST['multiple'] = array('1', '2');
+		$_POST['multiple'] = ['1', '2'];
 		$this->assertTrue($this->ddmMultiple->isFilled());
-		$_POST['multiple'] = array('1336', '1337', '1338');
+		$_POST['multiple'] = ['1336', '1337', '1338'];
 		$this->assertFalse($this->ddmMultiple->isFilled());
-		$_POST['multiple'] = array('1337', 1);
+		$_POST['multiple'] = ['1337', 1];
 		$this->assertTrue($this->ddmMultiple->isFilled());
 
 		// default element (multiple)
 		$this->ddmMultiple->setDefaultElement('', '1337');
 		$_POST['multiple'] = 'nothing';
 		$this->assertFalse($this->ddmMultiple->isFilled());
-		$_POST['multiple'] = array('1337');
+		$_POST['multiple'] = ['1337'];
 		$this->assertTrue($this->ddmMultiple->isFilled());
 
 		// multiple dropdown (optgroups)
 		$_POST['optgroup_multiple'] = [];
 		$this->assertFalse($this->ddmOptGroupMultiple->isFilled());
-		$_POST['optgroup_multiple'] = array('0', '1');
+		$_POST['optgroup_multiple'] = ['0', '1'];
 		$this->assertTrue($this->ddmOptGroupMultiple->isFilled());
-		$_POST['optgroup_multiple'] = array('1336', '1337', '1338');
+		$_POST['optgroup_multiple'] = ['1336', '1337', '1338'];
 		$this->assertFalse($this->ddmOptGroupMultiple->isFilled());
-		$_POST['optgroup_multiple'] = array('1337', 1);
+		$_POST['optgroup_multiple'] = ['1337', 1];
 		$this->assertTrue($this->ddmOptGroupMultiple->isFilled());
 
 		// default element (multiple & optgroups)
 		$this->ddmOptGroupMultiple->setDefaultElement('', '1337');
 		$_POST['optgroup_multiple'] = 'nothing';
 		$this->assertFalse($this->ddmOptGroupMultiple->isFilled());
-		$_POST['optgroup_multiple'] = array('1337');
+		$_POST['optgroup_multiple'] = ['1337'];
 		$this->assertTrue($this->ddmOptGroupMultiple->isFilled());
 	}
 
@@ -131,15 +131,15 @@ class SpoonFormDropdownTest extends TestCase
 	{
 		$_POST['form'] = 'dropdown';
 		$_POST['single'] = '1';
-		$_POST['multiple'] = array('1', '2', '3');
+		$_POST['multiple'] = ['1', '2', '3'];
 		$_POST['optgroup_single'] = '123';
-		$_POST['optgroup_multiple'] = array('0', '123');
+		$_POST['optgroup_multiple'] = ['0', '123'];
 		$this->assertEquals($_POST['single'], $this->ddmSingle->getValue());
 		$this->assertEquals($_POST['optgroup_single'], $this->ddmOptGroupSingle->getValue());
 		$this->assertEquals($_POST['multiple'], $this->ddmMultiple->getValue());
 		$this->assertEquals($_POST['optgroup_multiple'], $this->ddmOptGroupMultiple->getValue());
 
-		$_POST['single'] = array('foo', 'bar');
+		$_POST['single'] = ['foo', 'bar'];
 		$this->assertNull($this->ddmSingle->getValue());
 	}
 

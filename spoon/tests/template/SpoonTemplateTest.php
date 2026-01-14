@@ -19,9 +19,9 @@ class SpoonTemplateTest extends TestCase
 	{
 		$tpl = new SpoonTemplate();
 		$tpl->assign('name', 'value');
-		$tpl->assign('list', array('name' => 'Erik Bauffman'));
+		$tpl->assign('list', ['name' => 'Erik Bauffman']);
 		$this->assertEquals('value', $tpl->getAssignedValue('name'));
-		$this->assertEquals(array('name' => 'Erik Bauffman'), $tpl->getAssignedValue('list'));
+		$this->assertEquals(['name' => 'Erik Bauffman'], $tpl->getAssignedValue('list'));
 		$this->assertEquals(null, $tpl->getAssignedValue('wtf-this-is-super-cool'));
 	}
 }

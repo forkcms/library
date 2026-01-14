@@ -56,7 +56,7 @@ $output = '<!DOCTYPE HTML>
 			</html>';
 Spoon::setDebugMessage($output);
 
-spl_autoload_register(array('Spoon', 'autoLoader'));
+spl_autoload_register(['Spoon', 'autoLoader']);
 
 /**
  * This class holds objects/data in a name based registry to make them easily
@@ -75,7 +75,7 @@ class Spoon
 	 *
 	 * @var	array
 	 */
-	private static $registry = array();
+	private static $registry = [];
 
 
 	/*
@@ -101,7 +101,7 @@ class Spoon
 		$class = strtolower($class);
 
 		// list of classes and their location
-		$classes = array();
+		$classes = [];
 		$classes['spoondatabase'] = 'database/database.php';
 		$classes['spoondatagrid'] = 'datagrid/datagrid.php';
 		$classes['spoondatagridcolumn'] = 'datagrid/column.php';
@@ -172,7 +172,7 @@ class Spoon
 		if(!$hasXdebugVarDump)
 		{
 			$output = preg_replace('/\]\=\>\n(\s+)/m', '] => ', $output);
-			$output = '<pre>' . htmlspecialchars($output, ENT_QUOTES, Spoon::getCharset()) . '</pre>';
+			$output = '<pre>' . htmlspecialchars((string) $output, ENT_QUOTES, Spoon::getCharset()) . '</pre>';
 		}
 
 		echo $output;
@@ -227,7 +227,7 @@ class Spoon
 	 */
 	public static function getCharsets()
 	{
-		return array('utf-8', 'iso-8859-1', 'iso-8859-15');
+		return ['utf-8', 'iso-8859-1', 'iso-8859-15'];
 	}
 
 

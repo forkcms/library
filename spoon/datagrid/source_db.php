@@ -28,14 +28,6 @@
 class SpoonDatagridSourceDB extends SpoonDatagridSource
 {
 	/**
-	 * SpoonDatabase instance
-	 *
-	 * @var	SpoonDatabase
-	 */
-	private $db;
-
-
-	/**
 	 * Query to calculate the number of results
 	 *
 	 * @var	string
@@ -48,7 +40,7 @@ class SpoonDatagridSourceDB extends SpoonDatagridSource
 	 *
 	 * @var	array
 	 */
-	private $numResultsQueryParameters = array();
+	private $numResultsQueryParameters = [];
 
 
 	/**
@@ -64,21 +56,18 @@ class SpoonDatagridSourceDB extends SpoonDatagridSource
 	 *
 	 * @var	array
 	 */
-	private $queryParameters = array();
+	private $queryParameters = [];
 
 
 	/**
 	 * Class construtor.
 	 *
-	 * @param	SpoonDatabase $dbConnection			The database connection.
+	 * @param SpoonDatabase $db The database connection.
 	 * @param	string|array $query					The query to execute.
 	 * @param	string[optional] $numResultsQuery	The query to use to retrieve the number of results.
 	 */
-	public function __construct(SpoonDatabase $dbConnection, $query, $numResultsQuery = null)
+	public function __construct(private readonly SpoonDatabase $db, $query, $numResultsQuery = null)
 	{
-		// database connection
-		$this->db = $dbConnection;
-
 		// set queries
 		$this->setQuery($query, $numResultsQuery);
 	}
@@ -95,16 +84,10 @@ class SpoonDatagridSourceDB extends SpoonDatagridSource
 		if($this->numResults != 0)
 		{
 			// build query
-			switch($this->db->getDriver())
-			{
-				case 'mysql':
-					$query = (substr_count($this->query, 'LIMIT ') > 0) ? $this->query : $this->query . ' LIMIT 1';
-				break;
-
-				default:
-					throw new SpoonDataGridException('No datagrid support has been written for this database backend (' . $this->db->getDriver() . ')');
-				break;
-			}
+			$query = match ($this->db->getDriver()) {
+				'mysql' => (substr_count($this->query, 'LIMIT ') > 0) ? $this->query : $this->query . ' LIMIT 1',
+				default => throw new SpoonDataGridException('No datagrid support has been written for this database backend (' . $this->db->getDriver() . ')'),
+			};
 
 			// fetch record
 			$record = $this->db->getRecord($query, $this->queryParameters);

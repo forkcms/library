@@ -92,6 +92,7 @@ class SpoonFormCheckbox extends SpoonFormAttributes
 	 * @return	string
 	 * @param	array $variables	The variables to get the attribute-HTML for.
 	 */
+	#[\Override]
 	protected function getAttributesHTML(array $variables)
 	{
 		// init var
@@ -256,6 +257,7 @@ class SpoonFormCheckbox extends SpoonFormAttributes
 	 * @return	string
 	 * @param	SpoonTemplate[optional] $template	The template to parse the element in.
 	 */
+	#[\Override]
 	public function parse($template = null)
 	{
 		// name required
@@ -265,7 +267,7 @@ class SpoonFormCheckbox extends SpoonFormAttributes
 		$output = '<input type="checkbox" value="1"';
 
 		// add attributes
-		$output .= $this->getAttributesHTML(array('[id]' => $this->attributes['id'], '[name]' => $this->attributes['name'])) . ' />';
+		$output .= $this->getAttributesHTML(['[id]' => $this->attributes['id'], '[name]' => $this->attributes['name']]) . ' />';
 
 		// template
 		if($template !== null)

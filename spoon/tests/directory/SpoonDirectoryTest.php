@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-$includePath = dirname(dirname(dirname(dirname(__FILE__))));
+$includePath = dirname(__FILE__, 4);
 set_include_path(get_include_path() . PATH_SEPARATOR . $includePath);
 
 require_once 'spoon/spoon.php';
@@ -14,7 +14,7 @@ class SpoonDirectoryTest extends TestCase
 	protected function setup(): void
 	{
 		// set path
-		$this->path = dirname(dirname(__FILE__)) . '/tmp';
+		$this->path = dirname(__FILE__, 2) . '/tmp';
 	}
 
 	public function testCopy()
