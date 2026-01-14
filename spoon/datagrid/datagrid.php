@@ -1611,7 +1611,7 @@ class SpoonDataGrid
 		if($this->source->getNumResults() > 0)
 		{
 			// array
-			if(is_array($columns)) array_walk($columns, $this->setColumnsSequence(...));
+			if(is_array($columns)) $this->setColumnsSequence(...);
 
 			// multiple arguments
 			else
