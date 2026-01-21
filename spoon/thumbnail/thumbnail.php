@@ -251,6 +251,10 @@ class SpoonThumbnail
 		{
 			if($currentWidth == $this->width && $currentHeight == $this->height)
 			{
+                                if($this->filename == $filename)
+				{
+                                        return true;
+                                }
 				return SpoonDirectory::copy($this->filename, $filename, true, true, $chmod);
 			}
 		}
